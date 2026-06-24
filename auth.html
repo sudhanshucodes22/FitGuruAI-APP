@@ -1,0 +1,284 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500&amp;family=Geist:wght@500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        body {
+            background-color: #000000;
+            color: #e2e2e2;
+            overflow-x: hidden;
+        }
+        .glass-container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .neon-glow-border {
+            border: 1px solid #39ff14;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+        }
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+          screens: {
+            'sm': '9999px',
+            'md': '9999px',
+            'lg': '9999px',
+            'xl': '9999px',
+            '2xl': '9999px',
+          },
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#106e00",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface-container-low": "#1b1b1b",
+                        "surface-container": "#1f1f1f",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-primary-fixed-variant": "#095300",
+                        "on-secondary": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-container": "#39ff14",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "on-primary": "#053900",
+                        "secondary-container": "#474746",
+                        "outline": "#85967c",
+                        "on-tertiary-container": "#606162",
+                        "surface-container-highest": "#353535",
+                        "on-surface-variant": "#baccb0",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "inverse-on-surface": "#303030",
+                        "surface": "#131313",
+                        "surface-dim": "#131313",
+                        "on-secondary-container": "#b7b5b4",
+                        "surface-variant": "#353535",
+                        "outline-variant": "#3c4b35",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-primary-container": "#107100",
+                        "on-primary-fixed": "#022100",
+                        "background": "#131313",
+                        "tertiary-container": "#dddddd",
+                        "secondary": "#c8c6c5",
+                        "primary": "#efffe3",
+                        "on-background": "#e2e2e2",
+                        "error": "#ffb4ab",
+                        "tertiary": "#f9fafa",
+                        "surface-bright": "#393939",
+                        "surface-tint": "#2ae500",
+                        "on-tertiary": "#2f3131",
+                        "on-surface": "#e2e2e2",
+                        "surface-container-lowest": "#0e0e0e",
+                        "secondary-fixed": "#e5e2e1",
+                        "inverse-surface": "#e2e2e2",
+                        "primary-fixed": "#79ff5b",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-tertiary-fixed-variant": "#454747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "16px",
+                        "gutter": "20px",
+                        "container-max": "1440px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "lg": "40px",
+                        "xs": "8px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Hanken Grotesk"],
+                        "display-hero": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Geist"],
+                        "mono-data": ["Geist"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "mono-data": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+
+    <link href="app.css?v=3" rel="stylesheet">
+
+</head>
+<body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
+    <div class="iphone-container">
+        <div class="iphone-border"></div>
+        <div class="iphone-reflection"></div>
+        <div class="dynamic-island">
+            <div class="camera-lens"></div>
+        </div>
+        <div class="home-indicator"></div>
+        
+        <div class="iphone-screen">
+            
+            <!-- iOS Status Bar -->
+            <div class="status-bar">
+                <span class="status-bar-time leading-none">09:41</span>
+                <div class="status-bar-icons">
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">signal_cellular_alt</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">wifi</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">battery_5_bar</span>
+                </div>
+            </div>
+
+            
+            
+<!-- Atmospheric Background Shader -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-40">
+
+</div>
+<!-- Main Content Canvas -->
+<main class="scroll-area flex-grow w-full relative z-10 flex flex-col items-center justify-center min-h-full px-gutter py-xl w-full">
+<!-- Header Branding (Suppressed Nav Shell as per task focused rule) -->
+<header class="w-full flex-shrink-0 z-20 mb-xl text-center">
+<div class="inline-block p-xs rounded-xl bg-primary/5 mb-md">
+<button onclick="if(document.referrer && document.referrer.includes(window.location.host)) { window.history.back(); } else { window.location.href='index.html?v=4'; }" class="p-xs hover:bg-white/5 rounded-full transition-all duration-300 ease-out active:scale-95 text-on-surface-variant hover:text-primary mr-1 flex-shrink-0" title="Go Back">
+    <span class="material-symbols-outlined text-xl leading-none">arrow_back</span>
+</button>
+<span class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim">FITGURU</span>
+</div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Ascend Your Limits</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs max-w-sm">The technical engine for elite physical performance.</p>
+</header>
+<!-- Auth Selection Glass Card -->
+<div class="w-full max-w-md glass-container rounded-[2rem] p-lg flex flex-col gap-sm">
+<!-- Primary Action: Create Account -->
+<button onclick="window.location.href='dashboard.html'" class="group relative w-full h-16 bg-primary-container text-on-primary-container font-headline-md text-headline-md rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-center px-gutter" style="--mouse-x: 230.46922302246094px; --mouse-y: 28.221435546875px;">
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="relative z-10">CREATE ACCOUNT</span>
+</button>
+<!-- Secondary Action: Sign In -->
+<button onclick="window.location.href='dashboard.html'" class="w-full h-16 glass-container text-on-surface font-headline-md text-headline-md rounded-xl transition-all duration-300 hover:bg-white/5 hover:border-white/20 active:scale-95 flex items-center justify-center px-gutter">
+                SIGN IN
+            </button>
+<!-- Divider -->
+<div class="flex items-center gap-sm my-md">
+<div class="h-[1px] flex-1 bg-white/10"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Fast Track With</span>
+<div class="h-[1px] flex-1 bg-white/10"></div>
+</div>
+<!-- Social Logins -->
+<div class="grid grid-cols-2 gap-sm">
+<!-- Apple -->
+<button onclick="window.location.href='dashboard.html'" class="flex items-center justify-center gap-sm h-14 rounded-xl glass-container hover:bg-white/5 transition-all group">
+<svg class="w-5 h-5 fill-on-surface" viewBox="0 0 24 24">
+<path d="M17.05 20.28c-.96.95-2.06 2.15-3.41 2.15-1.31 0-1.74-.83-3.29-.83-1.54 0-2.03.81-3.28.83-1.34.02-2.58-1.38-3.55-2.33C1.53 18.1 0 15.19 0 12.35c0-4.54 2.84-6.94 5.61-6.94 1.46 0 2.84.97 3.73.97.9 0 2.53-1.12 4.29-1.12 1.83 0 3.2.66 4.14 1.87-3.32 1.94-2.78 6.25.5 7.64-.93 2.13-2.17 4.18-3.22 5.51zM13.03 2.31C13.84 1.34 14.39 0 14.39 0s-1.31.06-2.81 1.77c-1.28 1.47-1.11 2.76-1.11 2.76s1.37.14 2.56-1.22z"></path>
+</svg>
+<span class="font-body-md text-body-md">Apple</span>
+</button>
+<!-- Google -->
+<button onclick="window.location.href='dashboard.html'" class="flex items-center justify-center gap-sm h-14 rounded-xl glass-container hover:bg-white/5 transition-all group">
+<svg class="w-5 h-5" viewBox="0 0 24 24">
+<path d="M12 5.04c1.73 0 3.01.75 3.67 1.38l2.73-2.73C16.74 2.1 14.59 1 12 1 7.37 1 3.42 3.69 1.5 7.65l3.18 2.47C5.43 7.15 8.44 5.04 12 5.04z" fill="#EA4335"></path>
+<path d="M23.49 12.27c0-.83-.07-1.63-.2-2.39H12v4.51h6.44c-.28 1.48-1.11 2.73-2.36 3.58l3.66 2.84c2.14-1.97 3.39-4.88 3.39-8.54z" fill="#4285F4"></path>
+<path d="M4.68 14.88l-3.18 2.47C3.42 20.31 7.37 23 12 23c2.95 0 5.43-1.01 7.24-2.73l-3.66-2.84c-1.01.67-2.31 1.07-3.58 1.07-3.56 0-6.57-2.41-7.65-5.62z" fill="#FBBC05"></path>
+<path d="M1.5 7.65l3.18 2.47c1.08-3.21 4.09-5.62 7.65-5.62 1.38 0 2.65.41 3.69 1.1l2.73-2.73C13.62 1.39 11.41 1 9.32 1.43 5.92 2.14 3.06 4.54 1.5 7.65z" fill="#34A853"></path>
+</svg>
+<span class="font-body-md text-body-md">Google</span>
+</button>
+</div>
+</div>
+<!-- Footer Meta Section -->
+<footer class="mt-lg text-center max-w-xs">
+<p class="font-label-caps text-label-caps text-on-surface-variant/60 leading-relaxed font-body-md">
+                By joining, you consent to our <a class="text-primary hover:underline transition-all" href="dashboard.html">Training Protocols</a> and <a class="text-primary hover:underline transition-all" href="dashboard.html">Data Encryption Policy</a>.
+            </p>
+</footer>
+<!-- Bottom Ambient Lighting -->
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-32 bg-primary/10 blur-[120px] rounded-full pointer-events-none opacity-40"></div>
+</main>
+<!-- Visual Enhancements (Floating Elements) -->
+<div class="fixed top-20 right-[10%] opacity-20 pointer-events-none hidden lg:block">
+<div class="w-64 h-64 glass-container rounded-full animate-pulse-slow"></div>
+</div>
+<div class="absolute bottom-[84px] left-[5%] opacity-10 pointer-events-none hidden lg:block">
+<div class="w-96 h-96 border border-primary/20 rounded-full animate-pulse-slow"></div>
+</div>
+<!-- Interaction Script -->
+<script>
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousemove', (e) => {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                button.style.setProperty('--mouse-x', `${x}px`);
+                button.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+<!-- Custom Cursor for that Elite feeling -->
+<div class="fixed w-4 h-4 bg-primary-container rounded-full pointer-events-none z-[9999] opacity-0 transition-opacity duration-300 hidden md:block mix-blend-difference" id="custom-cursor" style="left: 372px; top: 401px; opacity: 0;"></div>
+<script>
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.opacity = '1';
+        });
+        document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
+    </script>
+
+
+
+            
+            
+        </div>
+    </div>
+    
+    <!-- Dynamic Clock script -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            const timeStr = hours + ':' + minutes;
+            document.querySelectorAll('.status-bar-time').forEach(el => el.textContent = timeStr);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
+</body></html>

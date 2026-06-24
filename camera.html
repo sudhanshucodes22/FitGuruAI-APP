@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FITGURU - AI Pro Camera</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+          screens: {
+            'sm': '9999px',
+            'md': '9999px',
+            'lg': '9999px',
+            'xl': '9999px',
+            '2xl': '9999px',
+          },
+                extend: {
+                    "colors": {
+                        "secondary-container": "#474746",
+                        "on-primary-container": "#107100",
+                        "primary-fixed": "#79ff5b",
+                        "surface-dim": "#131313",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "inverse-on-surface": "#303030",
+                        "surface-container-highest": "#353535",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-container": "#1f1f1f",
+                        "secondary": "#c8c6c5",
+                        "tertiary": "#f9fafa",
+                        "on-primary-fixed-variant": "#095300",
+                        "surface-container-low": "#1b1b1b",
+                        "surface-bright": "#393939",
+                        "on-secondary-fixed-variant": "#474746",
+                        "tertiary-container": "#dddddd",
+                        "surface": "#131313",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-secondary-container": "#b7b5b4",
+                        "primary-fixed-dim": "#2ae500",
+                        "on-surface-variant": "#baccb0",
+                        "on-tertiary-container": "#606162",
+                        "surface-variant": "#353535",
+                        "outline-variant": "#3c4b35",
+                        "on-surface": "#e2e2e2",
+                        "on-primary-fixed": "#022100",
+                        "inverse-surface": "#e2e2e2",
+                        "on-background": "#e2e2e2",
+                        "primary-container": "#39ff14",
+                        "on-secondary": "#313030",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "surface-container-high": "#2a2a2a",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#e2e2e2",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#2ae500",
+                        "outline": "#85967c",
+                        "inverse-primary": "#106e00",
+                        "background": "#131313",
+                        "on-primary": "#053900",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-error": "#690005",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-tertiary": "#2f3131",
+                        "primary": "#efffe3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "20px",
+                        "container-max": "1440px",
+                        "sm": "16px",
+                        "lg": "40px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "md": "24px",
+                        "xl": "64px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "mono-data": ["Geist Mono"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-hero": ["Hanken Grotesk"],
+                        "label-caps": ["Geist Mono"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "mono-data": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+        .animate-pulse-glow { animation: pulse-glow 2s infinite ease-in-out; }
+        .scanline {
+            background: linear-gradient(to bottom, transparent 0%, rgba(42, 229, 0, 0.1) 50%, transparent 100%);
+            height: 100px;
+            width: 100%;
+            position: absolute;
+            z-index: 10;
+            pointer-events: none;
+            animation: scanline 4s linear infinite;
+        }
+        .glass-hud {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .technical-border {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 90% 100%, 0% 100%);
+        }
+        .hud-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #2ae500;
+        }
+    </style>
+    <!-- MediaPipe Pose API -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+
+    <link href="app.css?v=3" rel="stylesheet">
+
+</head>
+<body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
+    <div class="iphone-container">
+        <div class="iphone-border"></div>
+        <div class="iphone-reflection"></div>
+        <div class="dynamic-island">
+            <div class="camera-lens"></div>
+        </div>
+        <div class="home-indicator"></div>
+        
+        <div class="iphone-screen">
+            
+            <!-- iOS Status Bar -->
+            <div class="status-bar">
+                <span class="status-bar-time leading-none">09:41</span>
+                <div class="status-bar-icons">
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">signal_cellular_alt</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">wifi</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">battery_5_bar</span>
+                </div>
+            </div>
+
+            
+            
+<!-- Main Camera Canvas -->
+<div class="relative h-full w-full bg-black overflow-hidden flex items-center justify-center">
+<!-- Live Camera Feed (Hidden source) -->
+<video id="webcam-video" autoplay playsinline muted class="hidden" width="640" height="480"></video>
+<!-- Live Camera Feed (Simulated source) -->
+<img id="fallback-img" alt="Pro athlete performing bench press" class="hidden" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYEaigbtJOQVVbaUjzak6ttwUHt6Exh6m0NV04Vk8TpCMTzUvqKFITu4hO8ApwJ-MhfA6wcgKQw0VFgaoFeWbaHnPCik0p3ivvFVhPsc-U8UYkObL8pKj7EdmAmgrajYfDZqkrz6oVL9jr7ZmWYRE4yKFyqBtJ7sZWKgcRfIv-Gvhz8f653vcEaDWLxpYKWBfGflwfaDYfdjJzvJWSZbfeu7YaNVfr3pU7Mwrmz9JG_GPmggNJ2rtZE8cil6S2Xn4kde_sp0rnpQ" crossorigin="anonymous"/>
+<!-- Unified Canvas for video rendering and skeleton overlay -->
+<canvas id="camera-canvas" class="absolute inset-0 w-full h-full object-cover z-20"></canvas>
+<!-- Scanline Effect -->
+<div class="scanline"></div>
+<!-- AI Overlay Grid Layer -->
+<div class="absolute inset-0 z-20 pointer-events-none opacity-40" style="background-image: radial-gradient(circle at 2px 2px, rgba(57, 255, 20, 0.1) 1px, transparent 0); background-size: 32px 32px;"></div>
+<div class="absolute top-0 left-0 w-full px-gutter py-md z-40 flex justify-between items-start">
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-xs">
+
+<button onclick="if(document.referrer && document.referrer.includes(window.location.host)) { window.history.back(); } else { window.location.href='exercises.html?v=4'; }" class="p-xs hover:bg-white/10 rounded-full transition-all duration-300 ease-out active:scale-95 text-[#2ae500] hover:text-white mr-1 flex-shrink-0" title="Go Back">
+    <span class="material-symbols-outlined text-xl leading-none">arrow_back</span>
+</button><span class="material-symbols-outlined text-primary-fixed-dim animate-pulse">radar</span>
+<h1 class="font-mono-data text-[10px] text-primary-fixed-dim uppercase tracking-wider font-bold">TARGET LOCK</h1>
+</div>
+<div class="flex gap-md font-mono-data text-[10px] text-on-surface-variant uppercase tracking-tighter">
+<span>SYS.RECON: ACTIVE</span>
+<span>FPS: 60.00</span>
+<span class="flex items-center gap-1">
+<span id="cam-status-dot" class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+<span id="cam-status-text">WEBCAM: SIMULATED</span>
+</span>
+</div>
+</div>
+<div class="flex items-center gap-xs">
+    <!-- Camera Toggle Button -->
+    <button id="cam-toggle-btn" class="w-8 h-8 rounded-full glass-hud flex items-center justify-center text-error border border-error/30 hover:bg-white/10 transition-all" title="Toggle Camera">
+        <span class="material-symbols-outlined text-sm">videocam_off</span>
+    </button>
+    <!-- HUD Toggle Button -->
+    <button id="hud-toggle-btn" class="w-8 h-8 rounded-full glass-hud flex items-center justify-center text-on-surface hover:bg-white/10 transition-all border border-white/10" title="Toggle HUD Overlays">
+        <span class="material-symbols-outlined text-sm">grid_view</span>
+    </button>
+    <!-- Recalibrate Button -->
+    <button id="recalib-btn" class="w-8 h-8 rounded-full glass-hud flex items-center justify-center text-on-surface hover:bg-white/10 transition-all border border-white/10" title="Recalibrate">
+        <span class="material-symbols-outlined text-sm">refresh</span>
+    </button>
+    <!-- Record Clip Button -->
+    <button id="record-btn" class="w-8 h-8 rounded-full glass-hud flex items-center justify-center text-on-surface hover:bg-white/10 transition-all border border-white/10" title="Record Clip">
+        <span class="material-symbols-outlined text-sm">videocam</span>
+    </button>
+    <!-- End Session Button -->
+    <button onclick="window.location.href='exercises.html'" class="w-8 h-8 rounded-full bg-error-container/20 text-error flex items-center justify-center border border-error/30 hover:bg-error-container transition-all" title="End Session">
+        <span class="material-symbols-outlined text-sm">close</span>
+    </button>
+</div>
+</div>
+<!-- LEFT PANEL - RECON CYCLES -->
+<div id="left-hud-panel" class="absolute left-gutter top-1/2 -translate-y-1/2 z-40 flex flex-col gap-md transition-all duration-300 opacity-0 pointer-events-none">
+<div class="glass-hud p-md rounded-xl w-48 border-l-4 border-l-primary-fixed-dim relative overflow-hidden">
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-xs opacity-60">Recon.Cycles</div>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-headline-lg text-primary-fixed-dim">08</span>
+<span class="font-mono-data text-body-md text-on-surface-variant">/12</span>
+</div>
+<div class="w-full h-1 bg-surface-container mt-md relative">
+<div class="absolute inset-y-0 left-0 bg-primary-fixed-dim w-2/3 shadow-[0_0_10px_#2ae500]"></div>
+</div>
+</div>
+<div class="glass-hud p-md rounded-xl w-48 border-l-4 border-l-primary-fixed relative">
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-xs opacity-60">Form Analysis</div>
+<div class="font-display-hero text-headline-md text-primary-fixed">92<span class="text-body-md">%</span></div>
+<div class="font-mono-data text-[10px] text-primary-fixed mt-xs animate-pulse">OPTIMAL RANGE</div>
+</div>
+</div>
+<!-- RIGHT PANEL - COGNITIVE CORE -->
+<div id="right-hud-panel" class="absolute right-gutter top-1/2 -translate-y-1/2 z-40 flex flex-col items-end gap-md transition-all duration-300 opacity-0 pointer-events-none">
+<div class="glass-hud p-md rounded-xl w-64 technical-border">
+<div class="flex justify-between items-center mb-md border-b border-white/10 pb-xs">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary-fixed-dim text-sm" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-label-caps text-label-caps uppercase">Cognitive Core</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">volume_up</span>
+</div>
+<div class="space-y-sm">
+<div class="bg-primary/5 border border-primary/20 p-xs rounded-lg flex items-center justify-between">
+<span class="font-mono-data text-[11px] text-primary-fixed-dim">PRE-TRAINED AI</span>
+<div class="w-2 h-2 rounded-full bg-primary-fixed-dim"></div>
+</div>
+<div class="opacity-50 pointer-events-none border border-white/5 p-xs rounded-lg flex items-center justify-between">
+<span class="font-mono-data text-[11px]">CUSTOM AI</span>
+<div class="w-2 h-2 rounded-full bg-white/20"></div>
+</div>
+</div>
+<div class="mt-lg pt-sm border-t border-white/5">
+<div class="font-mono-data text-[10px] text-on-surface-variant mb-xs">// CLASSIFIER_ACTIVE</div>
+<div class="font-body-md text-[13px] text-on-surface leading-snug">
+                        AI analyzing skeletal posture using hardcoded physical constraints for Bench Press.
+                    </div>
+</div>
+</div>
+<div class="glass-hud p-md rounded-xl w-64 border-r-4 border-r-error">
+<div class="font-label-caps text-label-caps text-error uppercase mb-xs">SYS.INTEGRITY</div>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-headline-md text-error">30%</span>
+<span class="font-mono-data text-[10px] text-error animate-pulse">LOW LATENCY CRITICAL</span>
+</div>
+</div>
+</div>
+<!-- BOTTOM HUD - MOTION COACHING & LOGS -->
+<div class="absolute bottom-md left-gutter right-gutter z-40 flex flex-col gap-xs">
+<div id="coaching-banner" class="flex items-center gap-xs bg-black/60 border border-white/10 backdrop-blur-md p-xs rounded-xl border-l-4 border-l-[#2ae500] transition-all duration-300">
+<div id="coaching-icon-container" class="bg-[#2ae500]/20 p-xs rounded-lg flex items-center justify-center">
+<span id="coaching-icon" class="material-symbols-outlined text-[#2ae500] text-sm">check_circle</span>
+</div>
+<div class="flex-1">
+<div id="coaching-title" class="font-mono-data text-[9px] text-[#2ae500] uppercase mb-base tracking-tighter">Motion Coaching // Status Normal</div>
+<div id="coaching-text" class="font-body-md text-xs sm:text-sm text-on-surface">USING SIMULATED ATHLETE DEMO</div>
+</div>
+<div class="h-1 w-16 bg-white/10 rounded-full relative overflow-hidden flex-shrink-0">
+<div id="coaching-progress-bar" class="absolute inset-y-0 left-0 bg-[#2ae500] w-1/2"></div>
+</div>
+</div>
+<!-- Single Line Auto-scroll Logs -->
+<div id="sys-log-line" class="font-mono-data text-[9px] text-[#2ae500]/60 text-center tracking-tighter truncate">// SYS_LOG: CALIBRATION OFFSET: 0.04 DEG</div>
+</div>
+<!-- Peripheral Depth Frame -->
+<div class="absolute inset-0 border-[24px] border-black/20 pointer-events-none z-10"></div>
+</div>
+<script>
+        // 1. Mouse movement parallax effect on canvas
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth - 0.5;
+            const mouseY = e.clientY / window.innerHeight - 0.5;
+            const canvas = document.getElementById('camera-canvas');
+            if (canvas) {
+                canvas.style.transform = `scale(1.05) translate(${mouseX * 10}px, ${mouseY * 10}px)`;
+            }
+        });
+
+        // 2. Logging helper
+        function addLogLine(msg) {
+            const logLine = document.getElementById('sys-log-line');
+            if (logLine) {
+                const now = new Date();
+                const h = String(now.getHours()).padStart(2, '0');
+                const m = String(now.getMinutes()).padStart(2, '0');
+                const s = String(now.getSeconds()).padStart(2, '0');
+                logLine.textContent = `[${h}:${m}:${s}] ${msg}`;
+            }
+        }
+
+        // 3. Dynamic Feedback Banner Helper
+        function showCoachingFeedback(message, type, isAlert) {
+            const banner = document.getElementById('coaching-banner');
+            const iconContainer = document.getElementById('coaching-icon-container');
+            const icon = document.getElementById('coaching-icon');
+            const title = document.getElementById('coaching-title');
+            const text = document.getElementById('coaching-text');
+            const prog = document.getElementById('coaching-progress-bar');
+
+            if (!banner) return;
+
+            if (isAlert) {
+                banner.className = 'flex items-center gap-xs bg-error/20 border border-error/40 backdrop-blur-md p-xs rounded-xl border-l-4 border-l-error transition-all duration-300';
+                if (iconContainer) iconContainer.className = 'bg-error/30 p-xs rounded-lg';
+                if (icon) {
+                    icon.className = 'material-symbols-outlined text-error text-sm';
+                    icon.textContent = 'warning';
+                }
+                if (title) {
+                    title.className = 'font-mono-data text-[9px] text-error uppercase mb-base tracking-tighter';
+                    title.textContent = `Motion Coaching // ${type.toUpperCase()}`;
+                }
+                if (text) {
+                    text.className = 'font-body-md text-xs sm:text-sm text-on-surface';
+                    text.textContent = message;
+                }
+                if (prog) {
+                    prog.className = 'absolute inset-y-0 left-0 bg-error transition-all duration-300';
+                }
+            } else {
+                banner.className = 'flex items-center gap-xs bg-black/60 border border-[#2ae500]/30 backdrop-blur-md p-xs rounded-xl border-l-4 border-l-[#2ae500] transition-all duration-300';
+                if (iconContainer) iconContainer.className = 'bg-[#2ae500]/20 p-xs rounded-lg';
+                if (icon) {
+                    icon.className = 'material-symbols-outlined text-[#2ae500] text-sm';
+                    icon.textContent = 'check_circle';
+                }
+                if (title) {
+                    title.className = 'font-mono-data text-[9px] text-[#2ae500] uppercase mb-base tracking-tighter';
+                    title.textContent = `Motion Coaching // ${type.toUpperCase()}`;
+                }
+                if (text) {
+                    text.className = 'font-body-md text-xs sm:text-sm text-[#2ae500]';
+                    text.textContent = message;
+                }
+                if (prog) {
+                    prog.className = 'absolute inset-y-0 left-0 bg-[#2ae500] transition-all duration-300';
+                }
+            }
+        }
+
+        // 4. Image Cover drawing function for canvas
+        function drawImageProp(ctx, img, x, y, w, h, offsetX = 0.5, offsetY = 0.5) {
+            const iw = img.videoWidth || img.naturalWidth || img.width;
+            const ih = img.videoHeight || img.naturalHeight || img.height;
+            if (!iw || !ih) return null;
+
+            const r = Math.min(w / iw, h / ih);
+            let nw = iw * r;
+            let nh = ih * r;
+            let ar = 1;
+
+            if (nw < w) ar = w / nw;
+            if (Math.abs(ar - 1) < 1e-14 && nh < h) ar = h / nh;
+            nw *= ar;
+            nh *= ar;
+
+            const cw = iw / (nw / w);
+            const ch = ih / (nh / h);
+
+            const cx = (iw - cw) * offsetX;
+            const cy = (ih - ch) * offsetY;
+
+            ctx.drawImage(img, Math.max(0, cx), Math.max(0, cy), Math.min(iw, cw), Math.min(ih, ch), x, y, w, h);
+
+            return { cx, cy, cw, ch, iw, ih };
+        }
+
+        // Coordinate mapper from source frame space to canvas space
+        function mapSourceToCanvas(sx, sy, cropParams, canvasW, canvasH) {
+            if (!cropParams) return { x: sx, y: sy };
+            const { cx, cy, cw, ch } = cropParams;
+            const dx = ((sx - cx) / cw) * canvasW;
+            const dy = ((sy - cy) / ch) * canvasH;
+            return { x: dx, y: dy };
+        }
+
+        // 5. Initialize Page Controls & Tracking Variables
+        let useActualTracking = false;
+        let poseDetector = null;
+        let lastPoseTimestamp = 0;
+        let activeStream = null;
+        let cameraHelper = null;
+        let isRecording = false;
+
+        const canvas = document.getElementById('camera-canvas');
+        const ctx = canvas.getContext('2d');
+        const video = document.getElementById('webcam-video');
+        const fallbackImg = document.getElementById('fallback-img');
+
+        // We store the current pose results to render in sync with requestAnimationFrame
+        let currentPoseResults = null;
+
+        async function startCameraAndTracking() {
+            const dot = document.getElementById('cam-status-dot');
+            const text = document.getElementById('cam-status-text');
+            const camBtn = document.getElementById('cam-toggle-btn');
+
+            if (typeof window.Pose === 'undefined' || typeof window.Camera === 'undefined') {
+                console.warn("MediaPipe libraries not loaded. Cannot start actual tracking.");
+                alert("Biometric scanning libraries are currently loading. Please wait a moment and try again.");
+                return;
+            }
+
+            try {
+                if (!poseDetector) {
+                    poseDetector = new Pose({
+                        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+                    });
+
+                    poseDetector.setOptions({
+                        modelComplexity: 0,
+                        smoothLandmarks: true,
+                        minDetectionConfidence: 0.5,
+                        minTrackingConfidence: 0.5
+                    });
+
+                    poseDetector.onResults((results) => {
+                        currentPoseResults = results;
+                        lastPoseTimestamp = Date.now();
+                    });
+                }
+
+                if (!cameraHelper) {
+                    cameraHelper = new Camera(video, {
+                        onFrame: async () => {
+                            if (useActualTracking && activeStream) {
+                                await poseDetector.send({ image: video });
+                            }
+                        },
+                        width: 640,
+                        height: 480
+                    });
+                }
+
+                await cameraHelper.start();
+                activeStream = video.srcObject;
+                useActualTracking = true;
+
+                if (dot) {
+                    dot.classList.remove('bg-amber-500');
+                    dot.classList.add('bg-primary-fixed-dim');
+                }
+                if (text) {
+                    text.textContent = 'WEBCAM: LIVE';
+                }
+                if (camBtn) {
+                    camBtn.className = 'w-8 h-8 rounded-full glass-hud flex items-center justify-center text-[#2ae500] border border-[#2ae500]/30 hover:bg-white/10 transition-all';
+                    camBtn.innerHTML = '<span class="material-symbols-outlined text-sm">videocam</span>';
+                }
+
+                addLogLine("WEBCAM STREAM ESTABLISHED");
+                showCoachingFeedback("CAMERA ACTIVE. POSITION IN FRAME.", "Status Normal", false);
+
+            } catch (err) {
+                console.error("Camera access failed or denied:", err);
+                alert("Camera access denied or failed. Please check your browser webcam permissions.");
+                stopCameraAndTracking();
+            }
+        }
+
+        function stopCameraAndTracking() {
+            const dot = document.getElementById('cam-status-dot');
+            const text = document.getElementById('cam-status-text');
+            const camBtn = document.getElementById('cam-toggle-btn');
+
+            useActualTracking = false;
+            currentPoseResults = null;
+
+            if (activeStream) {
+                activeStream.getTracks().forEach(track => track.stop());
+                activeStream = null;
+            }
+            if (video) {
+                video.srcObject = null;
+            }
+
+            if (dot) {
+                dot.classList.remove('bg-primary-fixed-dim');
+                dot.classList.add('bg-amber-500');
+            }
+            if (text) {
+                text.textContent = 'WEBCAM: SIMULATED';
+            }
+            if (camBtn) {
+                camBtn.className = 'w-8 h-8 rounded-full glass-hud flex items-center justify-center text-error border border-error/30 hover:bg-white/10 transition-all';
+                camBtn.innerHTML = '<span class="material-symbols-outlined text-sm">videocam_off</span>';
+            }
+
+            addLogLine("REVERTED TO DEMO SIMULATION");
+            showCoachingFeedback("USING SIMULATED ATHLETE DEMO", "Status Normal", false);
+        }
+
+        // 6. Draw functions for the skeleton overlay
+        function drawSkeletonNode(ctx, pt, label = "") {
+            // Glow circle
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = "rgba(42, 229, 0, 0.25)";
+            ctx.fill();
+
+            // Inner circle
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = "#2ae500";
+            ctx.fill();
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Label
+            if (label) {
+                ctx.font = "9px 'Geist Mono', monospace";
+                const tw = ctx.measureText(label).width;
+                
+                // Draw small box behind text
+                ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
+                ctx.fillRect(pt.x - tw / 2 - 4, pt.y - 22, tw + 8, 14);
+                ctx.strokeStyle = "rgba(42, 229, 0, 0.3)";
+                ctx.lineWidth = 0.5;
+                ctx.strokeRect(pt.x - tw / 2 - 4, pt.y - 22, tw + 8, 14);
+
+                // Draw text
+                ctx.fillStyle = "#2ae500";
+                ctx.fillText(label, pt.x - tw / 2, pt.y - 12);
+            }
+        }
+
+        function drawSkeletonBone(ctx, p1, p2) {
+            // Shadow green line
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = "rgba(42, 229, 0, 0.35)";
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            // Bright green line
+            ctx.strokeStyle = "#2ae500";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+
+        // Calculate Angle between three points: p1 (Shoulder), p2 (Elbow), p3 (Wrist)
+        function calcJointAngle(p1, p2, p3) {
+            const v1 = { x: p1.x - p2.x, y: p1.y - p2.y };
+            const v2 = { x: p3.x - p2.x, y: p3.y - p2.y };
+            const dot = v1.x * v2.x + v1.y * v2.y;
+            const mag1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y);
+            const mag2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+            if (mag1 * mag2 === 0) return 180;
+            let angle = Math.acos(dot / (mag1 * mag2)) * (180 / Math.PI);
+            return angle;
+        }
+
+        // 7. Core Render and Animation Loop
+        const repDuration = 3500;
+        let lastLoggedRep = -1;
+
+        function renderFrame(timestamp) {
+            // Resize canvas to match display size
+            if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+                canvas.width = canvas.clientWidth;
+                canvas.height = canvas.clientHeight;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const isWebcamActive = useActualTracking && (Date.now() - lastPoseTimestamp < 3000);
+
+            if (isWebcamActive && currentPoseResults) {
+                // --- WEBCAM TRACKING RENDER ---
+                const landmarks = currentPoseResults.poseLandmarks;
+
+                // 1. Draw video mirrored
+                ctx.save();
+                ctx.translate(canvas.width, 0);
+                ctx.scale(-1, 1);
+                const cropParams = drawImageProp(ctx, video, 0, 0, canvas.width, canvas.height);
+                ctx.restore();
+
+                if (landmarks && landmarks.length >= 17 && cropParams) {
+                    const videoW = cropParams.iw;
+                    const videoH = cropParams.ih;
+
+                    // Map points from video resolution space to canvas layout space
+                    // We flip x-coordinate for mirrored rendering on screen
+                    const getPt = (idx) => {
+                        const rawPt = mapSourceToCanvas(landmarks[idx].x * videoW, landmarks[idx].y * videoH, cropParams, canvas.width, canvas.height);
+                        return { x: canvas.width - rawPt.x, y: rawPt.y };
+                    };
+
+                    const shoulderL = getPt(11);
+                    const shoulderR = getPt(12);
+                    const elbowL = getPt(13);
+                    const elbowR = getPt(14);
+                    const wristL = getPt(15);
+                    const wristR = getPt(16);
+                    const hipL = getPt(23);
+
+                    const chest = {
+                        x: (shoulderL.x + shoulderR.x) / 2,
+                        y: (shoulderL.y + shoulderR.y) / 2
+                    };
+
+                    // Draw skeletal bones
+                    drawSkeletonBone(ctx, shoulderL, elbowL);
+                    drawSkeletonBone(ctx, shoulderR, elbowR);
+                    drawSkeletonBone(ctx, shoulderL, shoulderR);
+                    drawSkeletonBone(ctx, chest, hipL);
+
+                    // Calculate angles
+                    // MediaPipe normalized values for calc
+                    const angleL = calcJointAngle(
+                        { x: landmarks[11].x * videoW, y: landmarks[11].y * videoH },
+                        { x: landmarks[13].x * videoW, y: landmarks[13].y * videoH },
+                        { x: landmarks[15].x * videoW, y: landmarks[15].y * videoH }
+                    );
+                    const angleR = calcJointAngle(
+                        { x: landmarks[12].x * videoW, y: landmarks[12].y * videoH },
+                        { x: landmarks[14].x * videoW, y: landmarks[14].y * videoH },
+                        { x: landmarks[16].x * videoW, y: landmarks[16].y * videoH }
+                    );
+
+                    // Draw joint nodes with angle labels
+                    drawSkeletonNode(ctx, elbowL, `ELBOW_L: ${angleL.toFixed(1)}°`);
+                    drawSkeletonNode(ctx, elbowR, `ELBOW_R: ${angleR.toFixed(1)}°`);
+                    drawSkeletonNode(ctx, chest);
+
+                    // Live Coaching logic based on joints
+                    const avgAngle = (angleL + angleR) / 2;
+                    if (avgAngle > 145) {
+                        showCoachingFeedback("FORM OPTIMAL. LOWER BAR SLOWLY.", "Status Normal", false);
+                    } else if (avgAngle > 90 && avgAngle <= 145) {
+                        showCoachingFeedback("ELBOWS BENDING WELL. PUSH UP SMOOTHLY.", "Status Normal", false);
+                    } else {
+                        showCoachingFeedback("MAX DEPTH REACHED. ARCH BACK & PRESS UP!", "Live Alert", true);
+                    }
+
+                    // Progress bar matches elbow extension
+                    const progressVal = document.getElementById('coaching-progress-bar');
+                    if (progressVal) {
+                        const percent = Math.max(0, Math.min(100, ((avgAngle - 60) / 100) * 100));
+                        progressVal.style.width = `${percent}%`;
+                    }
+                } else {
+                    showCoachingFeedback("ALIGN BODY IN FRAME...", "Warning", true);
+                }
+
+            } else {
+                // --- fallback / demo athlete simulation ---
+                // 1. Draw static background cover
+                const cropParams = drawImageProp(ctx, fallbackImg, 0, 0, canvas.width, canvas.height);
+
+                if (cropParams) {
+                    const progress = (timestamp % repDuration) / repDuration;
+                    const factor = (1 - Math.cos(progress * 2 * Math.PI)) / 2;
+
+                    // Simulated rep counter sync
+                    const currentRep = Math.floor(timestamp / repDuration) % 12 + 1;
+                    if (currentRep !== lastLoggedRep) {
+                        lastLoggedRep = currentRep;
+                        const repBadge = document.querySelector('.w-48 .text-headline-lg');
+                        if (repBadge) {
+                            repBadge.innerHTML = String(currentRep).padStart(2, '0') + '<span class="font-mono-data text-body-md text-on-surface-variant">/12</span>';
+                        }
+                        
+                        const repProgress = document.querySelector('.w-48 .bg-primary-fixed-dim');
+                        if (repProgress) {
+                            repProgress.style.width = `${(currentRep / 12) * 100}%`;
+                        }
+
+                        addLogLine(`REPS COUNTING: REGISTERED REP ${currentRep}`);
+                    }
+
+                    // Simulated coordinates in 1376x768 space
+                    const cyCenter = 400 + (factor * 80); 
+                    const cyLeft = 420 + (factor * 50);    
+                    const cyRight = 420 + (factor * 50);
+
+                    const rawShoulderL = { x: 450, y: 340 };
+                    const rawShoulderR = { x: 926, y: 340 };
+                    const rawElbowL = { x: 450, y: cyLeft };
+                    const rawElbowR = { x: 926, y: cyRight };
+                    const rawWristL = { x: 450, y: cyLeft + 80 };
+                    const rawWristR = { x: 926, y: cyRight + 80 };
+                    const rawHip = { x: 688, y: 600 };
+
+                    const rawChest = {
+                        x: (rawShoulderL.x + rawShoulderR.x) / 2,
+                        y: cyCenter
+                    };
+
+                    // Map simulated coordinate space to canvas crop space
+                    const getPt = (sx, sy) => mapSourceToCanvas(sx, sy, cropParams, canvas.width, canvas.height);
+
+                    const shoulderL = getPt(rawShoulderL.x, rawShoulderL.y);
+                    const shoulderR = getPt(rawShoulderR.x, rawShoulderR.y);
+                    const elbowL = getPt(rawElbowL.x, rawElbowL.y);
+                    const elbowR = getPt(rawElbowR.x, rawElbowR.y);
+                    const wristL = getPt(rawWristL.x, rawWristL.y);
+                    const wristR = getPt(rawWristR.x, rawWristR.y);
+                    const chest = getPt(rawChest.x, rawChest.y);
+                    const hip = getPt(rawHip.x, rawHip.y);
+
+                    // Draw simulated skeletal bones
+                    drawSkeletonBone(ctx, shoulderL, elbowL);
+                    drawSkeletonBone(ctx, shoulderR, elbowR);
+                    drawSkeletonBone(ctx, shoulderL, shoulderR);
+                    drawSkeletonBone(ctx, chest, hip);
+
+                    // Simulated elbow angles
+                    const angleL = 142.4 - (factor * 60) + (Math.sin(timestamp / 300) * 1);
+                    const angleR = 145.1 - (factor * 62) + (Math.cos(timestamp / 300) * 1);
+
+                    // Draw joint nodes
+                    drawSkeletonNode(ctx, elbowL, `ELBOW_L: ${angleL.toFixed(1)}°`);
+                    drawSkeletonNode(ctx, elbowR, `ELBOW_R: ${angleR.toFixed(1)}°`);
+                    drawSkeletonNode(ctx, chest);
+
+                    // Simulated coaching text sync
+                    if (factor > 0.75) {
+                        showCoachingFeedback("KEEP FEET FLAT. ARCH BACK SLIGHTLY.", "Live Alert", true);
+                    } else if (factor < 0.25) {
+                        showCoachingFeedback("FORM OPTIMAL. KEEP STEADY TEMPO.", "Status Normal", false);
+                    } else {
+                        showCoachingFeedback("ELBOWS BENDING WELL. PUSH UP SMOOTHLY.", "Status Normal", false);
+                    }
+
+                    // Progress bar
+                    const progressVal = document.getElementById('coaching-progress-bar');
+                    if (progressVal) {
+                        progressVal.style.width = `${factor * 100}%`;
+                    }
+                }
+            }
+
+            requestAnimationFrame(renderFrame);
+        }
+
+        // Start render loop immediately
+        requestAnimationFrame(renderFrame);
+
+        // 8. Event Listeners & HUD Initializations
+        function initPage() {
+            // Recalibrate Button
+            const recalibBtn = document.getElementById('recalib-btn');
+            if (recalibBtn) {
+                recalibBtn.addEventListener('click', () => {
+                    recalibBtn.disabled = true;
+                    const originalHTML = recalibBtn.innerHTML;
+                    recalibBtn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">sync</span>';
+                    
+                    addLogLine("CALIBRATION ENGINE STARTED...");
+
+                    setTimeout(() => {
+                        recalibBtn.innerHTML = originalHTML;
+                        recalibBtn.disabled = false;
+                        
+                        addLogLine("CALIBRATION FIXED AND STABILIZED");
+
+                        // Show premium toast
+                        const toast = document.createElement('div');
+                        toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-background border border-[#2ae500]/50 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md max-w-sm w-[90%] transition-all duration-300';
+                        toast.innerHTML = '<span class="material-symbols-outlined text-[#2ae500]">check_circle</span><span class="text-xs font-mono-data uppercase">CALIBRATION STABLE</span>';
+                        document.body.appendChild(toast);
+                        setTimeout(() => toast.remove(), 2000);
+                    }, 1500);
+                });
+            }
+
+            // Camera Toggle Click (with confirmation)
+            const camBtn = document.getElementById('cam-toggle-btn');
+            if (camBtn) {
+                camBtn.addEventListener('click', () => {
+                    if (useActualTracking) {
+                        stopCameraAndTracking();
+                    } else {
+                        const approved = confirm("FitGuru requests camera access for AI Motion Coaching. Grant permission?");
+                        if (approved) {
+                            startCameraAndTracking();
+                        }
+                    }
+                });
+            }
+
+            // HUD Toggle Click (starts hidden)
+            let isHudVisible = false;
+            const hudBtn = document.getElementById('hud-toggle-btn');
+            const leftPanel = document.getElementById('left-hud-panel');
+            const rightPanel = document.getElementById('right-hud-panel');
+
+            if (hudBtn) {
+                hudBtn.addEventListener('click', () => {
+                    isHudVisible = !isHudVisible;
+                    
+                    if (isHudVisible) {
+                        if (leftPanel) leftPanel.classList.remove('opacity-0', 'pointer-events-none');
+                        if (rightPanel) rightPanel.classList.remove('opacity-0', 'pointer-events-none');
+                        hudBtn.className = 'w-8 h-8 rounded-full glass-hud flex items-center justify-center text-primary-fixed-dim border border-primary-fixed-dim/30 hover:bg-white/10 transition-all animate-pulse';
+                        addLogLine("FULL DIAGNOSTICS HUD ACTIVATED");
+                    } else {
+                        if (leftPanel) leftPanel.classList.add('opacity-0', 'pointer-events-none');
+                        if (rightPanel) rightPanel.classList.add('opacity-0', 'pointer-events-none');
+                        hudBtn.className = 'w-8 h-8 rounded-full glass-hud flex items-center justify-center text-on-surface hover:bg-white/10 transition-all border border-white/10';
+                        addLogLine("DIAGNOSTICS HUD MINIMIZED");
+                    }
+                });
+            }
+
+            // Record Clip Click
+            const recordBtn = document.getElementById('record-btn');
+            if (recordBtn) {
+                recordBtn.addEventListener('click', () => {
+                    isRecording = !isRecording;
+                    if (isRecording) {
+                        recordBtn.className = 'w-8 h-8 rounded-full bg-red-600/35 border border-red-500 text-red-500 flex items-center justify-center animate-pulse hover:bg-red-600/50 transition-all';
+                        addLogLine("VIDEO STREAM RECORDING INITIATED");
+                    } else {
+                        recordBtn.className = 'w-8 h-8 rounded-full glass-hud flex items-center justify-center text-on-surface hover:bg-white/10 transition-all border border-white/10';
+                        addLogLine("RECORDING SAVED TO DEVICE REEL");
+                        
+                        // Show save toast
+                        const toast = document.createElement('div');
+                        toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-background border border-primary-fixed-dim/50 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md max-w-sm w-[90%] transition-all duration-300';
+                        toast.innerHTML = '<span class="material-symbols-outlined text-primary-fixed-dim">save_alt</span><span class="text-xs font-mono-data uppercase">CLIP SAVED SUCCESSFULLY</span>';
+                        document.body.appendChild(toast);
+                        setTimeout(() => toast.remove(), 2000);
+                    }
+                });
+            }
+        }
+
+        // Initialize immediately
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            initPage();
+        }
+    </script>
+
+            
+            
+        </div>
+    </div>
+    
+    <!-- Dynamic Clock script -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            const timeStr = hours + ':' + minutes;
+            document.querySelectorAll('.status-bar-time').forEach(el => el.textContent = timeStr);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
+</body></html>

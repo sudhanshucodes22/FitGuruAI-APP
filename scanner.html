@@ -1,0 +1,747 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>FITGURU | Meal Scanner AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500&amp;family=Geist:wght@500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .elite-border {
+            border-top: 1px solid #39FF14;
+        }
+        .glow-neon {
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+        }
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #39FF14, transparent);
+            box-shadow: 0 0 15px #39FF14;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .bounding-box {
+            border: 2px solid #39FF14;
+            box-shadow: 0 0 8px #39FF14;
+            position: absolute;
+            transition: all 0.3s ease-out;
+        }
+        .corner-bracket {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid #39FF14;
+        }
+        .hud-grid {
+            background-image: linear-gradient(rgba(57, 255, 20, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(57, 255, 20, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .sticky-viewfinder {
+            position: sticky;
+            top: 0;
+            height: 60vh;
+            z-index: 10;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+          screens: {
+            'sm': '9999px',
+            'md': '9999px',
+            'lg': '9999px',
+            'xl': '9999px',
+            '2xl': '9999px',
+          },
+                extend: {
+                    "colors": {
+                        "on-background": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-primary-fixed": "#022100",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#353535",
+                        "surface-tint": "#2ae500",
+                        "inverse-surface": "#e2e2e2",
+                        "surface-dim": "#131313",
+                        "on-surface-variant": "#baccb0",
+                        "tertiary-container": "#dddddd",
+                        "on-tertiary": "#2f3131",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-tertiary-container": "#606162",
+                        "outline": "#85967c",
+                        "tertiary": "#f9fafa",
+                        "primary": "#efffe3",
+                        "background": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary": "#c8c6c5",
+                        "secondary-container": "#474746",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-surface": "#e2e2e2",
+                        "on-secondary-container": "#b7b5b4",
+                        "surface-bright": "#393939",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error-container": "#93000a",
+                        "inverse-on-surface": "#303030",
+                        "surface-container": "#1f1f1f",
+                        "on-primary-fixed-variant": "#095300",
+                        "error": "#ffb4ab",
+                        "on-primary": "#053900",
+                        "primary-fixed-dim": "#2ae500",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "primary-fixed": "#79ff5b",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "primary-container": "#39ff14",
+                        "outline-variant": "#3c4b35",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface": "#131313",
+                        "tertiary-fixed": "#e2e2e2",
+                        "surface-variant": "#353535",
+                        "on-primary-container": "#107100",
+                        "on-secondary": "#313030",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-container-low": "#1b1b1b",
+                        "inverse-primary": "#106e00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "20px",
+                        "lg": "40px",
+                        "md": "24px",
+                        "container-max": "1440px",
+                        "base": "4px",
+                        "xl": "64px",
+                        "sm": "16px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-hero": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "label-caps": ["Geist"],
+                        "mono-data": ["Geist"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "mono-data": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+
+    <link href="app.css?v=3" rel="stylesheet">
+
+</head>
+<body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
+    <div class="iphone-container">
+        <div class="iphone-border"></div>
+        <div class="iphone-reflection"></div>
+        <div class="dynamic-island">
+            <div class="camera-lens"></div>
+        </div>
+        <div class="home-indicator"></div>
+        
+        <div class="iphone-screen">
+            
+            <!-- iOS Status Bar -->
+            <div class="status-bar">
+                <span class="status-bar-time leading-none">09:41</span>
+                <div class="status-bar-icons">
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">signal_cellular_alt</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">wifi</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">battery_5_bar</span>
+                </div>
+            </div>
+
+            
+            
+<!-- Top App Bar (From COMPONENTS_13) -->
+<header class="w-full flex-shrink-0 z-20 bg-background/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-gutter py-md">
+<div class="flex items-center gap-sm">
+<button onclick="if(document.referrer && document.referrer.includes(window.location.host)) { window.history.back(); } else { window.location.href='dashboard.html?v=4'; }" class="p-xs hover:bg-white/5 rounded-full transition-all duration-300 ease-out active:scale-95 text-on-surface-variant hover:text-primary mr-1 flex-shrink-0" title="Go Back">
+    <span class="material-symbols-outlined text-xl leading-none">arrow_back</span>
+</button>
+<div onclick="window.location.href='profile.html'" class="w-10 h-10 rounded-full overflow-hidden border border-primary/20 cursor-pointer active:scale-95 transition-transform">
+<img alt="athlete profile photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs9odghwj6_Hb1iVv-68NYxBxE35IkRW0E2qn8qNc50Y5i-aqot4ArME_I5PZLDeB6saZ3i5xpk9zB2GNc3Gp-1RcwdMMMD4lttGdtr73fnJarjNedT6IcqINIha7V842S8ZLt-_iJzQwJONzbfEzUKBCfzheFDfaFu6d4scjP7MhvPtmScVoSWfbb2rYehCk5ISM2oNlJtaNl3rHz4TXKo7q0tX2Z4gs_t1PHNZLCRA9ShCVtkh17u6UjEV5k0yu-ZqC6epDASg">
+</div>
+<span class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim">FITGURU</span>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/5 transition-all duration-300 ease-out active:scale-95 text-primary">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<main class="scroll-area flex-grow w-full relative">
+<!-- Immersive Camera Viewfinder (Sticky Section) -->
+<section class="sticky-viewfinder w-full bg-black overflow-hidden shadow-2xl relative">
+<div class="absolute inset-0 opacity-30 hud-grid z-0"></div>
+<!-- Static Background (Initial State) -->
+<div id="static-feed" class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC570yR53ff5KKWtLpyUszqFIUSfo8eFg6m8a6CFNY40f-Lj5sFLXZoUdp85yMHHEgWdoFA2iKirEhchAl-noX4FGEe3rgujHHIdlbB6PNcyJpahvJ6W6d9K9gQ6RaM8nPmPAqc5aGrxCrUBL1xS5n5-OtEOjJNcaV7MZWVFjXRteUY0WBCMDlrUk5l-jPDanXy5SzOf1-axCQgCjQ8hpoW4I2RQXZrtylu9RV9BIFT-9QgHhi3rNerEEOc8lL3TaQ2io77mWP10g');">
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+</div>
+
+<!-- Webcam Feed (Hidden initially) -->
+<video id="webcam-feed" class="hidden absolute inset-0 w-full h-full object-cover z-10" autoplay playsinline></video>
+<!-- Canvas for Snapshot -->
+<canvas id="webcam-canvas" class="hidden"></canvas>
+<!-- Capture Flash Overlay -->
+<div id="camera-flash" class="hidden absolute inset-0 bg-white z-[60] opacity-0 transition-opacity duration-100"></div>
+
+<!-- Scanning HUD Overlays -->
+<div class="absolute inset-0 pointer-events-none z-20" id="scanning-hud">
+<div class="absolute w-full scan-line"></div>
+<!-- Bounding Box: Chicken -->
+<div id="box-chicken" class="bounding-box top-[25%] left-[20%] w-[40%] h-[35%] rounded-lg">
+<div class="absolute -top-7 left-0 bg-primary-container text-on-primary-container px-2 py-0.5 font-label-caps text-[10px] rounded flex items-center gap-1 shadow-lg">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+                    <span id="label-chicken">CHICKEN BREAST (150G)</span>
+                </div>
+<div class="corner-bracket -top-1 -left-1 border-r-0 border-b-0"></div>
+<div class="corner-bracket -top-1 -right-1 border-l-0 border-b-0"></div>
+<div class="corner-bracket -bottom-1 -left-1 border-r-0 border-t-0"></div>
+<div class="corner-bracket -bottom-1 -right-1 border-l-0 border-t-0"></div>
+</div>
+<!-- Bounding Box: Rice -->
+<div id="box-rice" class="bounding-box top-[50%] left-[55%] w-[25%] h-[20%] rounded-lg">
+<div class="absolute -top-7 left-0 bg-surface-container-highest text-on-surface px-2 py-0.5 font-label-caps text-[10px] rounded flex items-center gap-1 border border-white/10 shadow-lg">
+<span class="material-symbols-outlined text-[12px]">grain</span>
+                    <span id="label-rice">BROWN RICE (100G)</span>
+                </div>
+<div class="corner-bracket -top-1 -left-1 border-r-0 border-b-0"></div>
+<div class="corner-bracket -top-1 -right-1 border-l-0 border-b-0"></div>
+<div class="corner-bracket -bottom-1 -left-1 border-r-0 border-t-0"></div>
+<div class="corner-bracket -bottom-1 -right-1 border-l-0 border-t-0"></div>
+</div>
+<!-- Telemetry HUD -->
+<div class="absolute bottom-6 left-5 font-mono-data text-primary/70 text-[10px] flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    <span id="telemetry-status">SCANNER_V4.2 READY</span>
+                </div>
+<div id="telemetry-objects">OBJECTS: 2 DETECTED</div>
+<div id="telemetry-details">FOV: 78° | TILT: 12.4°</div>
+</div>
+</div>
+
+<!-- Analyzing Overlay (Loading spinner) -->
+<div id="analyzing-overlay" class="hidden absolute inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-md text-center">
+<div class="relative w-16 h-16 mb-4">
+<div class="w-16 h-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
+<span class="material-symbols-outlined absolute inset-0 flex items-center justify-center text-primary text-3xl animate-pulse">auto_awesome</span>
+</div>
+<div class="text-center px-4">
+<p class="font-label-caps text-xs text-primary uppercase tracking-[0.2em] mb-1">AI Bio-Analysis</p>
+<p class="font-body-md text-xs text-on-surface-variant animate-pulse" id="analyzing-text">SYNTHESIZING MACROS...</p>
+</div>
+</div>
+
+<!-- Camera Trigger / Control Buttons (Floating) -->
+<div class="absolute bottom-6 right-5 z-30 flex items-center gap-sm pointer-events-auto">
+<button id="shutter-btn" onclick="captureSnapshot()" class="hidden w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all" title="Capture & Analyze">
+<span class="material-symbols-outlined text-xl font-bold">circle</span>
+</button>
+<button id="camera-btn" onclick="toggleCamera()" class="w-12 h-12 rounded-full bg-[#39ff14]/10 border border-[#39ff14] text-[#39ff14] flex items-center justify-center shadow-[0_0_15px_rgba(57,255,20,0.3)] hover:scale-105 active:scale-95 transition-all" title="Start Live Scan">
+<span id="camera-btn-icon" class="material-symbols-outlined text-xl">photo_camera</span>
+</button>
+</div>
+</section>
+<!-- Nutrition DNA Dashboard (Scrollable) -->
+<section class="relative z-20 bg-background pt-8 px-gutter pb-xl rounded-t-3xl mt-2">
+<div class="max-w-md mx-auto space-y-lg">
+<!-- Dashboard Header -->
+<div class="flex justify-between items-end mb-4">
+<div>
+<h2 class="font-headline-lg text-headline-md tracking-tight text-white mb-1">Nutrition DNA</h2>
+<p class="text-on-surface-variant text-body-md opacity-70">AI Analysis of your current meal</p>
+</div>
+<button class="bg-surface-container-high p-2 rounded-full border border-white/5">
+<span class="material-symbols-outlined text-primary text-xl">share</span>
+</button>
+</div>
+<!-- Main Score & Progress Gauge -->
+<div class="glass-panel elite-border p-md rounded-2xl flex items-center justify-between glow-neon">
+<div class="flex flex-col"><span class="font-label-caps text-on-surface-variant text-[10px] tracking-widest mb-1">HEALTH SCORE</span><div class="flex items-baseline gap-xs"><span class="font-display-hero text-4xl text-primary-fixed-dim">85</span><span class="text-on-surface-variant font-mono-data text-sm">/100</span></div><span class="text-[10px] text-primary mt-2 font-medium bg-primary/10 px-2 py-0.5 rounded-full w-fit border border-primary/20">OPTIMAL FUEL</span></div>
+<div class="relative w-24 h-24">
+<svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"></path>
+<path class="transition-all duration-1000 ease-out" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#39FF14" stroke-dasharray="85, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl animate-pulse">bolt</span>
+</div>
+</div>
+</div>
+<!-- Macro Breakdown Grid -->
+<div class="grid grid-cols-2 gap-md">
+<!-- Calories Card -->
+<div class="glass-panel p-md rounded-2xl border-white/5 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-20">
+<span class="material-symbols-outlined text-4xl">local_fire_department</span>
+</div>
+<span class="font-label-caps text-on-surface-variant text-[10px] block mb-2">CALORIES</span>
+<div class="flex items-baseline gap-1 mb-4">
+<span class="font-headline-md text-white">542</span>
+<span class="text-[10px] text-on-surface-variant">kcal</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+<!-- Protein Card -->
+<div class="glass-panel p-md rounded-2xl border-primary/20 relative overflow-hidden">
+<span class="font-label-caps text-primary text-[10px] block mb-2">PROTEIN</span>
+<div class="flex items-baseline gap-1 mb-4">
+<span class="font-headline-md text-primary">42</span>
+<span class="text-[10px] text-primary/70">g</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full glow-neon" style="width: 80%;"></div>
+</div>
+</div>
+<!-- Carbs Card -->
+<div class="glass-panel p-md rounded-2xl border-white/5">
+<span class="font-label-caps text-on-surface-variant text-[10px] block mb-2">CARBS</span>
+<div class="flex items-baseline gap-1 mb-4">
+<span class="font-headline-md text-white">28</span>
+<span class="text-[10px] text-on-surface-variant">g</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-on-surface-variant h-full rounded-full opacity-60" style="width: 30%;"></div>
+</div>
+</div>
+<!-- Fats Card -->
+<div class="glass-panel p-md rounded-2xl border-white/5">
+<span class="font-label-caps text-on-surface-variant text-[10px] block mb-2">FATS</span>
+<div class="flex items-baseline gap-1 mb-4">
+<span class="font-headline-md text-white">12</span>
+<span class="text-[10px] text-on-surface-variant">g</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-on-surface-variant h-full rounded-full opacity-40" style="width: 20%;"></div>
+</div>
+</div>
+</div>
+<!-- Detected Ingredients -->
+<div class="glass-panel rounded-2xl p-md border-white/5">
+<h3 class="font-label-caps text-on-surface-variant mb-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">list_alt</span>
+                    DETECTED INGREDIENTS
+                </h3>
+<div class="space-y-sm"><div class="flex justify-between items-center py-sm border-b border-white/5"><div class="flex items-center gap-sm"><span class="material-symbols-outlined text-primary text-sm">restaurant</span><span class="text-body-md font-medium text-white">Grilled Chicken Breast</span></div><span class="font-mono-data text-primary text-sm">150g</span></div><div class="flex justify-between items-center py-sm border-b border-white/5"><div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant text-sm">grain</span><span class="text-body-md font-medium text-white">Organic Brown Rice</span></div><span class="font-mono-data text-on-surface-variant text-sm">100g</span></div><div class="flex justify-between items-center py-sm"><div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant text-sm">skillet</span><span class="text-body-md font-medium text-white">Olive Oil (Drizzle)</span></div><span class="font-mono-data text-on-surface-variant text-sm">5ml</span></div></div>
+</div>
+<!-- CTA Action -->
+<button onclick="logMeal()" class="w-full bg-primary-container text-on-primary-container py-md rounded-2xl font-headline-md flex items-center justify-center gap-sm transition-all duration-300 active:scale-95 shadow-lg shadow-primary/20 glow-neon">
+<span class="">LOG TO MEAL PLAN</span>
+<span class="material-symbols-outlined">add_task</span>
+</button>
+<!-- Bottom System Logs -->
+<div class="pt-lg pb-4 px-1 opacity-40">
+<div class="flex flex-col gap-1 font-mono-data text-[10px] text-on-surface-variant">
+<div class="flex justify-between">
+<span class="">AI_ENGINE_STATE:</span>
+<span class="text-primary">EXECUTION_READY</span>
+</div>
+<div class="flex justify-between">
+<span class="">SERVER_LATENCY:</span>
+<span class="">14ms</span>
+</div>
+<div class="flex justify-between">
+<span class="">GEO_COORD:</span>
+<span class="">34.05, -118.24</span>
+</div>
+<div class="flex justify-between">
+<span class="">FIRMWARE:</span>
+<span class="">FG_SCAN_OS_v1.0.8</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+     <script>
+         function logMeal() {
+             // Create standard premium toast notification
+             const toast = document.createElement('div');
+             toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-background border border-[#39ff14]/50 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md max-w-sm w-[90%] transition-all duration-300 transform scale-90 opacity-0';
+             toast.innerHTML = `
+                 <span class="material-symbols-outlined text-[#39ff14] animate-bounce">check_circle</span>
+                 <div>
+                     <p class="text-xs font-bold font-['Hanken_Grotesk'] uppercase tracking-wider">macros logged</p>
+                     <p class="text-[10px] text-on-surface-variant font-['Inter']">42g Protein & 542kcal synced successfully.</p>
+                 </div>
+             `;
+             document.body.appendChild(toast);
+             setTimeout(() => {
+                 toast.classList.remove('scale-90', 'opacity-0');
+             }, 50);
+             
+             setTimeout(() => {
+                 toast.classList.add('scale-90', 'opacity-0');
+                 setTimeout(() => {
+                     toast.remove();
+                     window.location.href = 'tracker.html';
+                 }, 300);
+             }, 2500);
+         }
+     </script>
+     </main>
+     
+<!-- Bottom Navigation Bar (From COMPONENTS_13) -->
+
+<script>
+    let webcamStream = null;
+    
+    function toggleCamera() {
+        const video = document.getElementById('webcam-feed');
+        const staticFeed = document.getElementById('static-feed');
+        const shutterBtn = document.getElementById('shutter-btn');
+        const cameraIcon = document.getElementById('camera-btn-icon');
+        const telemetryStatus = document.getElementById('telemetry-status');
+        
+        if (!webcamStream) {
+            // Start Camera
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                .then(stream => {
+                    webcamStream = stream;
+                    video.srcObject = stream;
+                    video.classList.remove('hidden');
+                    staticFeed.classList.add('opacity-0');
+                    shutterBtn.classList.remove('hidden');
+                    cameraIcon.textContent = 'close';
+                    
+                    // Update telemetry
+                    telemetryStatus.innerHTML = '<span class="text-[#39ff14] font-bold">LENS PROTOCOL ACTIVE</span>';
+                    showToast('CAMERA FEED SYNCED');
+                })
+                .catch(err => {
+                    console.warn("webcam stream access failed:", err);
+                    // Simulated camera fallback if no hardware is present
+                    showToast('SIMULATING CAMERA PROTOCOL');
+                    staticFeed.classList.add('brightness-125', 'contrast-125');
+                    shutterBtn.classList.remove('hidden');
+                    cameraIcon.textContent = 'close';
+                    webcamStream = "simulated";
+                });
+        } else {
+            // Stop Camera
+            stopCameraStream();
+            video.classList.add('hidden');
+            staticFeed.classList.remove('opacity-0', 'brightness-125', 'contrast-125');
+            shutterBtn.classList.add('hidden');
+            cameraIcon.textContent = 'photo_camera';
+            telemetryStatus.textContent = 'SCANNER_V4.2 READY';
+        }
+    }
+    
+    function stopCameraStream() {
+        if (webcamStream && webcamStream !== "simulated") {
+            webcamStream.getTracks().forEach(track => track.stop());
+        }
+        webcamStream = null;
+    }
+    
+    function captureSnapshot() {
+        const flash = document.getElementById('camera-flash');
+        const analyzing = document.getElementById('analyzing-overlay');
+        const analyzingText = document.getElementById('analyzing-text');
+        
+        // 1. Shutter Flash
+        flash.classList.remove('hidden');
+        flash.style.opacity = '1';
+        setTimeout(() => {
+            flash.style.opacity = '0';
+            setTimeout(() => flash.classList.add('hidden'), 100);
+        }, 100);
+        
+        // Take image frame if webcam is real
+        const video = document.getElementById('webcam-feed');
+        const canvas = document.getElementById('webcam-canvas');
+        const staticFeed = document.getElementById('static-feed');
+        
+        if (webcamStream && webcamStream !== "simulated" && video.readyState === video.HAVE_ENOUGH_DATA) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/jpeg');
+            // Set static feed background to snapshot dataurl to freeze frame
+            staticFeed.style.backgroundImage = `url('${dataUrl}')`;
+        }
+        
+        // Turn off camera
+        stopCameraStream();
+        video.classList.add('hidden');
+        staticFeed.classList.remove('opacity-0');
+        document.getElementById('shutter-btn').classList.add('hidden');
+        document.getElementById('camera-btn-icon').textContent = 'photo_camera';
+        document.getElementById('telemetry-status').textContent = 'SCANNER_V4.2 READY';
+        
+        // 2. Start AI Analysis Animation
+        analyzing.classList.remove('hidden');
+        
+        const messages = [
+            "CAPTURING VIEWPORT...",
+            "SEGMENTING OBJECTS...",
+            "COMPUTING VOLUMETRIC MASS...",
+            "NUTRITIONAL DENSITY MATCH FOUND!"
+        ];
+        
+        let msgIndex = 0;
+        const msgInterval = setInterval(() => {
+            msgIndex++;
+            if (msgIndex < messages.length) {
+                analyzingText.textContent = messages[msgIndex];
+            } else {
+                clearInterval(msgInterval);
+            }
+        }, 400);
+        
+        setTimeout(() => {
+            // Hide loading
+            analyzing.classList.add('hidden');
+            
+            // 3. Update UI content with NEW meal details!
+            updateMealScannerData();
+            
+            showToast('ANALYSIS COMPLETE: LOG UPDATED');
+        }, 2000);
+    }
+    
+    function showToast(text) {
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-background border border-[#39ff14]/50 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md max-w-sm w-[90%] transition-all duration-300';
+        toast.innerHTML = `<span class="material-symbols-outlined text-[#39ff14] animate-bounce">check_circle</span><span class="text-xs font-mono-data uppercase tracking-wider">${text}</span>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+    
+    function updateMealScannerData() {
+        // Change text values to represent the new scanned meal
+        const boxChicken = document.getElementById('box-chicken');
+        const labelChicken = document.getElementById('label-chicken');
+        const boxRice = document.getElementById('box-rice');
+        const labelRice = document.getElementById('label-rice');
+        
+        labelChicken.textContent = "GRILLED CHICKEN (180G)";
+        labelRice.textContent = "CAESAR SALAD (120G)";
+        
+        // Reposition bounding boxes slightly to simulate live repositioning!
+        boxChicken.style.top = '30%';
+        boxChicken.style.left = '15%';
+        boxChicken.style.width = '42%';
+        boxChicken.style.height = '38%';
+        
+        boxRice.style.top = '45%';
+        boxRice.style.left = '52%';
+        boxRice.style.width = '30%';
+        boxRice.style.height = '28%';
+        
+        // Telemetry details
+        document.getElementById('telemetry-objects').textContent = "OBJECTS: 2 IDENTIFIED";
+        
+        // 2. DNA Report
+        document.querySelector('h2.font-headline-lg').textContent = "Nutrition DNA: Caesar Salad";
+        document.querySelector('p.text-on-surface-variant').textContent = "AI Analysis of Grilled Chicken Caesar Salad";
+        
+        // Health score
+        document.querySelector('.text-primary-fixed-dim').textContent = "92";
+        document.querySelector('.bg-primary\\/10').textContent = "EXCELLENT FUEL";
+        
+        // SVG circle gauge
+        const gaugePath = document.querySelector('svg viewBox path:last-child') || document.querySelector('svg path:last-child');
+        if (gaugePath) {
+            gaugePath.setAttribute('stroke-dasharray', '92, 100');
+        }
+        
+        // Macros
+        // Calories: 480 kcal (60%)
+        const calorieCard = document.querySelector('.grid-cols-2 > div:nth-child(1)');
+        calorieCard.querySelector('span.font-headline-md').textContent = "480";
+        calorieCard.querySelector('.bg-primary').style.width = "60%";
+        
+        // Protein: 38g (76%)
+        const proteinCard = document.querySelector('.grid-cols-2 > div:nth-child(2)');
+        proteinCard.querySelector('span.font-headline-md').textContent = "38";
+        proteinCard.querySelector('.bg-primary').style.width = "76%";
+        
+        // Carbs: 12g (15%)
+        const carbsCard = document.querySelector('.grid-cols-2 > div:nth-child(3)');
+        carbsCard.querySelector('span.font-headline-md').textContent = "12";
+        carbsCard.querySelector('.bg-on-surface-variant').style.width = "15%";
+        
+        // Fats: 28g (45%)
+        const fatsCard = document.querySelector('.grid-cols-2 > div:nth-child(4)');
+        fatsCard.querySelector('span.font-headline-md').textContent = "28";
+        fatsCard.querySelector('.bg-on-surface-variant').style.width = "45%";
+        
+        // Detected Ingredients List
+        const ingredientsContainer = document.querySelector('.space-y-sm');
+        ingredientsContainer.innerHTML = `
+            <div class="flex justify-between items-center py-sm border-b border-white/5">
+                <div class="flex items-center gap-sm">
+                    <span class="material-symbols-outlined text-primary text-sm">restaurant</span>
+                    <span class="text-body-md font-medium text-white">Grilled Chicken Breast</span>
+                </div>
+                <span class="font-mono-data text-primary text-sm">180g</span>
+            </div>
+            <div class="flex justify-between items-center py-sm border-b border-white/5">
+                <div class="flex items-center gap-sm">
+                    <span class="material-symbols-outlined text-on-surface-variant text-sm">grain</span>
+                    <span class="text-body-md font-medium text-white">Romaine Lettuce & Croutons</span>
+                </div>
+                <span class="font-mono-data text-on-surface-variant text-sm">120g</span>
+            </div>
+            <div class="flex justify-between items-center py-sm">
+                <div class="flex items-center gap-sm">
+                    <span class="material-symbols-outlined text-on-surface-variant text-sm">skillet</span>
+                    <span class="text-body-md font-medium text-white">Caesar Dressing</span>
+                </div>
+                <span class="font-mono-data text-on-surface-variant text-sm">20ml</span>
+            </div>
+        `;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Simple scroll observer to adjust viewfinder opacity/scale
+        const viewfinder = document.querySelector('.sticky-viewfinder');
+        
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY;
+            const threshold = 300;
+            if (scrollPos > 0) {
+                const opacity = Math.max(0.2, 1 - (scrollPos / threshold));
+                const scale = 1 + (scrollPos / 2000);
+                viewfinder.style.opacity = opacity;
+                viewfinder.style.transform = `scale(${scale})`;
+            } else {
+                viewfinder.style.opacity = 1;
+                viewfinder.style.transform = 'scale(1)';
+            }
+        });
+
+        // Bounding box pulse animation
+        const boxes = document.querySelectorAll('.bounding-box');
+        setInterval(() => {
+            boxes.forEach(box => {
+                box.classList.add('glow-neon');
+                setTimeout(() => box.classList.remove('glow-neon'), 1000);
+            });
+        }, 3000);
+    });
+</script>
+
+
+
+            
+            
+            <!-- Bottom Navigation Bar -->
+            <nav class="absolute bottom-0 left-0 w-full bg-background/95 border-t border-white/10 flex justify-around items-center px-1 pb-3 z-40 shadow-[0_-10px_20px_rgba(0,0,0,0.5)]" style="height: 84px;">
+                
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="dashboard.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">home</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Home</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#39ff14]" href="scanner.html?v=4">
+                    <div class="w-11 h-11 rounded-xl border border-[#39ff14] bg-[#39ff14]/10 shadow-[0_0_10px_rgba(57,255,20,0.3)] flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl font-bold" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider font-bold">Meals</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="tracker.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">grid_view</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Tracker</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="coach.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">forum</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">AI Chat</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="rewards.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">trophy</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Badges</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="exercises.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">fitness_center</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Workouts</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="profile.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">person</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Profile</span>
+                </a>
+            
+            </nav>
+    
+        </div>
+    </div>
+    
+    <!-- Dynamic Clock script -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            const timeStr = hours + ':' + minutes;
+            document.querySelectorAll('.status-bar-time').forEach(el => el.textContent = timeStr);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
+</body></html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>FITGURU | Elite Rewards &amp; Badges</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Geist:wght@500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08)
+    }
+.neon-glow-primary {
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.25)
+    }
+.neon-border-active {
+    border: 1px solid rgba(57, 255, 20, 0.4);
+    box-shadow: inset 0 0 10px rgba(57, 255, 20, 0.1)
+    }
+.scanlines {
+    position: relative;
+    overflow: hidden
+    }
+.scanlines::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.02));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+    z-index: 5
+    }
+.noise {
+    position: relative
+    }
+.noise::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    pointer-events: none;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAgcDlyAvTZ788q7idw1wbT_t9GazG8bbktnA7qqCmadXt7gw7TIZXMZq-A_owZRHfHmdz58HpdtMas6IHntCkNM7qS0IFiXnz4JFzmbq3psC3q1eEUXRWiFtrTFb-NZpIkENY9IVEt4NXx4WtsXuw85XbMIn5f4aaYgjRL_TU2cE8Dku44mDlqmu0DTHuyu67QjC-lheTayGUwWXFv3vzzN1YZboz_Eh3aheZ5pcBUfpPBKN2p7_Id_6HnvP6jDn7k2aXFX5Kg3Q);
+    z-index: 1
+    }
+@keyframes pulse-ring {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 0.4; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+    }
+.animate-pulse-ring {
+    animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite
+    }
+.hexagon-frame {
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)
+    }
+.crest-frame {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 50% 100%, 0% 80%);
+}
+.metallic-diamond {
+    background: linear-gradient(135deg, #b98eff 0%, #4c1d95 50%, #2e1065 100%);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.3);
+}
+.metallic-platinum {
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 45%, #64748b 100%);
+    box-shadow: 0 0 30px rgba(226, 232, 240, 0.3), inset 0 0 15px rgba(255, 255, 255, 0.4);
+}
+.metallic-gold {
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #78350f 100%);
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.2);
+}
+.metallic-silver {
+    background: linear-gradient(135deg, #94a3b8 0%, #475569 50%, #1e293b 100%);
+    box-shadow: 0 0 20px rgba(148, 163, 184, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.1);
+}
+.metallic-locked {
+    background: linear-gradient(135deg, #1f1f1f 0%, #0f0f0f 100%);
+    border: 1px solid rgba(255,255,255,0.03);
+}
+.spotlight {
+    background: radial-gradient(circle at center, rgba(57, 255, 20, 0.15) 0%, transparent 70%);
+}
+body {
+    background-color: #131313;
+    color: #e2e2e2;
+    font-family: "Hanken Grotesk", sans-serif
+    }</style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#474746",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#022100",
+                        "inverse-primary": "#106e00",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface-container-low": "#1b1b1b",
+                        "surface-container-highest": "#353535",
+                        "on-tertiary-container": "#606162",
+                        "surface": "#131313",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-bright": "#393939",
+                        "on-primary-container": "#107100",
+                        "on-secondary-container": "#b7b5b4",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-primary-fixed-variant": "#095300",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#0e0e0e",
+                        "outline": "#85967c",
+                        "on-secondary": "#313030",
+                        "tertiary": "#f9fafa",
+                        "on-background": "#e2e2e2",
+                        "primary-fixed-dim": "#2ae500",
+                        "error": "#ffb4ab",
+                        "secondary": "#c8c6c5",
+                        "on-tertiary": "#2f3131",
+                        "on-error-container": "#ffdad6",
+                        "primary": "#efffe3",
+                        "surface-variant": "#353535",
+                        "background": "#131313",
+                        "on-surface": "#e2e2e2",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "tertiary-container": "#dddddd",
+                        "inverse-surface": "#e2e2e2",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-primary": "#053900",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "primary-container": "#39ff14",
+                        "surface-container": "#1f1f1f",
+                        "outline-variant": "#3c4b35",
+                        "inverse-on-surface": "#303030",
+                        "surface-dim": "#131313",
+                        "primary-fixed": "#79ff5b",
+                        "on-secondary-fixed-variant": "#474746",
+                        "surface-tint": "#2ae500",
+                        "on-surface-variant": "#baccb0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "16px",
+                        "container-max": "1440px",
+                        "lg": "40px",
+                        "gutter": "20px",
+                        "xl": "64px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "display-hero": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-caps": ["Geist"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "mono-data": ["Geist"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-32 noise">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-[60] bg-background/60 backdrop-blur-2xl border-b border-white/5 px-gutter py-md">
+<div class="max-w-container-max mx-auto flex justify-between items-center">
+<div class="flex items-center gap-xs">
+<div class="relative">
+<div class="absolute inset-0 bg-primary-container/20 rounded-full blur-md"></div>
+<div class="relative w-9 h-9 rounded-full bg-surface-container-highest border border-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+</div>
+<span class="font-display-hero text-headline-md tracking-tighter text-on-surface">FIT<span class="text-primary-container">GURU</span></span>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex flex-col items-end">
+<span class="text-[10px] font-label-caps text-on-surface-variant uppercase tracking-widest leading-none">Status</span>
+<span class="text-primary-container text-xs font-bold leading-none">CONNECTED</span>
+</div>
+<button class="w-10 h-10 rounded-lg glass-card flex items-center justify-center active:scale-95 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-xl">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="pt-24 px-gutter max-w-container-max mx-auto space-y-lg pb-20">
+<!-- Cinematic Status Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<div class="lg:col-span-8 glass-card rounded-xl p-md md:p-lg relative overflow-hidden scanlines">
+<!-- Status Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-xl relative z-10">
+<div class="space-y-1">
+<div class="flex items-center gap-xs">
+<div class="w-1.5 h-1.5 bg-primary-container rounded-full animate-pulse"></div>
+<p class="font-label-caps text-[10px] text-primary-container uppercase tracking-[0.2em]">Live Performance Index</p>
+</div>
+<h1 class="font-display-hero text-[42px] leading-none tracking-tight">LEVEL 42 <br><span class="text-on-surface-variant/40 italic font-light">ELITE ATHLETE</span></h1>
+</div>
+<div class="mt-md md:mt-0 text-left md:text-right">
+<p class="font-mono-data text-headline-md text-primary-container">12,450 <span class="text-on-surface-variant text-sm">/ 15,000 XP</span></p>
+<div class="w-48 h-1 bg-white/10 rounded-full mt-xs overflow-hidden">
+<div class="h-full bg-primary-container neon-glow-primary" style="width: 78%"></div>
+</div>
+<p class="font-label-caps text-[10px] text-on-surface-variant mt-xs tracking-widest uppercase">2,550 XP TO ASCENSION</p>
+</div>
+</div>
+<!-- Technical Diagnostics Grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 gap-xs md:gap-md relative z-10">
+<div class="p-sm bg-white/5 border border-white/5 rounded-lg">
+<p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase">Daily Streak</p>
+<div class="flex items-baseline gap-xs">
+<span class="text-headline-md font-display-hero text-on-background">14</span>
+<span class="text-xs text-primary-container">DAYS</span>
+</div>
+</div>
+<div class="p-sm bg-white/5 border border-white/5 rounded-lg">
+<p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase">Total Load</p>
+<div class="flex items-baseline gap-xs">
+<span class="text-headline-md font-display-hero text-on-background">248</span>
+<span class="text-xs text-on-surface-variant">LOGS</span>
+</div>
+</div>
+<div class="col-span-2 md:col-span-1 p-sm bg-white/5 border border-white/5 rounded-lg">
+<p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase">Network Rank</p>
+<div class="flex items-baseline gap-xs">
+<span class="text-headline-md font-display-hero text-primary-container">TOP 2%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Path to Mastery Progress -->
+<div class="lg:col-span-4 glass-card rounded-xl p-md flex flex-col items-center justify-center text-center relative scanlines">
+<div class="relative w-40 h-40 mb-md">
+<!-- Progress Ring -->
+<svg class="w-full h-full transform -rotate-90">
+<circle cx="80" cy="80" fill="transparent" r="74" stroke="rgba(255,255,255,0.05)" stroke-width="6"></circle>
+<circle class="drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]" cx="80" cy="80" fill="transparent" r="74" stroke="#39ff14" stroke-dasharray="465" stroke-dashoffset="102" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-hero text-[36px] leading-none text-on-background">78<span class="text-lg opacity-50">%</span></span>
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Completion</span>
+</div>
+<!-- Decorative Pulsing Ring -->
+<div class="absolute inset-[-8px] border border-primary-container/20 rounded-full animate-pulse-ring"></div>
+</div>
+<h3 class="font-headline-md text-on-background mb-1">Path to Mastery</h3>
+<p class="font-body-md text-sm text-on-surface-variant italic">Unlock "Titan" title at Level 50</p>
+</div>
+</section>
+<!-- Featured Reward: Centurion Streak -->
+<section class="relative rounded-xl overflow-hidden glass-card border-white/10 group">
+<div class="absolute inset-0 z-0 bg-[url('https://lh3.googleusercontent.com/aida-public/AB6AXuAH8xojimzmKYaP7-mIAw2beTTWTXDynhDavn-HgfFY8QP-mU4ANLpfsQkBjGHKFIPUxvjEaV_DA0cgnni2v4a8H-snQY8tdzZhz_FAwfG2GODltw4G8lMBvXcAJMXt-0__6k5eJ7upCIuZjTNtKxIKSemt89EycXVmbvtkUmTFx9PS8J2HUgtiX2OBP5mfRGl8saaOlwxcd0I6MEKLk1VdnAZVJjs0r-14WKnTj6i0nmTU9exqlooCSu21JsOjqZegtOdT4mPdow')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-30"></div>
+<div class="absolute inset-0 spotlight z-[1]"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent z-[2]"></div>
+<div class="relative z-10 p-lg flex flex-col items-center text-center">
+<p class="font-label-caps text-[12px] text-primary-container tracking-[0.4em] mb-md uppercase font-bold">High-Fidelity Reward Unlocked</p>
+<!-- Badge Icon with cinematic backlight -->
+<div class="relative mb-md">
+<div class="absolute inset-0 bg-primary-container/40 blur-[60px] rounded-full animate-pulse"></div>
+<div class="relative w-48 h-48"><div class="relative w-full h-full flex items-center justify-center drop-shadow-[0_0_30px_rgba(139,92,246,0.6)]"><img alt="Diamond Trophy" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB73wkytjVVtsGJ-DIEnDPTvuKfpVIFM5n0E98JxYpyU7j-sPcR9tvUW9F717t6E-GSgS-NoP5s7PcI1YvQly6ghrpJY3pH2mXICXwx1xsThMzST-Aho01rwP_uUVOkPjNPYZK9jO_v0-9iAhTHQ09Ls97Avqwyv1egKIxRJoBGr7K0kk_eVWKrkuwKa1ki-7gBUiehBGZPNggLYKOt2ji1z45vm6Jv6U3vSgxcRaHJTEjyRj1CEiJineSaWTnjndwD7kVMaybTrw"></div></div>
+</div>
+<h2 class="font-display-hero text-headline-lg mb-2 tracking-tighter">CENTURION STREAK</h2>
+<p class="font-body-lg text-on-surface-variant max-w-lg mb-lg">You've maintained peak performance for 100 consecutive sessions. Elite metallic tier achieved.</p>
+<button class="bg-primary-container text-on-primary-fixed font-label-caps text-[12px] px-12 py-4 rounded-full font-bold uppercase tracking-[0.3em] hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(57,255,20,0.4)]">
+                    Claim Reward
+                </button>
+</div>
+</section>
+<!-- Badge Collection Redesign -->
+<section class="space-y-xl">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="font-headline-md text-on-background flex items-center gap-xs">
+                        Badge Collection <span class="text-xs font-mono-data bg-white/5 px-2 py-0.5 rounded border border-white/10 text-on-surface-variant">56/100</span>
+</h3>
+<p class="text-[10px] font-label-caps text-on-surface-variant uppercase tracking-[0.2em] mt-1">Tiered Achievement Database</p>
+</div>
+<button class="text-on-surface-variant font-label-caps text-[11px] flex items-center gap-1 hover:text-primary-container transition-colors uppercase tracking-[0.2em]">
+                    Database <span class="material-symbols-outlined text-xs">arrow_forward_ios</span>
+</button>
+</div>
+<!-- DIAMOND TIER -->
+<div class="space-y-md">
+<div class="flex items-center gap-md">
+<div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+<h4 class="font-label-caps text-[11px] text-purple-400 tracking-[0.5em] uppercase font-bold">Diamond Tier</h4>
+<div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-purple-500/40 to-transparent"></div>
+</div>
+<div class="grid grid-cols-3 md:grid-cols-5 gap-md"><div class="flex flex-col items-center gap-sm group">
+<div class="w-full aspect-square crest-frame metallic-diamond flex items-center justify-center relative overflow-hidden transition-transform duration-500 hover:-translate-y-1"><img alt="Diamond Trophy" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB73wkytjVVtsGJ-DIEnDPTvuKfpVIFM5n0E98JxYpyU7j-sPcR9tvUW9F717t6E-GSgS-NoP5s7PcI1YvQly6ghrpJY3pH2mXICXwx1xsThMzST-Aho01rwP_uUVOkPjNPYZK9jO_v0-9iAhTHQ09Ls97Avqwyv1egKIxRJoBGr7K0kk_eVWKrkuwKa1ki-7gBUiehBGZPNggLYKOt2ji1z45vm6Jv6U3vSgxcRaHJTEjyRj1CEiJineSaWTnjndwD7kVMaybTrw"></div>
+<p class="font-label-caps text-[9px] text-on-surface uppercase tracking-[0.2em] text-center font-semibold">Ultimate Legend</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square crest-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">World Breaker</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square crest-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Zenith Mind</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square crest-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Void Walker</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square crest-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Star Born</p>
+</div></div>
+</div>
+<!-- PLATINUM TIER -->
+<div class="space-y-md"><div class="flex items-center gap-md"><div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div><h4 class="font-label-caps text-[11px] text-purple-400 tracking-[0.5em] uppercase font-bold">Platinum Tier</h4><div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-purple-500/40 to-transparent"></div></div><div class="grid grid-cols-3 md:grid-cols-5 gap-md"><div class="flex flex-col items-center gap-sm group">
+<div class="w-full aspect-square hexagon-frame metallic-diamond flex items-center justify-center relative overflow-hidden transition-transform duration-500 hover:-translate-y-1"><img alt="Platinum Badge" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]" src="https://lh3.googleusercontent.com/aida/AP1WRLsvFF9P1wRLiL_50uUjYBSZeEoXlnOv0n-b4FnSXNlSwqR0uPHxIUTNgBSIWN3GnBNRc034w2GJz5UOQfcs7GYUlMmi31gNoDTV-qthKMBwryiCZb1JSv1Rid6p4haf4p7OgIMNg_ZFCgnShuYH8_otBdN82kk3nt1jKSS3AdGv6TwtqIQujyBY1hm6Yhx73HdOfG_qjTgYfshFsoNhgBTC37zwFZLfYz0IeSU_pVbvPr8e9hH2bg2IxQ"></div>
+<p class="font-label-caps text-[9px] text-on-surface uppercase tracking-[0.2em] text-center font-semibold">Elite Warrior</p>
+</div>
+<div class="flex flex-col items-center gap-sm group">
+<div class="w-full aspect-square hexagon-frame metallic-diamond flex items-center justify-center relative overflow-hidden transition-transform duration-500 hover:-translate-y-1"><img alt="Platinum Badge" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]" src="https://lh3.googleusercontent.com/aida/AP1WRLsvFF9P1wRLiL_50uUjYBSZeEoXlnOv0n-b4FnSXNlSwqR0uPHxIUTNgBSIWN3GnBNRc034w2GJz5UOQfcs7GYUlMmi31gNoDTV-qthKMBwryiCZb1JSv1Rid6p4haf4p7OgIMNg_ZFCgnShuYH8_otBdN82kk3nt1jKSS3AdGv6TwtqIQujyBY1hm6Yhx73HdOfG_qjTgYfshFsoNhgBTC37zwFZLfYz0IeSU_pVbvPr8e9hH2bg2IxQ"></div>
+<p class="font-label-caps text-[9px] text-on-surface uppercase tracking-[0.2em] text-center font-semibold">Unyielding</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square hexagon-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Hyper Drive</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square hexagon-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Overclock</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square hexagon-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Apex</p>
+</div></div></div>
+<!-- GOLD TIER (ACTIVE HIGHLIGHTS) -->
+<div class="space-y-md"><div class="flex items-center gap-md"><div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-fbbf24/40 to-transparent"></div><h4 class="font-label-caps text-[11px] text-fbbf24 tracking-[0.5em] uppercase font-bold">Gold Tier</h4><div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-fbbf24/40 to-transparent"></div></div><div class="grid grid-cols-3 md:grid-cols-5 gap-md"><div class="flex flex-col items-center gap-sm group">
+<div class="w-full aspect-square crest-frame metallic-gold flex items-center justify-center relative overflow-hidden transition-transform duration-500 hover:-translate-y-1"><img alt="Gold Crest" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(251,191,36,0.4)]" src="https://lh3.googleusercontent.com/aida/AP1WRLuIl9Cm3juSJXWpfnqP2Xp5pzhuVZKoM58KJ4c3wtAmuk6WZCPM4bzs7BQRbPN2CBeszVZ7fcQnAuh82bx2NWU90LHQo51MOqqeoywOIn69D2d33wZ5VPvvgsPpXkbtINQ7l7DuryR9Rz39y_PLY2GkP3LWrysgcN2F3j7eRzqhU2NFKsl8xrTzQ9VbQsSZMyOcjNPMQZV5qRWbNozmjNVyFjTrbVBOCFFkKK8ty6UfcDSsElzlu5-9RA"></div>
+<p class="font-label-caps text-[9px] text-on-surface uppercase tracking-[0.2em] text-center font-semibold">Elite Warrior</p>
+</div>
+<div class="flex flex-col items-center gap-sm group">
+<div class="w-full aspect-square crest-frame metallic-gold flex items-center justify-center relative overflow-hidden transition-transform duration-500 hover:-translate-y-1"><img alt="Gold Crest" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(251,191,36,0.4)]" src="https://lh3.googleusercontent.com/aida/AP1WRLuIl9Cm3juSJXWpfnqP2Xp5pzhuVZKoM58KJ4c3wtAmuk6WZCPM4bzs7BQRbPN2CBeszVZ7fcQnAuh82bx2NWU90LHQo51MOqqeoywOIn69D2d33wZ5VPvvgsPpXkbtINQ7l7DuryR9Rz39y_PLY2GkP3LWrysgcN2F3j7eRzqhU2NFKsl8xrTzQ9VbQsSZMyOcjNPMQZV5qRWbNozmjNVyFjTrbVBOCFFkKK8ty6UfcDSsElzlu5-9RA"></div>
+<p class="font-label-caps text-[9px] text-on-surface uppercase tracking-[0.2em] text-center font-semibold">Unyielding</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square crest-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Hyper Drive</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square crest-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Vanguard</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square crest-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Sentinel</p>
+</div></div></div>
+<!-- SILVER TIER -->
+<div class="space-y-md"><div class="flex items-center gap-md"><div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-slate-500/30 to-transparent"></div><h4 class="font-label-caps text-[11px] text-slate-400 tracking-[0.5em] uppercase font-bold">Silver Tier</h4><div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-slate-500/30 to-transparent"></div></div><div class="grid grid-cols-3 md:grid-cols-5 gap-md"><div class="flex flex-col items-center gap-sm group">
+<div class="w-full aspect-square hexagon-frame metallic-silver flex items-center justify-center relative overflow-hidden transition-transform duration-500 hover:-translate-y-1"><img alt="Silver Shield" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(148,163,184,0.2)]" src="https://lh3.googleusercontent.com/aida/AP1WRLv-ggBEDs2BLjY0rDOqko4L3NxWrAajC0N2UCWIvoG5P_RpOFJi_qlR4U8oWziCAbONoWkk0ijCd45R5WMUEBg1upqqJ5zkZFGhFedURPolARRelPoVUX77k5NfCoC_8qOhZU5S0a2u7wCCwydUvQ9ehMmfAzwj1rDPA0vm7BI4T32sJubStWuZ6r6VCTQRYtxtnJb5ba1NoZCuda-8oUCrIxZUOB2SuE0-gZzEGt6qKnUSUMb5KNLVhA"></div>
+<p class="font-label-caps text-[9px] text-on-surface uppercase tracking-[0.2em] text-center font-semibold">Consistent</p>
+</div>
+<div class="flex flex-col items-center gap-sm group">
+<div class="w-full aspect-square hexagon-frame metallic-silver flex items-center justify-center relative overflow-hidden transition-transform duration-500 hover:-translate-y-1"><img alt="Silver Shield" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(148,163,184,0.2)]" src="https://lh3.googleusercontent.com/aida/AP1WRLv-ggBEDs2BLjY0rDOqko4L3NxWrAajC0N2UCWIvoG5P_RpOFJi_qlR4U8oWziCAbONoWkk0ijCd45R5WMUEBg1upqqJ5zkZFGhFedURPolARRelPoVUX77k5NfCoC_8qOhZU5S0a2u7wCCwydUvQ9ehMmfAzwj1rDPA0vm7BI4T32sJubStWuZ6r6VCTQRYtxtnJb5ba1NoZCuda-8oUCrIxZUOB2SuE0-gZzEGt6qKnUSUMb5KNLVhA"></div>
+<p class="font-label-caps text-[9px] text-on-surface uppercase tracking-[0.2em] text-center font-semibold">Early Bird</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square hexagon-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Night Owl</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square hexagon-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Grinder</p>
+</div>
+<div class="flex flex-col items-center gap-sm opacity-40 grayscale group cursor-not-allowed">
+<div class="w-full aspect-square hexagon-frame metallic-locked flex items-center justify-center relative">
+<span class="material-symbols-outlined text-white/20 text-3xl">lock</span>
+</div>
+<p class="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-[0.2em] text-center">Novice</p>
+</div></div></div>
+</section>
+<!-- Leaderboard: Refined -->
+<section class="space-y-md">
+<h3 class="font-headline-md text-on-background">Global Community Leaders</h3>
+<div class="glass-card rounded-xl overflow-hidden border-white/5">
+<div class="divide-y divide-white/5 flex flex-col">
+<!-- Rank 1 -->
+<div class="flex items-center p-md hover:bg-white/5 transition-colors group cursor-pointer">
+<div class="w-12 font-display-hero text-headline-md text-primary-container">01</div>
+<div class="flex-1 flex items-center gap-md">
+<div class="relative">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center border border-primary-container/50 overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAxym97b05tFmetYJ2Nt7hd3OSvTNWZg0OCozvcZld679i6CPZ6Y_E7iYUf-OztPaWn64wIA4I0FKYQPsXeX4l4o261w-ZQXE909uXHrkp8K50s4hnyQFcGCfaGWi-UZ9H4BiJa7BMJkJCgLBRetz-CPJsF0PdCtlpf5WtWaKzjvM30AG0Hz1Sqrocs1B5iZMqC_5aT47vIeJqPIWoGtAVI0niborTmrhfdY-vejwPWHmXq0Kk2O0ta4tDxCIDQVvL8EyVoAsijFw')"></div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-on-primary font-bold">check</span>
+</div>
+</div>
+<div>
+<p class="font-headline-md text-base text-on-background">Marcus Thorne</p>
+<p class="font-label-caps text-[10px] text-primary-container uppercase tracking-widest font-bold">Diamond Tier • LVL 88</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-mono-data text-on-background">89,200</p>
+<p class="text-[9px] font-label-caps text-on-surface-variant uppercase tracking-tighter">XP EARNED</p>
+</div>
+</div>
+<!-- Rank 2 -->
+<div class="flex items-center p-md hover:bg-white/5 transition-colors group cursor-pointer">
+<div class="w-12 font-display-hero text-headline-md text-secondary">02</div>
+<div class="flex-1 flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center border border-secondary/30 overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWqNXYxwsoTvyVtWMfh-nEFTN5ZDxT2jpRZBMM3qk3NLFr-p7ioI3BJMoyyBjmbQq6Qk0l5MnVyFay03yQzjKAYIkRwHOH1r-Wvg-knUgdLhFbcR0WwAUW7J-lZWMf2Jp_btSZjnr2vbgGVr8qvp6zxDxwR3pn8_vNRsgGcGHwak0BDSYbvowICClC--UTMDywaoQjICYaaqBBK4CtncEcIquovMZfk28vFu1NnEz8j5NbPQGsaV3AQVgvJVJLgRxmcC2IR2sKWg')"></div>
+<div>
+<p class="font-headline-md text-base text-on-background">Sarah Vance</p>
+<p class="font-label-caps text-[10px] text-secondary uppercase tracking-widest font-bold">Platinum Tier • LVL 74</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-mono-data text-on-background">76,450</p>
+<p class="text-[9px] font-label-caps text-on-surface-variant uppercase tracking-tighter">XP EARNED</p>
+</div>
+</div>
+<!-- Rank 3 -->
+<div class="flex items-center p-md hover:bg-white/5 transition-colors group cursor-pointer">
+<div class="w-12 font-display-hero text-headline-md text-tertiary-fixed-dim">03</div>
+<div class="flex-1 flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center border border-white/10 overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDmTbNdFGBA-Evp5BQ6b1287v6jPv3Id4ArG15eSrRvUwCe3rgUz0-lk3wOGl9RnN9w8sp6NmKwzsFk9-4XvHNhobIHlYB-YyV0KbULSaq7Vh3JhF7C-pPLpMUeXTcyCOyDoEQiAjRGwx29TllofkRoTsyv-0aa4kYljnS4FpbXOErDq9sd2D9q1jdIvDtQjNORjZT4b4z8vvlfrGbwVOnos7EU61ugU6GSUcym_R-AM3Tq8T0o_FOdMNpYXkQAJzz0kjdkLDqpZA')"></div>
+<div>
+<p class="font-headline-md text-base text-on-background">Alex Sterling</p>
+<p class="font-label-caps text-[10px] text-tertiary-fixed-dim uppercase tracking-widest font-bold">Gold Tier • LVL 42</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-mono-data text-on-background">68,900</p>
+<p class="text-[9px] font-label-caps text-on-surface-variant uppercase tracking-tighter">XP EARNED</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- High-Tech Bottom Navigation -->
+<nav class="fixed bottom-0 w-full h-20 bg-background/80 backdrop-blur-3xl border-t border-white/5 flex justify-around items-center px-4 pb-2 z-[60]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 active:scale-90 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-2xl">psychology</span>
+<span class="font-label-caps text-[10px] mt-1 uppercase tracking-tighter">Coach</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 active:scale-90 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-2xl">center_focus_strong</span>
+<span class="font-label-caps text-[10px] mt-1 uppercase tracking-tighter">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 active:scale-90 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-2xl">dashboard</span>
+<span class="font-label-caps text-[10px] mt-1 uppercase tracking-tighter">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 active:scale-90 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-2xl">fitness_center</span>
+<span class="font-label-caps text-[10px] mt-1 uppercase tracking-tighter">Log</span>
+</div>
+<!-- ACTIVE TAB: GYM (REWARDS) -->
+<div class="flex flex-col items-center justify-center relative">
+<div class="absolute -top-1 w-12 h-0.5 bg-primary-container shadow-[0_0_10px_#39ff14]"></div>
+<div class="flex flex-col items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-label-caps text-[10px] mt-1 uppercase font-bold tracking-tighter">Gym</span>
+</div>
+</div>
+</nav>
+
+
+</body></html>

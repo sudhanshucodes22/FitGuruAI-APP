@@ -1,0 +1,617 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=Geist:wght@500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          screens: {
+            'sm': '9999px',
+            'md': '9999px',
+            'lg': '9999px',
+            'xl': '9999px',
+            '2xl': '9999px',
+          },
+          extend: {
+            "colors": {
+                    "on-background": "#e2e2e2",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "on-primary-fixed": "#022100",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-highest": "#353535",
+                    "surface-tint": "#2ae500",
+                    "inverse-surface": "#e2e2e2",
+                    "surface-dim": "#131313",
+                    "on-surface-variant": "#baccb0",
+                    "tertiary-container": "#dddddd",
+                    "on-tertiary": "#2f3131",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-tertiary-container": "#606162",
+                    "outline": "#85967c",
+                    "tertiary": "#f9fafa",
+                    "primary": "#efffe3",
+                    "background": "#131313",
+                    "surface-container-high": "#2a2a2a",
+                    "secondary": "#c8c6c5",
+                    "secondary-container": "#474746",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-surface": "#e2e2e2",
+                    "on-secondary-container": "#b7b5b4",
+                    "surface-bright": "#393939",
+                    "surface-container-lowest": "#0e0e0e",
+                    "error-container": "#93000a",
+                    "inverse-on-surface": "#303030",
+                    "surface-container": "#1f1f1f",
+                    "on-primary-fixed-variant": "#095300",
+                    "error": "#ffb4ab",
+                    "on-primary": "#053900",
+                    "primary-fixed-dim": "#2ae500",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "primary-fixed": "#79ff5b",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-container": "#39ff14",
+                    "outline-variant": "#3c4b35",
+                    "on-error": "#690005",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "surface": "#131313",
+                    "tertiary-fixed": "#e2e2e2",
+                    "surface-variant": "#353535",
+                    "on-primary-container": "#107100",
+                    "on-secondary": "#313030",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "surface-container-low": "#1b1b1b",
+                    "inverse-primary": "#106e00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "20px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "container-max": "1440px",
+                    "base": "4px",
+                    "xl": "64px",
+                    "sm": "16px",
+                    "xs": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "display-hero": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "label-caps": ["Geist"],
+                    "mono-data": ["Geist"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "mono-data": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #000000;
+            color: #e2e2e2;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-4px);
+            border-color: rgba(57, 255, 20, 0.3);
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+        }
+        .avatar-3d-card {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        .avatar-inner {
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+        }
+        .elite-border {
+            border-top: 1px solid #39FF14;
+        }
+        .scanline {
+            background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50%);
+            background-size: 100% 4px;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 4s infinite ease-in-out;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+
+    <link href="app.css?v=3" rel="stylesheet">
+
+</head>
+<body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
+    <div class="iphone-container">
+        <div class="iphone-border"></div>
+        <div class="iphone-reflection"></div>
+        <div class="dynamic-island">
+            <div class="camera-lens"></div>
+        </div>
+        <div class="home-indicator"></div>
+        
+        <div class="iphone-screen">
+            
+            <!-- iOS Status Bar -->
+            <div class="status-bar">
+                <span class="status-bar-time leading-none">09:41</span>
+                <div class="status-bar-icons">
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">signal_cellular_alt</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">wifi</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">battery_5_bar</span>
+                </div>
+            </div>
+
+            
+            
+<!-- Top AppBar -->
+<header class="w-full flex-shrink-0 z-20 bg-background/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-gutter py-md">
+<div class="flex items-center gap-sm">
+<button onclick="if(document.referrer && document.referrer.includes(window.location.host)) { window.history.back(); } else { window.location.href='dashboard.html?v=4'; }" class="p-xs hover:bg-white/5 rounded-full transition-all duration-300 ease-out active:scale-95 text-on-surface-variant hover:text-primary mr-1 flex-shrink-0" title="Go Back">
+    <span class="material-symbols-outlined text-xl leading-none">arrow_back</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-primary/20">
+<img class="w-full h-full object-cover" data-alt="A professional close-up portrait of a high-performance athlete with sharp features and determined expression. The lighting is cinematic, using neon green rim lighting against a deep black studio background. The style is ultra-high definition, resembling a high-end sports magazine cover with deep shadows and vibrant highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdjqIqXnxjCrYrNz7P8akBINlTPV2xHFBejV9w5gf526H5BxCiJFmxjo8bhFiCj9YCSPNik3zNX95DVaPMGm1RpEB-6KCKgQerwBfccGTA7fL4YbAzd4hApqgnNnr8VYA5izalJbOCVv6SY1vqpnBllDEf0BcrsEl4R54XAZYEFONc6mxStTAZEmGVkNtFXku7KDetkmytfnIHXUKFq4zxC31G0QTLSm14zzwEYtyp2eIYJvT2b8ocXahy9OnhysuO2OzfWdWL-g">
+</div>
+<span class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim">FITGURU</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="search">search</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="settings">settings</span>
+</div>
+</header>
+<main class="scroll-area flex-grow w-full px-gutter   space-y-xl pb-xl">
+<!-- Hero Section: Profile Header -->
+<section class="flex flex-col md:flex-row gap-lg items-start gap-md">
+<div class="relative w-full md:w-1/3 group">
+<div class="avatar-3d-card w-full aspect-[4/5] rounded-xl overflow-hidden glass-card elite-border relative p-base">
+<div class="avatar-inner h-full w-full relative">
+<img class="w-full h-full object-cover rounded-lg" data-alt="A full-body digital render of a futuristic 'Cyber Athlete' in a dark high-tech gym environment. The character is wearing bioluminescent compression gear with glowing green fiber optics. The aesthetic is sleek, aggressive, and premium, with volumetric lighting and subtle atmospheric particles floating in the air. The color palette is dominated by pure black and electric neon green." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyDC4vg_D6NLuiAfkYEWWMDgUu1wnbgd5adylEHYuRpRzWtDD6fILpIoJuGG_Uaaw-AGCrBPs-evXlbf1KzeK6qc3DWDaiDjxtimh1tMDkGNaBqFW2uIIm-BK-MbIh2cyDi4ORPe34vgymYZmGRRCUtcolID2xW82s5eI9hPKuXhtmGznKpZBh8E47MpZq44GVd6d5GqB_qnJPwI-dDOzI_f6tmSJO28TwiQSaZexzZvmI4AuwGcbFU0YYPdFTO-kmt3AlttUV5Q">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-md left-md">
+<div class="bg-primary/10 backdrop-blur-md border border-primary/30 px-sm py-xs rounded-full inline-flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<span class="font-label-caps text-label-caps text-primary">ELITE STATUS</span>
+</div>
+</div>
+</div>
+</div>
+<!-- XP Badge -->
+<div class="absolute -bottom-4 -right-4 w-20 h-20 bg-background border border-primary/40 rounded-full flex flex-col items-center justify-center neon-glow shadow-primary/20">
+<span class="font-label-caps text-label-caps text-on-surface-variant">LVL</span>
+<span class="font-display-hero text-headline-md text-primary-fixed-dim">42</span>
+</div>
+</div>
+<div class="flex-1 space-y-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">Alex Sterling</h1>
+<p class="font-body-lg text-on-surface-variant flex items-center gap-xs">
+                        Pro Athlete <span class="w-1 h-1 bg-surface-container-highest rounded-full"></span> 7-Day Streak
+                    </p>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 gap-md">
+<div class="glass-card p-md rounded-xl space-y-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant">WORKOUTS</span>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-headline-md text-on-surface">1,248</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+<div class="glass-card p-md rounded-xl space-y-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant">ACHIEVEMENTS</span>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-headline-md text-on-surface">84</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="military_tech" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+</div>
+<div class="glass-card p-md rounded-xl space-y-xs col-span-2 md:col-span-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant">PR TOTAL</span>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-headline-md text-on-surface">412</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">KG</span>
+</div>
+</div>
+</div>
+<!-- Bio / Bio-metric HUD -->
+<div class="glass-card p-md rounded-xl border-l-4 border-primary/50 bg-primary/5">
+<div class="flex justify-between items-center mb-sm">
+<h3 class="font-label-caps text-label-caps text-primary tracking-widest">BIOMETRIC STATUS</h3>
+<span class="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+</div>
+<p class="font-mono-data text-on-surface leading-relaxed opacity-80">
+                        Body Fat: 8.4% // Recovery Score: 92% // VO2 Max: 58 <br>
+                        Focusing on explosive power and metabolic conditioning for the upcoming championship season.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Transformation Gallery -->
+<section class="space-y-md">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Evolution</h2>
+<p class="font-body-md text-on-surface-variant">Visualizing 24 months of discipline.</p>
+</div>
+<button class="text-primary font-label-caps text-label-caps hover:underline">VIEW ALL HISTORY</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter gap-md">
+<div class="relative group cursor-pointer overflow-hidden rounded-xl glass-card aspect-video md:aspect-[21/9]">
+<div class="absolute inset-0 flex">
+<div class="w-1/2 h-full relative">
+<img class="w-full h-full object-cover" data-alt="High-contrast black and white photography of an athlete starting their fitness journey. The lighting is soft and natural, emphasizing a softer physique in a garage gym setting. Professional aesthetic, slightly grainy film texture, focused on the 'before' state of a physical transformation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlQIBTVOVGRN9p5Sb7SHIkaBJrpWmahWJjCL1_wd_Em-HlPtawktQOUSWKThnaYeraERhapGv7lgAbG6RUpWGMer20eX4RLxp6eJlqp878lrJnXD3fSLqL8fnRs7W9-bBmW4I_EE_gv83RC0p4jqg8o3uCIFY8RiA9pRiJ5tBeHaECd7M-cc98BwsKTs8QD03-u-BK6M5c7NIPFaJyCK1DykqADsZWlOqsLUvjykuv7q5A9nq7vA-HaZwbAHa6nfJjydrUsBFtrg">
+<div class="absolute top-md left-md bg-black/60 backdrop-blur px-sm py-xs font-label-caps text-label-caps text-white rounded">JAN 2022</div>
+</div>
+<div class="w-1/2 h-full relative border-l border-primary/30">
+<img class="w-full h-full object-cover" data-alt="Powerful cinematic photography of a shredded athlete in peak condition. The lighting is harsh, high-contrast studio lighting that carves out muscle definition with neon green highlights. Professional commercial fitness style, showcasing an elite physique in a high-tech modern gym environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYdexa-SlBu8AzJHRmi_FWbvArLqNFwAiLAwHrxRoaYtnk1DQ0vsPlGrDLHdairiWIMZw5XYKkCGURq0zU8k8hWrOyaWY8SJnnlSaD1yU2c0K1fhZd7X6j8S_JKOwVICa_BNn5LzMDfuoqDKzzj9FWQqcwK0Dlff3DSZFaiTtvJSfBWLjpQJxWyq65t_GfDwkPznqYPdQn1PtLFoACqrM8UpeEwXhfM3QuE6Eza7lIqllwjQadPb15XUKu80bOSeyzxsYpOAYP6g">
+<div class="absolute top-md right-md bg-primary/20 backdrop-blur border border-primary/50 px-sm py-xs font-label-caps text-label-caps text-primary rounded">CURRENT</div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-md bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-white font-semibold">Bulking Phase 01: +12kg Muscle Mass</span>
+<span class="material-symbols-outlined text-primary" data-icon="expand_content">expand_content</span>
+</div>
+</div>
+</div>
+<!-- Progress Tracker Visual -->
+<div class="glass-card p-md flex flex-col justify-center items-center relative overflow-hidden">
+
+<div class="relative w-48 h-48 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90">
+<circle cx="96" cy="96" fill="none" r="80" stroke="#1a1a1a" stroke-width="12"></circle>
+<circle class="drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]" cx="96" cy="96" fill="none" r="80" stroke="#39FF14" stroke-dasharray="502" stroke-dashoffset="120" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute text-center">
+<span class="font-display-hero text-headline-lg text-primary">76%</span>
+<p class="font-label-caps text-label-caps text-on-surface-variant">YEAR GOAL</p>
+</div>
+</div>
+<div class="mt-md text-center">
+<p class="font-body-md text-on-surface">Next Milestone: <span class="text-primary">Elite Alpha Rank</span></p>
+<p class="font-mono-data text-mono-data text-on-surface-variant">estimated completion: oct 24</p>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Avatar Generator -->
+<section class="space-y-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">AI Avatar Forge</h2>
+<p class="font-body-md text-on-surface-variant">Evolve your digital presence through neural synthesis.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-md">
+<!-- Generator Card -->
+<button class="glass-card aspect-square rounded-xl flex flex-col items-center justify-center gap-sm border-dashed border-primary/30 group hover:bg-primary/5 transition-all">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="add">add</span>
+</div>
+<span class="font-label-caps text-label-caps text-primary">FORGE NEW</span>
+</button>
+<!-- Avatar Options -->
+<div class="glass-card rounded-xl overflow-hidden group cursor-pointer relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A stylized 3D avatar of a futuristic 'Gym Warrior' with metallic armor plating over athletic muscles. The skin is a deep charcoal grey with neon green circuit-like tattoos. The background is a digital void with floating data streams. High-performance elite aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7NheTY4Pu9lD4sT2jljOnPrFuRSiNGIufnN6BIxwn9aXTAQFkgHUwxlcWI2C2izErMCAV3NN0joHbGu3r9AakyX9wIWEIK2yBeG3wZT4WioVx36HawhwlH72spUO5jIKvleqg3GIPN2Vfljv3EyTrnGGiyUNSDRCTTYY0RrAIIGx4r54HHC4_LGbMsZhwx4_t-L2WnbzY8O1BterfN0SA5HSqfnAuD7q-pppzcqCq8uwnCYMtpVbWgCE4gxEi8OvtjQ8J5eZ1vw">
+<div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute bottom-0 inset-x-0 p-xs text-center bg-black/60 backdrop-blur-sm">
+<span class="font-label-caps text-[10px] text-white">WARRIOR</span>
+</div>
+</div>
+<div class="glass-card rounded-xl overflow-hidden group cursor-pointer relative border-2 border-primary/50 shadow-lg shadow-primary/20">
+<img class="w-full h-full object-cover" data-alt="A 'Cyber Athlete' AI avatar with a glowing holographic head-up display integrated into a high-tech visor. The clothing is a mix of futuristic carbon-fiber and glowing synthetic fabrics. The lighting is cinematic, dominated by neon green and deep black. Elite gaming and fitness crossover aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUNBV-dQS-REdRAB23eBJcDl6V5-y2pdbh1C6IYI9DHI6yIN_6MjqkgtPaALTwjbKtbQ2TlyoIiFvfv1Zl3Ft33MneKWuedfmgq07GW9XVtbBCZyC8QEaMNCLvMh0wzoSNePNuZZRDuvvgBnkKeQ0PbbXiR3Adw3aA_qMnkz46P9MXWUNagIs5smYW2x1dDaJ9vzbWc5avLYBOmXzGmiuqe6zRShmEEmyLUgEyOunSni5WrPpFMdpn8PCQ6qfTLY6oq6cb7Secrw">
+<div class="absolute top-xs right-xs">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-xs text-center bg-primary/80 backdrop-blur-sm">
+<span class="font-label-caps text-[10px] text-on-primary">ACTIVE</span>
+</div>
+</div>
+<div class="glass-card rounded-xl overflow-hidden group cursor-pointer relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="An ethereal, 'Ghost Athlete' AI avatar rendered in semi-transparent light blue and neon green energy. The form is muscular but shimmering like a nebula. The aesthetic is mystical, powerful, and technologically advanced. Dark mode background with subtle light trails." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBje8Fo8eTJkMAYumqWw1gLD9y70cezcwpR5s6KAHn6uJt3EyDoF4jU1TNwqYYMtqZRNoLeP4A2oDL1XTddop_rH5-TY4uy39Ohpo0pR9IUY-qyJ9RIw6uhzezmaMifHk2VHFD54WhTKSByiJclgOOlg2M7m9CNvqTaJewtXwXJ_9u86Jd8XYDRYywzwp6MTD-aD4aHRYJH-RjD2VRyRWHImwleYt2YnO14ZI_gGrQmpXKWTzEikXE_bWpnnU95Hle4JlBAf7J6Fg">
+<div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute bottom-0 inset-x-0 p-xs text-center bg-black/60 backdrop-blur-sm">
+<span class="font-label-caps text-[10px] text-white">NEBULA</span>
+</div>
+</div>
+<div class="glass-card rounded-xl overflow-hidden group cursor-pointer relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A 'Mecha-Physique' AI avatar where parts of the body are replaced by sleek, high-end mechanical components made of brushed aluminum and carbon fiber. Neon green cooling fluid flows through transparent tubes. High-end automotive engineering meets fitness aesthetics. Dark, moody lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXDd__ZcgWUrUrpWNIn5n-d6INhvpetE4B-CNtjDvo4SIOtstpUTQhOD0fq2sjvE67AvxR6aknST2IV45GieH_96gSICGCcQUreUOtxB7H4J9M1YgebK1p-6XVA1TkgXq4Q8vq-GKDYXTzQf00VTf2c_djnbi7Ige-eEYsZYnVp9yFd0rruiQe5Ab4WT1VYfoW1sOOqvgxS9psNMXntmevd43dm1evGLRICVGC24qfCxrVvn23bCr1CwdX3kqPO-1mdJZ5gfDoJg">
+<div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute bottom-0 inset-x-0 p-xs text-center bg-black/60 backdrop-blur-sm">
+<span class="font-label-caps text-[10px] text-white">MECHA</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Personal Records Bento Grid -->
+<section class="space-y-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Personal Records</h2>
+<p class="font-body-md text-on-surface-variant">Current limits to be broken.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-gutter">
+<div class="md:col-span-2 md:row-span-2 glass-card rounded-xl p-lg flex flex-col justify-between overflow-hidden relative">
+
+<div class="relative z-10">
+<span class="font-label-caps text-label-caps text-primary tracking-widest">MAJOR LIFT</span>
+<h3 class="font-display-hero text-[64px] text-on-surface mt-base">185<span class="text-headline-md text-on-surface-variant ml-xs">KG</span></h3>
+<p class="font-headline-md text-on-surface">Back Squat</p>
+</div>
+<div class="relative z-10 flex justify-between items-end border-t border-white/5 pt-md">
+<div class="space-y-base">
+<p class="font-label-caps text-[10px] text-on-surface-variant">LAST UPDATED</p>
+<p class="font-mono-data text-mono-data text-on-surface">12 AUG 2023</p>
+</div>
+<div onclick="updatePR(this)" class="bg-primary px-md py-sm rounded-lg text-on-primary font-label-caps text-label-caps active:scale-95 transition-transform cursor-pointer">
+                            UPDATE
+                        </div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-md flex flex-col justify-between rounded-lg">
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant">BENCH PRESS</span>
+<span class="material-symbols-outlined text-primary" data-icon="fitness_center">fitness_center</span>
+</div>
+<div>
+<span class="font-display-hero text-headline-md text-on-surface">125</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant ml-xs">KG</span>
+</div>
+</div>
+<div class="glass-card rounded-xl p-md flex flex-col justify-between rounded-lg">
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant">DEADLIFT</span>
+<span class="material-symbols-outlined text-primary" data-icon="bolt">bolt</span>
+</div>
+<div>
+<span class="font-display-hero text-headline-md text-on-surface">220</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant ml-xs">KG</span>
+</div>
+</div>
+<div class="glass-card rounded-xl p-md flex flex-col justify-between border-l-2 border-primary/40 rounded-lg">
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant">OVERHEAD</span>
+<span class="material-symbols-outlined text-primary" data-icon="vertical_align_top">vertical_align_top</span>
+</div>
+<div>
+<span class="font-display-hero text-headline-md text-on-surface">85</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant ml-xs">KG</span>
+</div>
+</div>
+<div class="glass-card rounded-xl p-md flex flex-col justify-between rounded-lg">
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant">MILE RUN</span>
+<span class="material-symbols-outlined text-primary" data-icon="speed">speed</span>
+</div>
+<div>
+<span class="font-display-hero text-headline-md text-on-surface">5:42</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant ml-xs">MIN</span>
+</div>
+</div>
+</div>
+</section>
+
+     <script>
+         function updatePR(btn) {
+             const parent = btn.closest('.relative');
+             const display = parent.querySelector('h3');
+             const currentVal = parseInt(display.textContent);
+             const newVal = prompt("Enter new Personal Record (KG):", currentVal);
+             if (newVal && !isNaN(newVal)) {
+                 display.innerHTML = newVal + '<span class="text-headline-md text-on-surface-variant ml-xs">KG</span>';
+                 
+                 // Show premium alert
+                 const toast = document.createElement('div');
+                 toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-background border border-[#39ff14]/50 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md max-w-sm w-[90%] transition-all duration-300';
+                 toast.innerHTML = '<span class="material-symbols-outlined text-[#39ff14]">check_circle</span><span class="text-xs font-mono-data uppercase">PR DATABASE UPDATED</span>';
+                 document.body.appendChild(toast);
+                 setTimeout(() => toast.remove(), 2000);
+             }
+         }
+         
+         // Select Avatar Forge options and update avatar profile picture!
+         document.addEventListener('DOMContentLoaded', () => {
+             const avatarOptions = document.querySelectorAll('.grid-cols-2 .relative, .grid-cols-2 button');
+             const mainAvatarImg = document.querySelector('.avatar-inner img');
+             
+             avatarOptions.forEach(opt => {
+                 opt.addEventListener('click', () => {
+                     const img = opt.querySelector('img');
+                     if (img && mainAvatarImg) {
+                         // Update main profile picture
+                         mainAvatarImg.src = img.src;
+                         
+                         // Clear active classes from other options
+                         avatarOptions.forEach(o => {
+                             o.classList.remove('border-2', 'border-primary/50', 'shadow-lg', 'shadow-primary/20');
+                             const badge = o.querySelector('.absolute.top-xs');
+                             if(badge) badge.remove();
+                             const activeLabel = o.querySelector('.bg-primary\/80');
+                             if (activeLabel) {
+                                 activeLabel.className = 'absolute bottom-0 inset-x-0 p-xs text-center bg-black/60 backdrop-blur-sm';
+                                 activeLabel.querySelector('span').textContent = activeLabel.querySelector('span').textContent.replace('ACTIVE', '');
+                             }
+                         });
+                         
+                         // Set current as active
+                         opt.classList.add('border-2', 'border-primary/50', 'shadow-lg', 'shadow-primary/20');
+                         
+                         // Add check icon badge
+                         const badge = document.createElement('div');
+                         badge.className = 'absolute top-xs right-xs';
+                         badge.innerHTML = '<span class="material-symbols-outlined text-primary text-sm">check_circle</span>';
+                         opt.appendChild(badge);
+                     }
+                 });
+             });
+             
+             // Forge new button action
+             const forgeBtn = document.querySelector('.border-dashed');
+             if(forgeBtn) {
+                 forgeBtn.addEventListener('click', () => {
+                     forgeBtn.disabled = true;
+                     const originalText = forgeBtn.querySelector('span:last-child').textContent;
+                     forgeBtn.querySelector('span:last-child').textContent = 'SYNTHESIZING...';
+                     
+                     setTimeout(() => {
+                         forgeBtn.disabled = false;
+                         forgeBtn.querySelector('span:last-child').textContent = originalText;
+                         alert("New AI Athlete avatar synthesized and added to collection!");
+                     }, 2000);
+                 });
+             }
+         });
+     </script>
+     </main>
+     
+<!-- Bottom Navigation -->
+
+<!-- Ambient Background Elements -->
+<div class="absolute top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+<div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/3 rounded-full blur-[100px]"></div>
+<div class="scanline absolute inset-0 opacity-[0.03]"></div>
+</div>
+<script>
+        // Micro-interaction: 3D Tilt for Avatar Card
+        const avatarCard = document.querySelector('.avatar-3d-card');
+        const avatarInner = document.querySelector('.avatar-inner');
+
+        if (avatarCard) {
+            avatarCard.addEventListener('mousemove', (e) => {
+                const rect = avatarCard.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                avatarInner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            });
+
+            avatarCard.addEventListener('mouseleave', () => {
+                avatarInner.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+            });
+        }
+    </script>
+
+
+
+            
+            
+            <!-- Bottom Navigation Bar -->
+            <nav class="absolute bottom-0 left-0 w-full bg-background/95 border-t border-white/10 flex justify-around items-center px-1 pb-3 z-40 shadow-[0_-10px_20px_rgba(0,0,0,0.5)]" style="height: 84px;">
+                
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="dashboard.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">home</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Home</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="scanner.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">restaurant</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Meals</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="tracker.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">grid_view</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Tracker</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="coach.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">forum</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">AI Chat</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="rewards.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">trophy</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Badges</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="exercises.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">fitness_center</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Workouts</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#39ff14]" href="profile.html?v=4">
+                    <div class="w-11 h-11 rounded-xl border border-[#39ff14] bg-[#39ff14]/10 shadow-[0_0_10px_rgba(57,255,20,0.3)] flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl font-bold" style="font-variation-settings: 'FILL' 1;">person</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider font-bold">Profile</span>
+                </a>
+            
+            </nav>
+    
+        </div>
+    </div>
+    
+    <!-- Dynamic Clock script -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            const timeStr = hours + ':' + minutes;
+            document.querySelectorAll('.status-bar-time').forEach(el => el.textContent = timeStr);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
+</body></html>

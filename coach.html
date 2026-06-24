@@ -1,0 +1,564 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>FITGURU AI Coach</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=Geist:wght@500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          screens: {
+            'sm': '9999px',
+            'md': '9999px',
+            'lg': '9999px',
+            'xl': '9999px',
+            '2xl': '9999px',
+          },
+          extend: {
+            "colors": {
+                    "on-background": "#e2e2e2",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "on-primary-fixed": "#022100",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-highest": "#353535",
+                    "surface-tint": "#2ae500",
+                    "inverse-surface": "#e2e2e2",
+                    "surface-dim": "#131313",
+                    "on-surface-variant": "#baccb0",
+                    "tertiary-container": "#dddddd",
+                    "on-tertiary": "#2f3131",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-tertiary-container": "#606162",
+                    "outline": "#85967c",
+                    "tertiary": "#f9fafa",
+                    "primary": "#efffe3",
+                    "background": "#131313",
+                    "surface-container-high": "#2a2a2a",
+                    "secondary": "#c8c6c5",
+                    "secondary-container": "#474746",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-surface": "#e2e2e2",
+                    "on-secondary-container": "#b7b5b4",
+                    "surface-bright": "#393939",
+                    "surface-container-lowest": "#0e0e0e",
+                    "error-container": "#93000a",
+                    "inverse-on-surface": "#303030",
+                    "surface-container": "#1f1f1f",
+                    "on-primary-fixed-variant": "#095300",
+                    "error": "#ffb4ab",
+                    "on-primary": "#053900",
+                    "primary-fixed-dim": "#2ae500",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "primary-fixed": "#79ff5b",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-container": "#39ff14",
+                    "outline-variant": "#3c4b35",
+                    "on-error": "#690005",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "surface": "#131313",
+                    "tertiary-fixed": "#e2e2e2",
+                    "surface-variant": "#353535",
+                    "on-primary-container": "#107100",
+                    "on-secondary": "#313030",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "surface-container-low": "#1b1b1b",
+                    "inverse-primary": "#106e00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "20px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "container-max": "1440px",
+                    "base": "4px",
+                    "xl": "64px",
+                    "sm": "16px",
+                    "xs": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "display-hero": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "label-caps": ["Geist"],
+                    "mono-data": ["Geist"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "mono-data": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #000000;
+            color: #e2e2e2;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .elite-border {
+            border-top: 1px solid #39ff14;
+        }
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+        }
+        .waveform-bar {
+            animation: wave 1.2s ease-in-out infinite;
+        }
+        @keyframes wave {
+            0%, 100% { height: 8px; }
+            50% { height: 24px; }
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  
+    <link href="app.css?v=3" rel="stylesheet">
+
+</head>
+<body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
+    <div class="iphone-container">
+        <div class="iphone-border"></div>
+        <div class="iphone-reflection"></div>
+        <div class="dynamic-island">
+            <div class="camera-lens"></div>
+        </div>
+        <div class="home-indicator"></div>
+        
+        <div class="iphone-screen">
+            
+            <!-- iOS Status Bar -->
+            <div class="status-bar">
+                <span class="status-bar-time leading-none">09:41</span>
+                <div class="status-bar-icons">
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">signal_cellular_alt</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">wifi</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0, 'wght' 600">battery_5_bar</span>
+                </div>
+            </div>
+
+            
+            
+<!-- Top App Bar -->
+<header class="w-full flex-shrink-0 z-20 bg-background/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-gutter py-md">
+<div class="flex items-center gap-sm">
+<button onclick="if(document.referrer && document.referrer.includes(window.location.host)) { window.history.back(); } else { window.location.href='dashboard.html?v=4'; }" class="p-xs hover:bg-white/5 rounded-full transition-all duration-300 ease-out active:scale-95 text-on-surface-variant hover:text-primary mr-1 flex-shrink-0" title="Go Back">
+    <span class="material-symbols-outlined text-xl leading-none">arrow_back</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div>
+<h1 class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim leading-none">FITGURU</h1>
+<span class="font-label-caps text-[10px] text-on-surface-variant tracking-[0.2em]">AI COACHING UNIT</span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/5 transition-all active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</button>
+</header>
+<main class="scroll-area flex-grow w-full px-gutter   space-y-lg">
+<!-- AI Avatar & Intro -->
+<section class="flex flex-col items-center text-center space-y-md relative z-10">
+<div class="relative">
+<div class="w-32 h-32 rounded-full p-1 bg-gradient-to-tr from-primary/40 to-transparent animate-pulse">
+<img class="w-full h-full rounded-full object-cover" data-alt="A highly detailed 3D digital avatar of a futuristic athletic trainer, featuring glowing cybernetic details, short buzz-cut hair, and a sharp focused expression. The background is a dark, tech-inspired training environment with neon green light accents and high-end glass textures. Professional lighting emphasizes the skin texture and metallic elements, creating an elite tech-noir aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB19t161uaT8feGpCk1WnR1e1CTRl1YnAAGlfex3h0FApwiXIUUD_yRO7o6HKbGli4GMqiub-LsSaQ8rGaHQMOk1HzVG416zGMnP5W0LdcgsNwX7Y4FDxg5Kqcd_FhtGy15AhUTQEyUs-A74czc4MYU0saWl_WjyEFbvBCNgClNShBailjcw_0xGytPmZqeLs0ASNpfEo9f_iRD1gRmt94nz6LxgdYjqeeoUt5lSpDVFmLRRviNdhCNLnekRoohOCwBuo9DYbY3g">
+</div>
+<div class="absolute bottom-1 right-1 w-6 h-6 bg-primary-container rounded-full border-4 border-background flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-on-primary font-bold">bolt</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">"Ready to crush your goals today, Alex?"</h2>
+<p class="text-on-surface-variant max-w-lg mx-auto">I've analyzed your sleep data and previous workout intensity. We're pivoting your nutrition to optimize recovery.</p>
+</div>
+</section>
+<!-- Diet Strategy Switcher -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="glass-card elite-border rounded-xl p-md flex flex-col gap-sm group cursor-pointer hover:bg-white/5 transition-all">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary text-3xl">restaurant</span>
+<span class="font-label-caps text-primary bg-primary/10 px-2 py-1 rounded">ACTIVE PLAN</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Elite Lean Bulking</h3>
+<p class="text-on-surface-variant text-sm">Focus on 250kcal surplus with high protein bioavailability to maximize hypertrophic response.</p>
+<div class="mt-xs flex items-center gap-md">
+<div class="flex flex-col">
+<span class="text-primary font-mono-data">3,200</span>
+<span class="text-[10px] text-on-surface-variant font-label-caps">DAILY KCAL</span>
+</div>
+<div class="h-8 w-[1px] bg-white/10"></div>
+<div class="flex flex-col">
+<span class="text-primary font-mono-data">210g</span>
+<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-md flex flex-col gap-sm opacity-60 hover:opacity-100 transition-all cursor-pointer">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-secondary text-3xl">agender</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Rapid Fat Loss</h3>
+<p class="text-on-surface-variant text-sm">Aggressive 500kcal deficit with carb cycling to maintain metabolic flexibility and strength.</p>
+<div class="mt-xs flex items-center gap-md">
+<div class="flex flex-col">
+<span class="text-on-surface font-mono-data">2,450</span>
+<span class="text-[10px] text-on-surface-variant font-label-caps">DAILY KCAL</span>
+</div>
+<div class="h-8 w-[1px] bg-white/10"></div>
+<div class="flex flex-col">
+<span class="text-on-surface font-mono-data">190g</span>
+<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Meal Schedule -->
+<section class="space-y-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+                    Today's Protocol
+                </h3>
+<button class="text-primary font-label-caps text-xs flex items-center gap-xs">
+                    EDIT PLAN <span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+<div class="space-y-sm">
+<!-- Meal 1 -->
+<div class="glass-card rounded-xl p-md flex items-center gap-md relative overflow-hidden group">
+<div class="absolute inset-y-0 left-0 w-1 bg-primary"></div>
+<div class="font-mono-data text-primary text-lg w-20 flex-shrink-0">07:00 AM</div>
+<div class="flex-grow">
+<h4 class="font-headline-md text-sm md:text-md">Power Oats &amp; Whey</h4>
+<p class="text-xs text-on-surface-variant font-body-md">80g Oats, 250ml Milk, 1 Scoop Whey</p>
+</div>
+<div class="text-right flex flex-col items-end">
+<span class="text-primary font-mono-data text-md">30g</span>
+<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
+</div>
+<span class="material-symbols-outlined text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Meal 2 -->
+<div class="glass-card rounded-xl p-md flex items-center gap-md relative overflow-hidden border-l-4 border-transparent">
+<div class="font-mono-data text-on-surface-variant text-lg w-20 flex-shrink-0">12:30 PM</div>
+<div class="flex-grow">
+<h4 class="font-headline-md text-sm md:text-md">Chicken &amp; Jasmine Rice</h4>
+<p class="text-xs text-on-surface-variant font-body-md">200g Grilled Chicken, 150g Rice, Steamed Greens</p>
+</div>
+<div class="text-right flex flex-col items-end">
+<span class="text-on-surface font-mono-data text-md">48g</span>
+<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">radio_button_unchecked</span>
+</div>
+<!-- Meal 3 -->
+<div class="glass-card rounded-xl p-md flex items-center gap-md relative overflow-hidden border-l-4 border-transparent">
+<div class="font-mono-data text-on-surface-variant text-lg w-20 flex-shrink-0">04:00 PM</div>
+<div class="flex-grow">
+<h4 class="font-headline-md text-sm md:text-md">Pre-Workout Fuel</h4>
+<p class="text-xs text-on-surface-variant font-body-md">1 Banana, 30g Almonds, Black Coffee</p>
+</div>
+<div class="text-right flex flex-col items-end">
+<span class="text-on-surface font-mono-data text-md">6g</span>
+<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">radio_button_unchecked</span>
+</div>
+<!-- Meal 4 (Bento Card Style) -->
+<div class="grid grid-cols-2 gap-sm">
+<div class="glass-card rounded-xl p-md flex flex-col justify-between aspect-square">
+<span class="font-mono-data text-on-surface-variant">08:00 PM</span>
+<div>
+<h4 class="font-headline-md text-sm">Grilled Salmon</h4>
+<p class="text-[10px] text-on-surface-variant mt-xs font-body-md">Omega-3 focus for overnight anti-inflammatory support.</p>
+</div>
+<div class="pt-sm border-t border-white/5 flex justify-between items-center">
+<span class="text-primary font-mono-data">32g P</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">info</span>
+</div>
+</div>
+<div class="glass-card rounded-xl p-md flex flex-col justify-between aspect-square">
+<span class="font-mono-data text-on-surface-variant">10:00 PM</span>
+<div>
+<h4 class="font-headline-md text-sm">Casein Shake</h4>
+<p class="text-[10px] text-on-surface-variant mt-xs font-body-md">Slow release protein to fuel muscle repair during REM.</p>
+</div>
+<div class="pt-sm border-t border-white/5 flex justify-between items-center">
+<span class="text-primary font-mono-data">25g P</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">bedtime</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Insights Bento -->
+<section class="grid grid-cols-6 gap-sm">
+<div class="col-span-6 md:col-span-4 glass-card rounded-xl p-md flex flex-col gap-sm">
+<h4 class="font-label-caps text-xs text-primary">RECOVERY INDEX</h4>
+<div class="flex items-end gap-md flex-grow">
+<div class="flex-grow h-32 flex items-end gap-xs">
+<div class="w-full bg-primary/20 h-1/2 rounded-t-sm"></div>
+<div class="w-full bg-primary/40 h-2/3 rounded-t-sm"></div>
+<div class="w-full bg-primary/60 h-3/4 rounded-t-sm"></div>
+<div class="w-full bg-primary h-[90%] rounded-t-sm neon-glow"></div>
+<div class="w-full bg-primary/40 h-1/2 rounded-t-sm"></div>
+<div class="w-full bg-primary/30 h-1/3 rounded-t-sm"></div>
+</div>
+<div class="text-right">
+<span class="text-headline-lg font-display-hero text-primary">88%</span>
+<p class="text-[10px] text-on-surface-variant font-label-caps">OPTIMAL ZONE</p>
+</div>
+</div>
+</div>
+<div class="col-span-6 md:col-span-2 glass-card rounded-xl p-md flex flex-col items-center justify-center text-center gap-sm">
+<div class="w-16 h-16 rounded-full border-2 border-primary/20 flex items-center justify-center relative">
+<div class="absolute inset-0 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
+<span class="material-symbols-outlined text-primary text-3xl">water_drop</span>
+</div>
+<div>
+<h4 class="font-headline-md text-sm">Hydration Status</h4>
+<p class="text-[10px] text-on-surface-variant">2.4L / 4.0L Goal</p>
+</div>
+</div>
+</section>
+
+     <script>
+         document.addEventListener('DOMContentLoaded', () => {
+             const chatInput = document.getElementById('chat-input');
+             const sendBtn = document.getElementById('send-chat-btn');
+             const mainSec = document.querySelector('main');
+             
+             // Dynamic Chat Interface Setup
+             sendBtn.addEventListener('click', () => {
+                 const text = chatInput.value.trim();
+                 if(!text) return;
+                 
+                 chatInput.value = '';
+                 
+                 // If this is the first message, replace the main content with a chat thread!
+                 let thread = document.getElementById('chat-thread');
+                 if (!thread) {
+                     // Hide other sections
+                     const sections = mainSec.querySelectorAll('section');
+                     sections.forEach(sec => sec.classList.add('hidden'));
+                     
+                     // Create Chat Thread Container
+                     thread = document.createElement('div');
+                     thread.id = 'chat-thread';
+                     thread.className = 'w-full max-w-md mx-auto space-y-4 pb-4 overflow-y-auto max-h-[50vh] hide-scrollbar';
+                     
+                     // Insert at top of main
+                     mainSec.insertBefore(thread, mainSec.firstChild);
+                     
+                     // Add initial system message
+                     appendMessage('AI Coach', 'Hydration logged at 2.4L. Starting performance Protocol Briefing. Ready for your query, Alex.', false);
+                 }
+                 
+                 // Append User Message
+                 appendMessage('You', text, true);
+                 
+                 // Simulate AI Response
+                 setTimeout(() => {
+                     let reply = "Processing biometric feedback... ";
+                     const q = text.toLowerCase();
+                     if (q.includes('hydrate') || q.includes('water')) {
+                         reply = "Your hydration is currently at 60%. I recommend consuming 500ml of mineralized water before your bench session to maintain muscular output.";
+                     } else if (q.includes('workout') || q.includes('routine') || q.includes('bench')) {
+                         reply = "Your central nervous system recovery is at 88% today. You are cleared for high-load bench presses. Squat form correction is also recommended.";
+                     } else if (q.includes('protein') || q.includes('diet') || q.includes('eat')) {
+                         reply = "Lean Bulking plan requires 3,200kcal. Your dinner should focus on grilled salmon (32g protein) for overnight muscle fiber recovery.";
+                     } else {
+                         reply = "Affirmative, Alex. Analyzing load-path variables. Form analysis indicates left elbow deviation. Keep core braced and push past your previous limits.";
+                     }
+                     appendMessage('AI Coach', reply, false);
+                 }, 1000);
+             });
+             
+             function appendMessage(sender, text, isUser) {
+                 const thread = document.getElementById('chat-thread');
+                 const msg = document.createElement('div');
+                 msg.className = isUser 
+                     ? 'flex flex-col items-end' 
+                     : 'flex flex-col items-start';
+                     
+                 const cardClass = isUser 
+                     ? 'bg-primary-container text-on-primary-container rounded-t-2xl rounded-l-2xl' 
+                     : 'glass-card text-on-surface rounded-t-2xl rounded-r-2xl border-white/5';
+                     
+                 msg.innerHTML = `
+                     <span class="font-['Geist'] text-[8px] text-on-surface-variant uppercase tracking-widest mb-1 px-2">${sender}</span>
+                     <div class="${cardClass} p-4 max-w-[85%] text-xs leading-relaxed shadow-lg">
+                         ${text}
+                     </div>
+                 `;
+                 thread.appendChild(msg);
+                 
+                 // Scroll to bottom
+                 const scrollArea = document.querySelector('.scroll-area');
+                 if (scrollArea) {
+                     scrollArea.scrollTop = scrollArea.scrollHeight;
+                 }
+             }
+         });
+     </script>
+     </main>
+     
+<!-- Voice Assistant & Interaction Layer -->
+<div class="absolute left-0 w-full z-50" style="bottom: 84px;">
+<!-- Chat Interaction Background Blur -->
+<div class="bg-background/90 backdrop-blur-2xl border-t border-white/10 px-gutter pt-md pb-xs rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+<!-- Voice Waveform Overlay -->
+<div class="flex items-center justify-center gap-1 h-12 mb-sm">
+<div class="waveform-bar w-1 bg-primary/20 rounded-full" style="animation-delay: 0.1s; height: 30px;"></div>
+<div class="waveform-bar w-1 bg-primary/40 rounded-full" style="animation-delay: 0.2s; height: 33px;"></div>
+<div class="waveform-bar w-1 bg-primary/60 rounded-full" style="animation-delay: 0.3s; height: 22px;"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full neon-glow" style="animation-delay: 0.4s; height: 10px;"></div>
+<div class="waveform-bar w-1 bg-primary/60 rounded-full" style="animation-delay: 0.5s; height: 18px;"></div>
+<div class="waveform-bar w-1 bg-primary/40 rounded-full" style="animation-delay: 0.6s; height: 12px;"></div>
+<div class="waveform-bar w-1 bg-primary/20 rounded-full" style="animation-delay: 0.7s; height: 14px;"></div>
+</div>
+<!-- Input Bar -->
+<div class="flex items-center gap-sm mb-md">
+<div class="flex-grow glass-card rounded-full px-sm py-2 flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-md">mic</span>
+<input id="chat-input" class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full placeholder:text-on-surface-variant/50" placeholder="Ask your coach anything..." type="text" onkeydown="if(event.key === 'Enter') document.getElementById('send-chat-btn').click()">
+</div>
+<button id="send-chat-btn" class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-lg shadow-primary/20 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<!-- Bottom Navigation Sync -->
+
+</div>
+</div>
+<!-- Background Atmospheric Effect -->
+<div class="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+<div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full"></div>
+<div class="absolute top-[40%] -right-[10%] w-[30%] h-[50%] bg-primary/3 blur-[150px] rounded-full"></div>
+</div>
+<script>
+        // Simple micro-interaction for the voice bars to simulate activity
+        const bars = document.querySelectorAll('.waveform-bar');
+        setInterval(() => {
+            bars.forEach(bar => {
+                const randomHeight = Math.floor(Math.random() * 30) + 8;
+                bar.style.height = `${randomHeight}px`;
+            });
+        }, 150);
+
+        // Active state determination logic for nav (Simulated)
+        // Current screen is Coach, so psychology icon is active.
+    </script>
+
+
+
+            
+            
+            <!-- Bottom Navigation Bar -->
+            <nav class="absolute bottom-0 left-0 w-full bg-background/95 border-t border-white/10 flex justify-around items-center px-1 pb-3 z-40 shadow-[0_-10px_20px_rgba(0,0,0,0.5)]" style="height: 84px;">
+                
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="dashboard.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">home</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Home</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="scanner.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">restaurant</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Meals</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="tracker.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">grid_view</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Tracker</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#39ff14]" href="coach.html?v=4">
+                    <div class="w-11 h-11 rounded-xl border border-[#39ff14] bg-[#39ff14]/10 shadow-[0_0_10px_rgba(57,255,20,0.3)] flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl font-bold" style="font-variation-settings: 'FILL' 1;">forum</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider font-bold">AI Chat</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="rewards.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">trophy</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Badges</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="exercises.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">fitness_center</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Workouts</span>
+                </a>
+            
+
+                <a class="flex flex-col items-center justify-center text-[#8e8e93] hover:text-[#39ff14] opacity-75 hover:opacity-100 transition-all duration-200" href="profile.html?v=4">
+                    <div class="w-11 h-11 flex items-center justify-center mb-0.5">
+                        <span class="material-symbols-outlined text-xl">person</span>
+                    </div>
+                    <span class="font-label-caps text-[8px] uppercase tracking-wider">Profile</span>
+                </a>
+            
+            </nav>
+    
+        </div>
+    </div>
+    
+    <!-- Dynamic Clock script -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            const timeStr = hours + ':' + minutes;
+            document.querySelectorAll('.status-bar-time').forEach(el => el.textContent = timeStr);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
+</body></html>

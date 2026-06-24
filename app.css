@@ -1,0 +1,203 @@
+/* Fonts */
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Scrollable content inside screen frame */
+.scroll-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding-bottom: 84px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+.scroll-area::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+/* Glassmorphism Panel */
+.glass-panel {
+    background: rgba(25, 25, 25, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* HUD background grids */
+.hud-grid {
+    background-size: 30px 30px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Glow and Shadow Effects */
+.text-glow {
+    text-shadow: 0 0 12px rgba(57, 255, 20, 0.35);
+}
+.neon-glow {
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.25);
+}
+
+
+/* Device Shell Emulation */
+.iphone-container {
+    width: 390px;
+    height: 844px;
+    border-radius: 48px;
+    position: relative;
+    padding: 11px;
+    background: #151515;
+    box-sizing: border-box;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    transition: transform 0.3s ease;
+}
+
+@media (max-height: 890px) {
+    .iphone-container {
+        transform: scale(0.9);
+    }
+}
+@media (max-height: 800px) {
+    .iphone-container {
+        transform: scale(0.82);
+    }
+}
+@media (max-height: 730px) {
+    .iphone-container {
+        transform: scale(0.74);
+    }
+}
+@media (max-height: 660px) {
+    .iphone-container {
+        transform: scale(0.66);
+    }
+}
+
+
+/* Phone Outer Bezel */
+.iphone-border {
+    position: absolute;
+    inset: 0;
+    border-radius: 48px;
+    border: 3.5px solid #2d2d2d;
+    box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.15),
+                0 15px 35px rgba(0, 0, 0, 0.8),
+                0 0 0 10px #111111;
+    pointer-events: none;
+    z-index: 60;
+}
+
+/* iPhone Screen Container */
+.iphone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 38px;
+    overflow: hidden;
+    background: #050505;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Dynamic Island Notch */
+.dynamic-island {
+    position: absolute;
+    top: 17px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 30px;
+    background: #000000;
+    border-radius: 20px;
+    z-index: 100;
+    box-shadow: inset 0 0 4px rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 15px;
+    pointer-events: none;
+}
+
+.camera-lens {
+    width: 10px;
+    height: 10px;
+    background: #050510;
+    border-radius: 50%;
+    border: 1.5px solid #0f0f1c;
+    opacity: 0.8;
+}
+
+/* Glass Screen Reflection Overlay */
+.iphone-reflection {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    z-index: 55;
+    border-radius: 0 48px 48px 0;
+    pointer-events: none;
+}
+
+/* Home Bar Indicator */
+.home-indicator {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 135px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+/* iOS Status Bar styling */
+.status-bar {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    background: #050505;
+    z-index: 50;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.status-bar-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}

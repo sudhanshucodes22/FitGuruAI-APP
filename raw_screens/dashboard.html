@@ -1,0 +1,448 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>FITGURU | Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Geist:wght@400;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card-elite {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid #39FF14;
+        }
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+        }
+        .neon-text-glow {
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+        .ring-container {
+            filter: drop-shadow(0 0 12px rgba(57, 255, 20, 0.4));
+        }
+        body {
+            background-color: #131313;
+            color: #e2e2e2;
+            overflow-x: hidden;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 4s infinite ease-in-out;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-background": "#e2e2e2",
+                "on-tertiary-fixed-variant": "#454747",
+                "on-primary-fixed": "#022100",
+                "on-error-container": "#ffdad6",
+                "surface-container-highest": "#353535",
+                "surface-tint": "#2ae500",
+                "inverse-surface": "#e2e2e2",
+                "surface-dim": "#131313",
+                "on-surface-variant": "#baccb0",
+                "tertiary-container": "#dddddd",
+                "on-tertiary": "#2f3131",
+                "on-secondary-fixed-variant": "#474746",
+                "on-tertiary-container": "#606162",
+                "outline": "#85967c",
+                "tertiary": "#f9fafa",
+                "primary": "#efffe3",
+                "background": "#131313",
+                "surface-container-high": "#2a2a2a",
+                "secondary": "#c8c6c5",
+                "secondary-container": "#474746",
+                "secondary-fixed": "#e5e2e1",
+                "on-surface": "#e2e2e2",
+                "on-secondary-container": "#b7b5b4",
+                "surface-bright": "#393939",
+                "surface-container-lowest": "#0e0e0e",
+                "error-container": "#93000a",
+                "inverse-on-surface": "#303030",
+                "surface-container": "#1f1f1f",
+                "on-primary-fixed-variant": "#095300",
+                "error": "#ffb4ab",
+                "on-primary": "#053900",
+                "primary-fixed-dim": "#2ae500",
+                "tertiary-fixed-dim": "#c6c6c7",
+                "primary-fixed": "#79ff5b",
+                "secondary-fixed-dim": "#c8c6c5",
+                "primary-container": "#39ff14",
+                "outline-variant": "#3c4b35",
+                "on-error": "#690005",
+                "on-secondary-fixed": "#1c1b1b",
+                "surface": "#131313",
+                "tertiary-fixed": "#e2e2e2",
+                "surface-variant": "#353535",
+                "on-primary-container": "#107100",
+                "on-secondary": "#313030",
+                "on-tertiary-fixed": "#1a1c1c",
+                "surface-container-low": "#1b1b1b",
+                "inverse-primary": "#106e00"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "gutter": "20px",
+                "lg": "40px",
+                "md": "24px",
+                "container-max": "1440px",
+                "base": "4px",
+                "xl": "64px",
+                "sm": "16px",
+                "xs": "8px"
+            },
+            "fontFamily": {
+                "headline-lg-mobile": ["Hanken Grotesk"],
+                "display-hero": ["Hanken Grotesk"],
+                "body-lg": ["Inter"],
+                "headline-md": ["Hanken Grotesk"],
+                "label-caps": ["Geist"],
+                "mono-data": ["Geist"],
+                "body-md": ["Inter"],
+                "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                "mono-data": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-gutter py-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-primary/20">
+<img class="w-full h-full object-cover" data-alt="A cinematic, high-detail portrait of a professional athlete in a dark gym environment. The lighting is dramatic and moody, highlighting the contours of the face with sharp neon green accents reflecting from nearby equipment. The background is blurred to create depth, focusing on the determined and focused expression of the athlete. The overall aesthetic is premium, high-contrast, and technically sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4cB7OeVPdcQzcrxItKzyUg_XksDWpCLT4LzP9MME0fdmPz_AV_5OE6TNUYf5yPklG-YAIG-EdRpcGo7Bm0srVW8NoSlihHjGIkJ3IX8_c7m_1hy0d-65Fcumrq_5mwXa8agUaTkFNVrlmj48MN2fhsaYCZJ8Beyi4nbWlrY_25fctRd3NAOZReCQcbEamx4Aa9aaw_q93f6KUefNiCpN7DVUrscDEFp9VmGGz2KDOqUXcC5p1O3USAbfFoU_hwaUvJLXI3iN5xw">
+</div>
+<h1 class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim">FITGURU</h1>
+</div>
+<div class="flex items-center gap-md">
+<button class="transition-all duration-300 ease-out active:scale-95 hover:bg-white/5 p-xs rounded-full">
+<span class="material-symbols-outlined text-primary">search</span>
+</button>
+<button class="transition-all duration-300 ease-out active:scale-95 hover:bg-white/5 p-xs rounded-full">
+<span class="material-symbols-outlined text-primary">settings</span>
+</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-gutter max-w-container-max mx-auto space-y-md">
+<!-- Hero Section -->
+<section class="relative rounded-xl overflow-hidden min-h-[320px] flex items-end p-lg">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent z-10"></div>
+<img class="w-full h-full object-cover" data-alt="A wide-angle, cinematic photograph of a high-end, dark-themed private gym at night. Large floor-to-ceiling windows overlook a blurred city skyline. Inside, premium matte black fitness equipment is spaced perfectly across a polished concrete floor. Neon green LED strips run along the ceiling and floor edges, casting a futuristic glow. The atmosphere is atmospheric, expensive, and intensely focused, perfectly capturing a high-performance athletic environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcOA1UsQGDC8_JJLfVDaSa4jnp0j7e_Nx1Txqx1AFBh_9X38jOFNqUDAO7MdMhABnKLwB-aVNwJXFczFX5F7zWpMMl9WcV0JW7rF_9m4YBi9K3f1f6YH6hqVGQ1XteDcz3ugPi-BP1HVO7_U2bI1FCE1btHGfa0A6IpANOtd5QoPQI0A0J_2zFDH3vcb18PFqrSxEWigrFrK7p8M_-0Y24KWru3HPfoRTV_86NhPKKiQgKtGPsZ_EHTF_iGo7CbTk9VSSO2jwpYw">
+</div>
+<div class="relative z-20 space-y-xs">
+<span class="font-label-caps text-label-caps text-primary tracking-[0.2em] uppercase">Daily Performance</span>
+<h2 class="font-display-hero text-headline-lg-mobile md:text-headline-lg text-white">Good Evening Sudhanshu 💪</h2>
+<p class="font-body-md text-on-surface-variant max-w-md">Your peak performance window is starting. AI suggests a high-intensity session tonight based on your recovery score.</p>
+</div>
+</section>
+<!-- Metrics Layer: Score & Insights -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-stretch">
+<!-- AI Readiness Score (Large Ring) -->
+<div class="lg:col-span-5 glass-card-elite rounded-xl p-md flex flex-col items-center justify-center space-y-sm text-center" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
+<div class="relative w-64 h-64 flex items-center justify-center ring-container">
+<!-- Progress Ring Background -->
+<svg class="w-full h-full -rotate-90">
+<circle cx="128" cy="128" fill="transparent" r="110" stroke="#1A1A1A" stroke-width="12"></circle>
+<circle class="transition-all duration-1000 ease-out" cx="128" cy="128" fill="transparent" r="110" stroke="#39FF14" stroke-dasharray="691" stroke-dashoffset="138" stroke-width="12" style="stroke-dashoffset: 124;"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="font-display-hero text-6xl text-white neon-text-glow">82</span>
+<span class="font-label-caps text-label-caps text-primary">READINESS</span>
+</div>
+<!-- Secondary Ring (Small) -->
+<div class="absolute w-full h-full scale-75 opacity-50">
+<svg class="w-full h-full rotate-45">
+<circle cx="128" cy="128" fill="transparent" r="110" stroke="#39FF14" stroke-dasharray="10 20" stroke-width="4"></circle>
+</svg>
+</div>
+</div>
+<div>
+<h3 class="font-headline-md text-white">Elite Status</h3>
+<p class="text-on-surface-variant text-body-md">You are in the top 2% of athletes today.</p>
+</div>
+</div>
+<!-- AI Insight Cards -->
+<div class="lg:col-span-7 flex flex-col gap-gutter">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter h-full">
+<div class="glass-card p-md rounded-xl flex flex-col justify-between border-l-4 border-error/50" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: &quot;FILL&quot; 1;">restaurant</span>
+<span class="font-mono-data text-error">-12% vs goal</span>
+</div>
+<div class="mt-md">
+<p class="font-headline-md text-white">Protein 20g below target</p>
+<p class="text-on-surface-variant text-sm">Add 1 scoop of whey or 150g Greek yogurt to hit your anabolic window.</p>
+</div>
+</div>
+<div class="glass-card p-md rounded-xl flex flex-col justify-between border-l-4 border-primary/50">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: &quot;FILL&quot; 1;">trending_up</span>
+<span class="font-mono-data text-primary">+15% week</span>
+</div>
+<div class="mt-md">
+<p class="font-headline-md text-white">Consistency +15%</p>
+<p class="text-on-surface-variant text-sm">You haven't missed a morning session in 12 days. Momentum is building.</p>
+</div>
+</div>
+</div>
+<!-- Large Feature Preview -->
+<div class="glass-card p-md rounded-xl flex items-center gap-md group cursor-pointer transition-all duration-300 hover:bg-white/10" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
+<img alt="Gourmet healthy meal with grilled salmon, avocado, and quinoa" class="w-full h-full object-cover brightness-110 contrast-110 opacity-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4B7zkUBaQMdnoZpvhi7MHA-tytBGUkUtUpCUqJ4Vuc7rOkvoD34O9B9UE9sjd0Obg0k1yZk_hAUYySRhDIV9TRamJyET3E8T8M9NV5swuFTEyjiVWXfiZxBuJ-YXKKuzJmHm_CGJwjq14PYrP9gMZQUHmman3yy90I_C-P-JkJAerMfxeSptiSlPPw_EmNEUWvM0Ka1p9ggxNgWCcqFSd0LJwpZoovZM9djnqnxQWAPhKq_O9LteS7ErXypWUgpznVUoPrKtaAA">
+</div>
+<div class="flex-1">
+<span class="font-label-caps text-xs text-primary mb-1 block">AI SCANNER READY</span>
+<h4 class="font-headline-md text-white group-hover:text-primary transition-colors">Log your dinner</h4>
+<p class="text-on-surface-variant text-sm">AI detected 480kcal in your last photo. Verify now.</p>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Stats Grid (Glass Cards) -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-sm">
+<div class="glass-card p-sm rounded-xl space-y-xs" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">local_fire_department</span>
+<span class="font-label-caps text-xs">CALORIES</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-white text-headline-md">1,842</span>
+<span class="text-xs text-on-surface-variant">/ 2,400</span>
+</div>
+<div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[76%] neon-glow"></div>
+</div>
+</div>
+<div class="glass-card p-sm rounded-xl space-y-xs" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">water_drop</span>
+<span class="font-label-caps text-xs">HYDRATION</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-white text-headline-md">2.4</span>
+<span class="text-xs text-on-surface-variant">/ 3.5 L</span>
+</div>
+<div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+<div class="bg-blue-400 h-full w-[68%]"></div>
+</div>
+</div>
+<div class="glass-card p-sm rounded-xl space-y-xs" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">footprint</span>
+<span class="font-label-caps text-xs">STEPS</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-white text-headline-md">8,142</span>
+<span class="text-xs text-on-surface-variant">/ 10k</span>
+</div>
+<div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+<div class="bg-primary-fixed-dim h-full w-[81%]"></div>
+</div>
+</div>
+<div class="glass-card p-sm rounded-xl space-y-xs">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">monitor_heart</span>
+<span class="font-label-caps text-xs">RESTING HR</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-white text-headline-md">58</span>
+<span class="text-xs text-on-surface-variant">BPM</span>
+</div>
+<div class="text-primary text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_downward</span>
+                    Lower than average
+                </div>
+</div>
+</section>
+<!-- Feature Grid (Bento) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- AI Coach -->
+<div class="md:col-span-2 glass-card-elite rounded-xl overflow-hidden relative min-h-[280px] p-lg flex flex-col justify-between group cursor-pointer" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
+<div class="absolute top-0 right-0 p-lg opacity-20 group-hover:opacity-40 transition-opacity">
+<span class="material-symbols-outlined text-[120px] text-primary">psychology</span>
+</div>
+<div class="relative z-10">
+<span class="bg-primary/20 text-primary-fixed px-3 py-1 rounded-full font-label-caps text-[10px] mb-4 inline-block">NEURAL ADAPTIVE COACHING</span>
+<h3 class="font-display-hero text-headline-lg text-white mb-2">Connect with AI Coach</h3>
+<p class="text-on-surface-variant max-w-sm">Optimizing your split based on yesterday's central nervous system fatigue.</p>
+</div>
+<button class="relative z-10 self-start bg-primary text-on-primary px-sm py-xs rounded-lg font-label-caps text-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                    START BRIEFING <span class="material-symbols-outlined text-sm">play_arrow</span>
+</button>
+</div>
+<!-- Workout Card -->
+<div class="glass-card rounded-xl overflow-hidden flex flex-col" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
+<div class="h-40 relative">
+<img alt="Professional athlete performing a heavy deadlift in a high-tech gym" class="w-full h-full object-cover brightness-110 contrast-110 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRwTw1EQEx4t9jyQt7DaNZby2z4Jt7XVUaWmnsyeb9YZpM1L5okhwX-qzYVGqgY9BEB75nNOz2yk1ZL5eENe0FT30idX8yqqse40i_fp7FtBCrFCawzJoPNV_l7uo3WpPKY6ia4UP4oP5OOheA4-2IRDaUaDkSb7RJnVY4nhy6LKc-psOlNETf8e-L3WBkQe9W3tuIZw9CqWYjz3E9Bt2rGKnZSZFDGD33c9qDkcMOMbu-WLC7omXndiabJIHmGUMRP4IuZB5aZw">
+<div class="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent flex items-end p-md"><h4 class="font-headline-md text-white">Leg Day: Power</h4></div>
+</div>
+<div class="p-md space-y-md flex-1">
+<div class="flex justify-between text-on-surface-variant font-mono-data text-xs">
+<span class="">45-60 MIN</span>
+<span class="">ADVANCED</span>
+</div>
+<ul class="space-y-sm">
+<li class="flex items-center gap-xs text-sm">
+<span class="w-1 h-1 rounded-full bg-primary"></span>
+                            Back Squats (5x5)
+                        </li>
+<li class="flex items-center gap-xs text-sm">
+<span class="w-1 h-1 rounded-full bg-primary"></span>
+                            Deadlifts (3x8)
+                        </li>
+</ul>
+<button class="w-full py-sm border border-white/10 rounded-lg hover:bg-white/5 transition-all font-label-caps text-xs">VIEW FULL ROUTINE</button>
+</div>
+</div>
+<!-- AI Posture Check -->
+<div class="glass-card rounded-xl p-md flex flex-col justify-between min-h-[200px] border-t border-primary-fixed/20 relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 opacity-40"><img alt="High-tech fitness tracker" class="w-32 h-32 object-cover rounded-full brightness-125 contrast-110 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrWyx8S_4ZeWTu_z26qTNIXVuXmZiyTGqQuR8pFCPOAk_UUuYa7oEeRfJeaP6nk0ac0AVajRVKL7BPq2CY-Eh3JnwRRqGTT0sET6Y_STDGSHbBxYhABlqk7xD4-tAS1_roRapTWSme7MSCG5AcCgTU5vQzrJgZpe5HBa3D_nHcPhIwqKS8HCkFwRGZkkksyrb-L8de1xsfmD0M-h_aXXMUrFL2CnZKab4yNy-R3-k7poH5LyTuXJvTQGu8NsVTVH2FbNGMSEzABw"></div>
+<div class="space-y-xs">
+<span class="material-symbols-outlined text-primary">camera_front</span>
+<h4 class="font-headline-md text-white">AI Posture Check</h4>
+<p class="text-on-surface-variant text-sm">Analyze your squat form in real-time using mobile vision.</p>
+</div>
+<div class="flex items-center gap-2 text-primary font-label-caps text-xs mt-4">
+<span class="animate-pulse w-2 h-2 rounded-full bg-primary"></span>
+                    READY FOR SCAN
+                </div>
+</div>
+<!-- Daily Streak -->
+<div class="glass-card rounded-xl p-md flex flex-col justify-center items-center gap-md border border-white/5">
+<div class="text-center">
+<span class="font-display-hero text-5xl text-white">12</span>
+<p class="font-label-caps text-on-surface-variant text-xs mt-1">DAY STREAK</p>
+</div>
+<div class="flex gap-1">
+<span class="w-2 h-6 bg-primary rounded-full neon-glow"></span>
+<span class="w-2 h-6 bg-primary rounded-full neon-glow"></span>
+<span class="w-2 h-6 bg-primary rounded-full neon-glow"></span>
+<span class="w-2 h-6 bg-primary rounded-full neon-glow"></span>
+<span class="w-2 h-6 bg-primary rounded-full neon-glow"></span>
+<span class="w-2 h-6 bg-white/10 rounded-full"></span>
+<span class="w-2 h-6 bg-white/10 rounded-full"></span>
+</div>
+</div>
+<!-- Quick Log -->
+<div class="glass-card rounded-xl p-md flex flex-col justify-between border-t border-white/10">
+<h4 class="font-headline-md text-white">Quick Log</h4>
+<div class="grid grid-cols-3 gap-xs">
+<button class="bg-white/5 hover:bg-white/10 p-xs rounded flex flex-col items-center gap-1 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">scale</span>
+<span class="text-[10px] font-label-caps">WEIGHT</span>
+</button>
+<button class="bg-white/5 hover:bg-white/10 p-xs rounded flex flex-col items-center gap-1 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">bedtime</span>
+<span class="text-[10px] font-label-caps">SLEEP</span>
+</button>
+<button class="bg-white/5 hover:bg-white/10 p-xs rounded flex flex-col items-center gap-1 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">mood</span>
+<span class="text-[10px] font-label-caps">MOOD</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full h-20 bg-background/90 backdrop-blur-2xl border-t border-white/10 flex justify-around items-center px-4 pb-2 z-50 rounded-t-xl shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary cursor-pointer active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-caps text-label-caps mt-1">Coach</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary cursor-pointer active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">center_focus_strong</span>
+<span class="font-label-caps text-label-caps mt-1">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary-fixed-dim bg-primary/10 rounded-xl p-xs active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">dashboard</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary cursor-pointer active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-label-caps text-label-caps mt-1">Log</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary cursor-pointer active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-caps text-label-caps mt-1">Gym</span>
+</div>
+</nav>
+<!-- Interactive script for ring animation -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const circle = document.querySelector('circle[stroke-dashoffset]');
+            if (circle) {
+                // Trigger animation after a slight delay
+                setTimeout(() => {
+                    circle.style.strokeDashoffset = '124'; // Example value: 82% of 691
+                }, 500);
+            }
+            
+            // Subtle parallax/tilt for glass cards
+            const cards = document.querySelectorAll('.glass-card, .glass-card-elite');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+                });
+            });
+        });
+    </script>
+
+
+
+
+
+
+</body></html>
