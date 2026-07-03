@@ -201,3 +201,39 @@ body {
     align-items: center;
     gap: 6px;
 }
+
+/* Real Mobile Viewport Overrides (Full Screen App experience) */
+@media (max-width: 500px) {
+    body {
+        padding: 0 !important;
+        margin: 0 !important;
+        background-color: #000000 !important;
+    }
+    .iphone-container {
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        background: #000000 !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+    .iphone-border, .iphone-reflection, .dynamic-island, .home-indicator {
+        display: none !important;
+    }
+    .iphone-screen {
+        border-radius: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+    }
+    /* Hide desktop status bar on real mobile to prevent double headers */
+    .status-bar {
+        display: none !important;
+    }
+    /* Adjust bottom navigation for native mobile edge viewports */
+    nav {
+        padding-bottom: 20px !important;
+    }
+}

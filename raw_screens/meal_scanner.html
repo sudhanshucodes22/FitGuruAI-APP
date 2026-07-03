@@ -233,12 +233,16 @@
 </div>
 
 <!-- Camera Trigger / Control Buttons (Floating) -->
+<input type="file" accept="image/*" id="file-input" class="hidden" onchange="uploadSelectedFile(event)">
 <div class="absolute bottom-6 right-5 z-30 flex items-center gap-sm pointer-events-auto">
 <button id="shutter-btn" onclick="captureSnapshot()" class="hidden w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all" title="Capture & Analyze">
 <span class="material-symbols-outlined text-xl font-bold">circle</span>
 </button>
 <button id="camera-btn" onclick="toggleCamera()" class="w-12 h-12 rounded-full bg-[#39ff14]/10 border border-[#39ff14] text-[#39ff14] flex items-center justify-center shadow-[0_0_15px_rgba(57,255,20,0.3)] hover:scale-105 active:scale-95 transition-all" title="Start Live Scan">
 <span id="camera-btn-icon" class="material-symbols-outlined text-xl">photo_camera</span>
+</button>
+<button onclick="document.getElementById('file-input').click()" class="w-12 h-12 rounded-full bg-[#39ff14]/10 border border-[#39ff14] text-[#39ff14] flex items-center justify-center shadow-[0_0_15px_rgba(57,255,20,0.3)] hover:scale-105 active:scale-95 transition-all" title="Upload Photo">
+<span class="material-symbols-outlined text-xl">upload_file</span>
 </button>
 </div>
 </section>
@@ -248,8 +252,8 @@
 <!-- Dashboard Header -->
 <div class="flex justify-between items-end mb-4">
 <div>
-<h2 class="font-headline-lg text-headline-md tracking-tight text-white mb-1">Nutrition DNA</h2>
-<p class="text-on-surface-variant text-body-md opacity-70">AI Analysis of your current meal</p>
+<h2 class="font-headline-lg text-headline-md tracking-tight text-white mb-1" id="meal-name-title">Nutrition DNA</h2>
+<p class="text-on-surface-variant text-body-md opacity-70" id="meal-desc-text">AI Analysis of your current meal</p>
 </div>
 <button class="bg-surface-container-high p-2 rounded-full border border-white/5">
 <span class="material-symbols-outlined text-primary text-xl">share</span>
@@ -257,11 +261,18 @@
 </div>
 <!-- Main Score & Progress Gauge -->
 <div class="glass-panel elite-border p-md rounded-2xl flex items-center justify-between glow-neon">
-<div class="flex flex-col"><span class="font-label-caps text-on-surface-variant text-[10px] tracking-widest mb-1">HEALTH SCORE</span><div class="flex items-baseline gap-xs"><span class="font-display-hero text-4xl text-primary-fixed-dim">85</span><span class="text-on-surface-variant font-mono-data text-sm">/100</span></div><span class="text-[10px] text-primary mt-2 font-medium bg-primary/10 px-2 py-0.5 rounded-full w-fit border border-primary/20">OPTIMAL FUEL</span></div>
+<div class="flex flex-col">
+<span class="font-label-caps text-on-surface-variant text-[10px] tracking-widest mb-1">HEALTH SCORE</span>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-hero text-4xl text-primary-fixed-dim" id="health-score-val">85</span>
+<span class="text-on-surface-variant font-mono-data text-sm">/100</span>
+</div>
+<span class="text-[10px] text-primary mt-2 font-medium bg-primary/10 px-2 py-0.5 rounded-full w-fit border border-primary/20" id="health-score-tag">OPTIMAL FUEL</span>
+</div>
 <div class="relative w-24 h-24">
 <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
 <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"></path>
-<path class="transition-all duration-1000 ease-out" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#39FF14" stroke-dasharray="85, 100" stroke-linecap="round" stroke-width="3"></path>
+<path class="transition-all duration-1000 ease-out" id="health-gauge" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#39FF14" stroke-dasharray="85, 100" stroke-linecap="round" stroke-width="3"></path>
 </svg>
 <div class="absolute inset-0 flex flex-col items-center justify-center">
 <span class="material-symbols-outlined text-primary text-2xl animate-pulse">bolt</span>
@@ -277,44 +288,44 @@
 </div>
 <span class="font-label-caps text-on-surface-variant text-[10px] block mb-2">CALORIES</span>
 <div class="flex items-baseline gap-1 mb-4">
-<span class="font-headline-md text-white">542</span>
+<span class="font-headline-md text-white" id="calories-val">542</span>
 <span class="text-[10px] text-on-surface-variant">kcal</span>
 </div>
 <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-<div class="bg-primary h-full rounded-full" style="width: 65%;"></div>
+<div id="calories-progress" class="bg-primary h-full rounded-full" style="width: 65%;"></div>
 </div>
 </div>
 <!-- Protein Card -->
 <div class="glass-panel p-md rounded-2xl border-primary/20 relative overflow-hidden">
 <span class="font-label-caps text-primary text-[10px] block mb-2">PROTEIN</span>
 <div class="flex items-baseline gap-1 mb-4">
-<span class="font-headline-md text-primary">42</span>
+<span class="font-headline-md text-primary" id="protein-val">42</span>
 <span class="text-[10px] text-primary/70">g</span>
 </div>
 <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-<div class="bg-primary h-full rounded-full glow-neon" style="width: 80%;"></div>
+<div id="protein-progress" class="bg-primary h-full rounded-full glow-neon" style="width: 80%;"></div>
 </div>
 </div>
 <!-- Carbs Card -->
 <div class="glass-panel p-md rounded-2xl border-white/5">
 <span class="font-label-caps text-on-surface-variant text-[10px] block mb-2">CARBS</span>
 <div class="flex items-baseline gap-1 mb-4">
-<span class="font-headline-md text-white">28</span>
+<span class="font-headline-md text-white" id="carbs-val">28</span>
 <span class="text-[10px] text-on-surface-variant">g</span>
 </div>
 <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-<div class="bg-on-surface-variant h-full rounded-full opacity-60" style="width: 30%;"></div>
+<div id="carbs-progress" class="bg-on-surface-variant h-full rounded-full opacity-60" style="width: 30%;"></div>
 </div>
 </div>
 <!-- Fats Card -->
 <div class="glass-panel p-md rounded-2xl border-white/5">
 <span class="font-label-caps text-on-surface-variant text-[10px] block mb-2">FATS</span>
 <div class="flex items-baseline gap-1 mb-4">
-<span class="font-headline-md text-white">12</span>
+<span class="font-headline-md text-white" id="fats-val">12</span>
 <span class="text-[10px] text-on-surface-variant">g</span>
 </div>
 <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-<div class="bg-on-surface-variant h-full rounded-full opacity-40" style="width: 20%;"></div>
+<div id="fats-progress" class="bg-on-surface-variant h-full rounded-full opacity-40" style="width: 20%;"></div>
 </div>
 </div>
 </div>
@@ -324,10 +335,17 @@
 <span class="material-symbols-outlined text-sm">list_alt</span>
                     DETECTED INGREDIENTS
                 </h3>
-<div class="space-y-sm"><div class="flex justify-between items-center py-sm border-b border-white/5"><div class="flex items-center gap-sm"><span class="material-symbols-outlined text-primary text-sm">restaurant</span><span class="text-body-md font-medium text-white">Grilled Chicken Breast</span></div><span class="font-mono-data text-primary text-sm">150g</span></div><div class="flex justify-between items-center py-sm border-b border-white/5"><div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant text-sm">grain</span><span class="text-body-md font-medium text-white">Organic Brown Rice</span></div><span class="font-mono-data text-on-surface-variant text-sm">100g</span></div><div class="flex justify-between items-center py-sm"><div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant text-sm">skillet</span><span class="text-body-md font-medium text-white">Olive Oil (Drizzle)</span></div><span class="font-mono-data text-on-surface-variant text-sm">5ml</span></div></div>
+<div class="space-y-sm" id="ingredients-list">
+    <div class="flex justify-between items-center py-sm border-b border-white/5">
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary text-sm">restaurant</span>
+            <span class="text-body-md font-medium text-white">Pending Scan...</span>
+        </div>
+    </div>
+</div>
 </div>
 <!-- CTA Action -->
-<button class="w-full bg-primary-container text-on-primary-container py-md rounded-2xl font-headline-md flex items-center justify-center gap-sm transition-all duration-300 active:scale-95 shadow-lg shadow-primary/20 glow-neon">
+<button id="log-meal-btn" onclick="logScannedMeal()" class="w-full bg-primary-container text-on-primary-container py-md rounded-2xl font-headline-md flex items-center justify-center gap-sm transition-all duration-300 active:scale-95 shadow-lg shadow-primary/20 glow-neon">
 <span class="">LOG TO MEAL PLAN</span>
 <span class="material-symbols-outlined">add_task</span>
 </button>
@@ -340,11 +358,7 @@
 </div>
 <div class="flex justify-between">
 <span class="">SERVER_LATENCY:</span>
-<span class="">14ms</span>
-</div>
-<div class="flex justify-between">
-<span class="">GEO_COORD:</span>
-<span class="">34.05, -118.24</span>
+<span id="latency-val">14ms</span>
 </div>
 <div class="flex justify-between">
 <span class="">FIRMWARE:</span>
@@ -355,31 +369,9 @@
 </div>
 </section>
 </main>
-<!-- Bottom Navigation Bar (From COMPONENTS_13) -->
-<nav class="fixed bottom-0 w-full h-20 bg-background/90 backdrop-blur-2xl border-t border-white/10 flex justify-around items-center px-4 pb-2 z-50 rounded-t-xl shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
-<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-transform duration-200 active:scale-90" href="#">
-<span class="material-symbols-outlined">psychology</span>
-<span class="font-label-caps text-label-caps">Coach</span>
-</a>
-<a class="flex flex-col items-center justify-center text-primary-fixed-dim bg-primary/10 rounded-xl p-xs transition-transform duration-200 active:scale-90" href="#">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
-<span class="font-label-caps text-label-caps">Scan</span>
-</a>
-<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-transform duration-200 active:scale-90" href="#">
-<span class="material-symbols-outlined">dashboard</span>
-<span class="font-label-caps text-label-caps">Home</span>
-</a>
-<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-transform duration-200 active:scale-90" href="#">
-<span class="material-symbols-outlined">fitness_center</span>
-<span class="font-label-caps text-label-caps">Log</span>
-</a>
-<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-transform duration-200 active:scale-90" href="#">
-<span class="material-symbols-outlined">map</span>
-<span class="font-label-caps text-label-caps">Gym</span>
-</a>
-</nav>
 <script>
     let webcamStream = null;
+    let currentScannedMeal = null;
     
     function toggleCamera() {
         const video = document.getElementById('webcam-feed');
@@ -389,7 +381,6 @@
         const telemetryStatus = document.getElementById('telemetry-status');
         
         if (!webcamStream) {
-            // Start Camera
             navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
                 .then(stream => {
                     webcamStream = stream;
@@ -399,13 +390,11 @@
                     shutterBtn.classList.remove('hidden');
                     cameraIcon.textContent = 'close';
                     
-                    // Update telemetry
                     telemetryStatus.innerHTML = '<span class="text-[#39ff14] font-bold">LENS PROTOCOL ACTIVE</span>';
                     showToast('CAMERA FEED SYNCED');
                 })
                 .catch(err => {
                     console.warn("webcam stream access failed:", err);
-                    // Simulated camera fallback if no hardware is present
                     showToast('SIMULATING CAMERA PROTOCOL');
                     staticFeed.classList.add('brightness-125', 'contrast-125');
                     shutterBtn.classList.remove('hidden');
@@ -413,7 +402,6 @@
                     webcamStream = "simulated";
                 });
         } else {
-            // Stop Camera
             stopCameraStream();
             video.classList.add('hidden');
             staticFeed.classList.remove('opacity-0', 'brightness-125', 'contrast-125');
@@ -432,8 +420,9 @@
     
     function captureSnapshot() {
         const flash = document.getElementById('camera-flash');
-        const analyzing = document.getElementById('analyzing-overlay');
-        const analyzingText = document.getElementById('analyzing-text');
+        const video = document.getElementById('webcam-feed');
+        const canvas = document.getElementById('webcam-canvas');
+        const staticFeed = document.getElementById('static-feed');
         
         // 1. Shutter Flash
         flash.classList.remove('hidden');
@@ -443,22 +432,16 @@
             setTimeout(() => flash.classList.add('hidden'), 100);
         }, 100);
         
-        // Take image frame if webcam is real
-        const video = document.getElementById('webcam-feed');
-        const canvas = document.getElementById('webcam-canvas');
-        const staticFeed = document.getElementById('static-feed');
-        
+        let dataUrl = null;
         if (webcamStream && webcamStream !== "simulated" && video.readyState === video.HAVE_ENOUGH_DATA) {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL('image/jpeg');
-            // Set static feed background to snapshot dataurl to freeze frame
+            dataUrl = canvas.toDataURL('image/jpeg');
             staticFeed.style.backgroundImage = `url('${dataUrl}')`;
         }
         
-        // Turn off camera
         stopCameraStream();
         video.classList.add('hidden');
         staticFeed.classList.remove('opacity-0');
@@ -466,135 +449,196 @@
         document.getElementById('camera-btn-icon').textContent = 'photo_camera';
         document.getElementById('telemetry-status').textContent = 'SCANNER_V4.2 READY';
         
-        // 2. Start AI Analysis Animation
+        if (dataUrl) {
+            sendBase64ToScan(dataUrl);
+        } else {
+            // Simulated camera freeze fallback
+            uploadScannedMealFake();
+        }
+    }
+
+    async function sendBase64ToScan(base64Data) {
+        const analyzing = document.getElementById('analyzing-overlay');
+        const analyzingText = document.getElementById('analyzing-text');
         analyzing.classList.remove('hidden');
+        analyzingText.textContent = "AI BIO-ANALYSIS...";
         
-        const messages = [
-            "CAPTURING VIEWPORT...",
-            "SEGMENTING OBJECTS...",
-            "COMPUTING VOLUMETRIC MASS...",
-            "NUTRITIONAL DENSITY MATCH FOUND!"
-        ];
-        
-        let msgIndex = 0;
-        const msgInterval = setInterval(() => {
-            msgIndex++;
-            if (msgIndex < messages.length) {
-                analyzingText.textContent = messages[msgIndex];
-            } else {
-                clearInterval(msgInterval);
-            }
-        }, 400);
-        
-        setTimeout(() => {
-            // Hide loading
+        const startTime = Date.now();
+        try {
+            const res = await fetch('/api/scanner/scan', {
+                method: 'POST',
+                headers: getAuthHeaders('application/json'),
+                body: JSON.stringify({ imageBase64: base64Data })
+            });
+            const data = await res.json();
+            
             analyzing.classList.add('hidden');
+            document.getElementById('latency-val').textContent = `${Date.now() - startTime}ms`;
             
-            // 3. Update UI content with NEW meal details!
-            updateMealScannerData();
+            if (res.ok) {
+                currentScannedMeal = data.meal;
+                updateMealScannerData(data.meal);
+                if (data.xpGained > 0) {
+                    showToast(`+${data.xpGained} XP GAINED`);
+                }
+            } else {
+                showToast(data.error || "Scan failed", "error");
+            }
+        } catch (err) {
+            analyzing.classList.add('hidden');
+            showToast("Connection uplink failed", "error");
+        }
+    }
+
+    async function uploadSelectedFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            document.getElementById('static-feed').style.backgroundImage = `url('${e.target.result}')`;
+            sendBase64ToScan(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function uploadScannedMealFake() {
+        const analyzing = document.getElementById('analyzing-overlay');
+        analyzing.classList.remove('hidden');
+        document.getElementById('analyzing-text').textContent = "COMPUTING VOLUMETRIC MASS...";
+        
+        const startTime = Date.now();
+        try {
+            // Fake scan trigger by sending a null base64 payload to get fallback data
+            const res = await fetch('/api/scanner/scan', {
+                method: 'POST',
+                headers: getAuthHeaders('application/json'),
+                body: JSON.stringify({ imageBase64: "" })
+            });
+            const data = await res.json();
+            analyzing.classList.add('hidden');
+            document.getElementById('latency-val').textContent = `${Date.now() - startTime}ms`;
             
-            showToast('ANALYSIS COMPLETE: LOG UPDATED');
-        }, 2000);
+            if (res.ok) {
+                currentScannedMeal = data.meal;
+                updateMealScannerData(data.meal);
+                if (data.xpGained > 0) {
+                    showToast(`+${data.xpGained} XP GAINED`);
+                }
+            }
+        } catch (e) {
+            analyzing.classList.add('hidden');
+            showToast("Offline simulation model activated");
+        }
     }
-    
-    function showToast(text) {
-        const toast = document.createElement('div');
-        toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-background border border-[#39ff14]/50 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md max-w-sm w-[90%] transition-all duration-300';
-        toast.innerHTML = `<span class="material-symbols-outlined text-[#39ff14] animate-bounce">check_circle</span><span class="text-xs font-mono-data uppercase tracking-wider">${text}</span>`;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2500);
-    }
-    
-    function updateMealScannerData() {
-        // Change text values to represent the new scanned meal
-        const boxChicken = document.getElementById('box-chicken');
+
+    function updateMealScannerData(meal) {
+        if (!meal) return;
+        
+        // Bounding boxes
         const labelChicken = document.getElementById('label-chicken');
-        const boxRice = document.getElementById('box-rice');
-        const labelRice = document.getElementById('label-rice');
+        if (labelChicken) {
+            labelChicken.textContent = meal.name.toUpperCase();
+        }
         
-        labelChicken.textContent = "GRILLED CHICKEN (180G)";
-        labelRice.textContent = "CAESAR SALAD (120G)";
+        // Details
+        document.getElementById('meal-name-title').textContent = `Nutrition DNA: ${meal.name}`;
+        document.getElementById('meal-desc-text').textContent = meal.description;
         
-        // Reposition bounding boxes slightly to simulate live repositioning!
-        boxChicken.style.top = '30%';
-        boxChicken.style.left = '15%';
-        boxChicken.style.width = '42%';
-        boxChicken.style.height = '38%';
+        // Health score calc
+        const healthScore = Math.min(100, Math.round(55 + (meal.protein / (meal.calories || 1)) * 350));
+        document.getElementById('health-score-val').textContent = healthScore;
+        document.getElementById('health-score-tag').textContent = healthScore >= 80 ? 'EXCELLENT FUEL' : 'BALANCED PROTOCOL';
         
-        boxRice.style.top = '45%';
-        boxRice.style.left = '52%';
-        boxRice.style.width = '30%';
-        boxRice.style.height = '28%';
-        
-        // Telemetry details
-        document.getElementById('telemetry-objects').textContent = "OBJECTS: 2 IDENTIFIED";
-        
-        // 2. DNA Report
-        document.querySelector('h2.font-headline-lg').textContent = "Nutrition DNA: Caesar Salad";
-        document.querySelector('p.text-on-surface-variant').textContent = "AI Analysis of Grilled Chicken Caesar Salad";
-        
-        // Health score
-        document.querySelector('.text-primary-fixed-dim').textContent = "92";
-        document.querySelector('.bg-primary\\/10').textContent = "EXCELLENT FUEL";
-        
-        // SVG circle gauge
-        const gaugePath = document.querySelector('svg viewBox path:last-child') || document.querySelector('svg path:last-child');
+        const gaugePath = document.getElementById('health-gauge');
         if (gaugePath) {
-            gaugePath.setAttribute('stroke-dasharray', '92, 100');
+            gaugePath.setAttribute('stroke-dasharray', `${healthScore}, 100`);
         }
         
         // Macros
-        // Calories: 480 kcal (60%)
-        const calorieCard = document.querySelector('.grid-cols-2 > div:nth-child(1)');
-        calorieCard.querySelector('span.font-headline-md').textContent = "480";
-        calorieCard.querySelector('.bg-primary').style.width = "60%";
+        document.getElementById('calories-val').textContent = meal.calories;
+        const calPercent = Math.min(100, (meal.calories / 1000) * 100);
+        document.getElementById('calories-progress').style.width = `${calPercent}%`;
+
+        document.getElementById('protein-val').textContent = meal.protein;
+        const proteinPercent = Math.min(100, (meal.protein / 60) * 100);
+        document.getElementById('protein-progress').style.width = `${proteinPercent}%`;
+
+        document.getElementById('carbs-val').textContent = meal.carbs;
+        const carbsPercent = Math.min(100, (meal.carbs / 100) * 100);
+        document.getElementById('carbs-progress').style.width = `${carbsPercent}%`;
+
+        document.getElementById('fats-val').textContent = meal.fat;
+        const fatsPercent = Math.min(100, (meal.fat / 40) * 100);
+        document.getElementById('fats-progress').style.width = `${fatsPercent}%`;
         
-        // Protein: 38g (76%)
-        const proteinCard = document.querySelector('.grid-cols-2 > div:nth-child(2)');
-        proteinCard.querySelector('span.font-headline-md').textContent = "38";
-        proteinCard.querySelector('.bg-primary').style.width = "76%";
-        
-        // Carbs: 12g (15%)
-        const carbsCard = document.querySelector('.grid-cols-2 > div:nth-child(3)');
-        carbsCard.querySelector('span.font-headline-md').textContent = "12";
-        carbsCard.querySelector('.bg-on-surface-variant').style.width = "15%";
-        
-        // Fats: 28g (45%)
-        const fatsCard = document.querySelector('.grid-cols-2 > div:nth-child(4)');
-        fatsCard.querySelector('span.font-headline-md').textContent = "28";
-        fatsCard.querySelector('.bg-on-surface-variant').style.width = "45%";
-        
-        // Detected Ingredients List
-        const ingredientsContainer = document.querySelector('.space-y-sm');
-        ingredientsContainer.innerHTML = `
-            <div class="flex justify-between items-center py-sm border-b border-white/5">
-                <div class="flex items-center gap-sm">
-                    <span class="material-symbols-outlined text-primary text-sm">restaurant</span>
-                    <span class="text-body-md font-medium text-white">Grilled Chicken Breast</span>
+        // Ingredients
+        const ingredientsContainer = document.getElementById('ingredients-list');
+        if (ingredientsContainer) {
+            ingredientsContainer.innerHTML = `
+                <div class="flex justify-between items-center py-sm border-b border-white/5">
+                    <div class="flex items-center gap-sm">
+                        <span class="material-symbols-outlined text-primary text-sm">restaurant</span>
+                        <span class="text-body-md font-medium text-white">${meal.name}</span>
+                    </div>
+                    <span class="font-mono-data text-primary text-sm">1 serving</span>
                 </div>
-                <span class="font-mono-data text-primary text-sm">180g</span>
-            </div>
-            <div class="flex justify-between items-center py-sm border-b border-white/5">
-                <div class="flex items-center gap-sm">
-                    <span class="material-symbols-outlined text-on-surface-variant text-sm">grain</span>
-                    <span class="text-body-md font-medium text-white">Romaine Lettuce & Croutons</span>
-                </div>
-                <span class="font-mono-data text-on-surface-variant text-sm">120g</span>
-            </div>
-            <div class="flex justify-between items-center py-sm">
-                <div class="flex items-center gap-sm">
-                    <span class="material-symbols-outlined text-on-surface-variant text-sm">skillet</span>
-                    <span class="text-body-md font-medium text-white">Caesar Dressing</span>
-                </div>
-                <span class="font-mono-data text-on-surface-variant text-sm">20ml</span>
-            </div>
-        `;
+            `;
+        }
+    }
+
+    async function logScannedMeal() {
+        if (!currentScannedMeal) {
+            showToast("No active meal scanned", "error");
+            return;
+        }
+        
+        // Mark diet as completed in habits
+        try {
+            const res = await fetch('/api/habits/toggle', {
+                method: 'POST',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ dietCompleted: true })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                showToast("MEAL LOGGED SUCCESSFULLY");
+                setTimeout(() => window.location.href = 'dashboard.html', 1200);
+            } else {
+                showToast(data.error || "Failed to log meal", "error");
+            }
+        } catch (err) {
+            showToast("Connection failed", "error");
+        }
+    }
+    
+    // Initial fetch of profile & latest meals
+    async function initScanner() {
+        try {
+            // Profile verification
+            const profileRes = await fetch('/api/auth/profile', { headers: getAuthHeaders() });
+            if (!profileRes.ok) throw new Error("Unauthorized");
+            
+            // Fetch history to load latest scan
+            const historyRes = await fetch('/api/scanner/history', { headers: getAuthHeaders() });
+            if (historyRes.ok) {
+                const meals = await historyRes.json();
+                if (meals.length > 0) {
+                    currentScannedMeal = meals[meals.length - 1];
+                    updateMealScannerData(currentScannedMeal);
+                }
+            }
+        } catch (e) {
+            console.error("Scanner init failed:", e);
+            localStorage.removeItem('token');
+            window.location.href = 'auth.html';
+        }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Simple scroll observer to adjust viewfinder opacity/scale
-        const viewfinder = document.querySelector('.sticky-viewfinder');
+        initScanner();
         
+        const viewfinder = document.querySelector('.sticky-viewfinder');
         window.addEventListener('scroll', () => {
             const scrollPos = window.scrollY;
             const threshold = 300;
@@ -609,7 +653,7 @@
             }
         });
 
-        // Bounding box pulse animation
+        // Bounding box pulse
         const boxes = document.querySelectorAll('.bounding-box');
         setInterval(() => {
             boxes.forEach(box => {
@@ -619,6 +663,5 @@
         }, 3000);
     });
 </script>
-
-
-</body></html>
+</body>
+</html>

@@ -148,6 +148,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
 
     <link href="app.css?v=3" rel="stylesheet">
+    <script src="api-helper.js?v=2"></script>
 
 </head>
 <body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
@@ -220,8 +221,12 @@
     <button id="record-btn" class="w-8 h-8 rounded-full glass-hud flex items-center justify-center text-on-surface hover:bg-white/10 transition-all border border-white/10" title="Record Clip">
         <span class="material-symbols-outlined text-sm">videocam</span>
     </button>
+    <!-- Voice Coach Toggle Button -->
+    <button id="voice-agent-btn" class="w-8 h-8 rounded-full glass-hud flex items-center justify-center text-[#2ae500] hover:bg-white/10 transition-all border border-[#2ae500]/30" title="Toggle AI Voice Coach">
+        <span class="material-symbols-outlined text-sm">volume_up</span>
+    </button>
     <!-- End Session Button -->
-    <button onclick="window.location.href='exercises.html'" class="w-8 h-8 rounded-full bg-error-container/20 text-error flex items-center justify-center border border-error/30 hover:bg-error-container transition-all" title="End Session">
+    <button id="end-session-btn" class="w-8 h-8 rounded-full bg-error-container/20 text-error flex items-center justify-center border border-error/30 hover:bg-error-container transition-all" title="End Session">
         <span class="material-symbols-outlined text-sm">close</span>
     </button>
 </div>
@@ -370,6 +375,11 @@
                     prog.className = 'absolute inset-y-0 left-0 bg-[#2ae500] transition-all duration-300';
                 }
             }
+
+            // Speak coaching feedback (skip generic system startup messages)
+            if (message && message !== "USING SIMULATED ATHLETE DEMO" && message !== "CAMERA ACTIVE. POSITION IN FRAME.") {
+                speakCoachingCue(message);
+            }
         }
 
         // 4. Image Cover drawing function for canvas
@@ -409,6 +419,13 @@
         }
 
         // 5. Initialize Page Controls & Tracking Variables
+        const urlParams = new URLSearchParams(window.location.search);
+        const exerciseName = urlParams.get('exercise') || 'Bench Press';
+        const sessionStartTime = Date.now();
+        let repsCount = 0;
+        let repState = 'up'; // "up" or "down" for real rep counting
+        let lastRepFinishTime = 0;
+
         let useActualTracking = false;
         let poseDetector = null;
         let lastPoseTimestamp = 0;
@@ -423,6 +440,46 @@
 
         // We store the current pose results to render in sync with requestAnimationFrame
         let currentPoseResults = null;
+
+        // --- AI VOICE AGENT STATE & ENGINE ---
+        let voiceAgentEnabled = true;
+        let lastSpokenText = '';
+        let lastSpeechTime = 0;
+
+        function speakCoachingCue(text) {
+            if (!voiceAgentEnabled) return;
+            const now = Date.now();
+            // Rate limit matching cues (same message requires 4s cooldown; any new message requires 1.5s spacing)
+            if (text === lastSpokenText && now - lastSpeechTime < 4000) return;
+            if (now - lastSpeechTime < 1500) return;
+
+            try {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1.05;
+                utterance.pitch = 1.0;
+                
+                const voices = window.speechSynthesis.getVoices();
+                const preferredVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Samantha')));
+                if (preferredVoice) {
+                    utterance.voice = preferredVoice;
+                }
+                
+                lastSpokenText = text;
+                lastSpeechTime = now;
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                console.error("Voice synthesis failed:", e);
+            }
+        }
+
+        // Preload voices
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.getVoices();
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+            }
+        }
 
         async function startCameraAndTracking() {
             const dot = document.getElementById('cam-status-dot');
@@ -442,7 +499,7 @@
                     });
 
                     poseDetector.setOptions({
-                        modelComplexity: 0,
+                        modelComplexity: 1,
                         smoothLandmarks: true,
                         minDetectionConfidence: 0.5,
                         minTrackingConfidence: 0.5
@@ -586,6 +643,152 @@
             return angle;
         }
 
+        // --- PREMIUM BIOMETRIC HUD RENDERERS ---
+        function drawBiometricOverlays(ctx, elbow, shoulder, wrist, angle) {
+            const angle1 = Math.atan2(shoulder.y - elbow.y, shoulder.x - elbow.x);
+            const angle2 = Math.atan2(wrist.y - elbow.y, wrist.x - elbow.x);
+
+            let arcColor = "rgba(42, 229, 0, 0.7)"; // Neon Green
+            if (angle < 95) {
+                arcColor = "rgba(239, 68, 68, 0.85)"; // Vivid Red
+            } else if (angle < 135) {
+                arcColor = "rgba(245, 158, 11, 0.75)"; // Amber/Orange
+            }
+
+            // 1. Draw glowing flexion arc centered at elbow
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(elbow.x, elbow.y, 24, Math.min(angle1, angle2), Math.max(angle1, angle2));
+            ctx.strokeStyle = arcColor;
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // 2. Draw outer crosshair ticks around elbow
+            ctx.beginPath();
+            ctx.moveTo(elbow.x, elbow.y - 12); ctx.lineTo(elbow.x, elbow.y - 8);
+            ctx.moveTo(elbow.x, elbow.y + 8); ctx.lineTo(elbow.x, elbow.y + 12);
+            ctx.moveTo(elbow.x - 12, elbow.y); ctx.lineTo(elbow.x - 8, elbow.y);
+            ctx.moveTo(elbow.x + 8, elbow.y); ctx.lineTo(elbow.x + 12, elbow.y);
+            ctx.strokeStyle = arcColor;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // 3. Draw inner target glowing core
+            ctx.beginPath();
+            ctx.arc(elbow.x, elbow.y, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = arcColor;
+            ctx.fill();
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // 4. Floating angle numerical tag
+            ctx.font = "bold 9px 'Geist Mono', monospace";
+            const valStr = `${angle.toFixed(0)}°`;
+            const textW = ctx.measureText(valStr).width;
+            const textX = elbow.x + 16;
+            const textY = elbow.y - 12;
+
+            // Draw tag block
+            ctx.fillStyle = "rgba(10, 10, 10, 0.85)";
+            ctx.fillRect(textX - 4, textY - 9, textW + 8, 13);
+            ctx.strokeStyle = arcColor;
+            ctx.lineWidth = 1;
+            ctx.strokeRect(textX - 4, textY - 9, textW + 8, 13);
+
+            // Draw text
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(valStr, textX, textY);
+            ctx.restore();
+        }
+
+        function drawChestReticle(ctx, chest, isAligned) {
+            const size = 28;
+            const reticleColor = isAligned ? "rgba(42, 229, 0, 0.85)" : "rgba(239, 68, 68, 0.85)";
+            const glowColor = isAligned ? "rgba(42, 229, 0, 0.2)" : "rgba(239, 68, 68, 0.3)";
+
+            ctx.save();
+            // Outer glowing ring
+            ctx.beginPath();
+            ctx.arc(chest.x, chest.y, size, 0, 2 * Math.PI);
+            ctx.strokeStyle = glowColor;
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            // Center target point
+            ctx.beginPath();
+            ctx.arc(chest.x, chest.y, 3, 0, 2 * Math.PI);
+            ctx.fillStyle = reticleColor;
+            ctx.fill();
+
+            // Four corner L-brackets
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = reticleColor;
+
+            // Top-left
+            ctx.beginPath();
+            ctx.moveTo(chest.x - size, chest.y - size + 6);
+            ctx.lineTo(chest.x - size, chest.y - size);
+            ctx.lineTo(chest.x - size + 6, chest.y - size);
+            ctx.stroke();
+
+            // Top-right
+            ctx.beginPath();
+            ctx.moveTo(chest.x + size - 6, chest.y - size);
+            ctx.lineTo(chest.x + size, chest.y - size);
+            ctx.lineTo(chest.x + size, chest.y - size + 6);
+            ctx.stroke();
+
+            // Bottom-left
+            ctx.beginPath();
+            ctx.moveTo(chest.x - size, chest.y + size - 6);
+            ctx.lineTo(chest.x - size, chest.y + size);
+            ctx.lineTo(chest.x - size + 6, chest.y + size);
+            ctx.stroke();
+
+            // Bottom-right
+            ctx.beginPath();
+            ctx.moveTo(chest.x + size - 6, chest.y + size);
+            ctx.lineTo(chest.x + size, chest.y + size);
+            ctx.lineTo(chest.x + size, chest.y + size - 6);
+            ctx.stroke();
+
+            // Status label
+            ctx.font = "bold 8px 'Geist Mono', monospace";
+            ctx.fillStyle = reticleColor;
+            const labelText = isAligned ? "LOCK OK" : "LOCKING...";
+            const labelW = ctx.measureText(labelText).width;
+            ctx.fillText(labelText, chest.x - labelW / 2, chest.y + size + 12);
+            ctx.restore();
+        }
+
+        function drawCanvasAlert(ctx, title, message) {
+            ctx.save();
+            const x = 20;
+            const y = 90;
+            const w = canvas.width - 40;
+            const h = 48;
+            
+            // Draw glass card with red border and blinking background glow
+            const flashVal = Math.sin(Date.now() / 150) * 0.15 + 0.35;
+            ctx.fillStyle = `rgba(239, 68, 68, ${flashVal})`;
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = "rgba(255, 68, 68, 0.85)";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, w, h);
+
+            // Warning Icon & Title
+            ctx.font = "bold 9px 'Geist Mono', monospace";
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(`⚠️ [ ${title.toUpperCase()} ]`, x + 12, y + 20);
+
+            // Warning message text
+            ctx.font = "10px 'Inter', sans-serif";
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(message, x + 12, y + 36);
+            ctx.restore();
+        }
+
         // 7. Core Render and Animation Loop
         const repDuration = 3500;
         let lastLoggedRep = -1;
@@ -655,19 +858,103 @@
                         { x: landmarks[16].x * videoW, y: landmarks[16].y * videoH }
                     );
 
-                    // Draw joint nodes with angle labels
-                    drawSkeletonNode(ctx, elbowL, `ELBOW_L: ${angleL.toFixed(1)}°`);
-                    drawSkeletonNode(ctx, elbowR, `ELBOW_R: ${angleR.toFixed(1)}°`);
-                    drawSkeletonNode(ctx, chest);
+                    // Draw joint nodes with dynamic biometric overlays
+                    drawBiometricOverlays(ctx, elbowL, shoulderL, wristL, angleL);
+                    drawBiometricOverlays(ctx, elbowR, shoulderR, wristR, angleR);
 
-                    // Live Coaching logic based on joints
+                    // Alignment locking reticle on chest
+                    const isAligned = Math.abs(shoulderL.x - shoulderR.x) > (canvas.width * 0.15);
+                    drawChestReticle(ctx, chest, isAligned);
+
+                    // --- ADVANCED POSTURE DETECTION CHECKS ---
+                    const requiredJoints = [11, 12, 13, 14, 15, 16];
+                    let lowVisibilityCount = 0;
+                    requiredJoints.forEach(idx => {
+                        if (landmarks[idx] && landmarks[idx].visibility < 0.52) {
+                            lowVisibilityCount++;
+                        }
+                    });
+
+                    let offScreenCount = 0;
+                    requiredJoints.forEach(idx => {
+                        const lm = landmarks[idx];
+                        if (lm) {
+                            if (lm.x < 0.03 || lm.x > 0.97 || lm.y < 0.03 || lm.y > 0.97) {
+                                offScreenCount++;
+                            }
+                        }
+                    });
+
+                    const isBodyMissing = lowVisibilityCount > 1 || offScreenCount > 1;
+
+                    const shoulderDiffY = Math.abs(shoulderL.y - shoulderR.y);
+                    const shoulderDistance = Math.hypot(shoulderL.x - shoulderR.x, shoulderL.y - shoulderR.y);
+                    const isTilted = (shoulderDiffY / shoulderDistance) > 0.12;
+
+                    // Live Coaching logic based on joints and posture checks
                     const avgAngle = (angleL + angleR) / 2;
-                    if (avgAngle > 145) {
-                        showCoachingFeedback("FORM OPTIMAL. LOWER BAR SLOWLY.", "Status Normal", false);
-                    } else if (avgAngle > 90 && avgAngle <= 145) {
-                        showCoachingFeedback("ELBOWS BENDING WELL. PUSH UP SMOOTHLY.", "Status Normal", false);
+
+                    if (isBodyMissing) {
+                        drawCanvasAlert(ctx, "ALIGNMENT ERROR", "ATHLETE NOT FULLY VISIBLE. STAND 6 FEET BACK.");
+                        showCoachingFeedback("STAND BACK! ENSURE FULL BODY IS IN CAMERA FRAME", "Warning", true);
+                        speakCoachingCue("Step back, make sure your full body is in the camera frame.");
+                    } else if (isTilted) {
+                        drawCanvasAlert(ctx, "FORM ERROR", "UNEVEN SHOULDER ALIGNMENT. KEEP SHOULDERS LEVEL.");
+                        showCoachingFeedback("SHOULDER ASYMMETRY DETECTED. LEVEL YOUR SHOULDERS.", "Warning", true);
+                        speakCoachingCue("Level your shoulders.");
+                        // Draw red dotted tilt warning line between shoulders
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.moveTo(shoulderL.x, shoulderL.y);
+                        ctx.lineTo(shoulderR.x, shoulderR.y);
+                        ctx.strokeStyle = "#ff4444";
+                        ctx.lineWidth = 2;
+                        ctx.setLineDash([5, 5]);
+                        ctx.stroke();
+                        ctx.restore();
                     } else {
-                        showCoachingFeedback("MAX DEPTH REACHED. ARCH BACK & PRESS UP!", "Live Alert", true);
+                        if (avgAngle > 145) {
+                            showCoachingFeedback("FORM OPTIMAL. LOWER BAR SLOWLY.", "Status Normal", false);
+                        } else if (avgAngle > 90 && avgAngle <= 145) {
+                            showCoachingFeedback("ELBOWS BENDING WELL. PUSH UP SMOOTHLY.", "Status Normal", false);
+                        } else {
+                            showCoachingFeedback("MAX DEPTH REACHED. ARCH BACK & PRESS UP!", "Live Alert", true);
+                        }
+                    }
+
+                    // WebRTC-based Rep Counter State Machine
+                    if (avgAngle < 95 && repState === 'up') {
+                        repState = 'down';
+                        addLogLine("ELBOWS FLEXED: REP DOWN STAGE");
+                    } else if (avgAngle > 140 && repState === 'down') {
+                        repState = 'up';
+                        repsCount++;
+
+                        // Dynamic Tempo Timing Check
+                        const now = Date.now();
+                        if (lastRepFinishTime > 0) {
+                            const repDurationMs = now - lastRepFinishTime;
+                            if (repDurationMs < 2200) {
+                                speakCoachingCue("Slow down your eccentric descent.");
+                                showToast("TEMPO WARNING: TOO FAST", "warning");
+                                addLogLine(`TEMPO WARNING: REP COMPLETED IN ${(repDurationMs / 1000).toFixed(1)}s (TOO FAST)`);
+                            }
+                        }
+                        lastRepFinishTime = now;
+                        
+                        // Update HUD Counter & Progress Bar
+                        const repBadge = document.querySelector('#left-hud-panel .text-headline-lg');
+                        if (repBadge) {
+                            repBadge.innerHTML = String(repsCount).padStart(2, '0') + '<span class="font-mono-data text-body-md text-on-surface-variant">/12</span>';
+                        }
+                        const repProgress = document.querySelector('#left-hud-panel .bg-primary-fixed-dim');
+                        if (repProgress) {
+                            repProgress.style.width = `${Math.min(100, (repsCount / 12) * 100)}%`;
+                        }
+                        
+                        addLogLine(`REPS REGISTERED: REAL REP ${repsCount} DETECTED`);
+                        showToast(`REP ${repsCount} REGISTERED`);
+                        speakCoachingCue(`Rep ${repsCount}.`);
                     }
 
                     // Progress bar matches elbow extension
@@ -693,17 +980,19 @@
                     const currentRep = Math.floor(timestamp / repDuration) % 12 + 1;
                     if (currentRep !== lastLoggedRep) {
                         lastLoggedRep = currentRep;
-                        const repBadge = document.querySelector('.w-48 .text-headline-lg');
+                        repsCount = currentRep;
+                        const repBadge = document.querySelector('#left-hud-panel .text-headline-lg');
                         if (repBadge) {
                             repBadge.innerHTML = String(currentRep).padStart(2, '0') + '<span class="font-mono-data text-body-md text-on-surface-variant">/12</span>';
                         }
                         
-                        const repProgress = document.querySelector('.w-48 .bg-primary-fixed-dim');
+                        const repProgress = document.querySelector('#left-hud-panel .bg-primary-fixed-dim');
                         if (repProgress) {
                             repProgress.style.width = `${(currentRep / 12) * 100}%`;
                         }
 
                         addLogLine(`REPS COUNTING: REGISTERED REP ${currentRep}`);
+                        speakCoachingCue(`Rep ${currentRep}.`);
                     }
 
                     // Simulated coordinates in 1376x768 space
@@ -746,10 +1035,12 @@
                     const angleL = 142.4 - (factor * 60) + (Math.sin(timestamp / 300) * 1);
                     const angleR = 145.1 - (factor * 62) + (Math.cos(timestamp / 300) * 1);
 
-                    // Draw joint nodes
-                    drawSkeletonNode(ctx, elbowL, `ELBOW_L: ${angleL.toFixed(1)}°`);
-                    drawSkeletonNode(ctx, elbowR, `ELBOW_R: ${angleR.toFixed(1)}°`);
-                    drawSkeletonNode(ctx, chest);
+                    // Draw joint nodes with dynamic biometric overlays
+                    drawBiometricOverlays(ctx, elbowL, shoulderL, wristL, angleL);
+                    drawBiometricOverlays(ctx, elbowR, shoulderR, wristR, angleR);
+
+                    // Simulated alignment is always locked/stable
+                    drawChestReticle(ctx, chest, true);
 
                     // Simulated coaching text sync
                     if (factor > 0.75) {
@@ -859,6 +1150,67 @@
                         toast.innerHTML = '<span class="material-symbols-outlined text-primary-fixed-dim">save_alt</span><span class="text-xs font-mono-data uppercase">CLIP SAVED SUCCESSFULLY</span>';
                         document.body.appendChild(toast);
                         setTimeout(() => toast.remove(), 2000);
+                    }
+                });
+            }
+
+            // Voice Agent Toggle Click
+            const voiceBtn = document.getElementById('voice-agent-btn');
+            if (voiceBtn) {
+                voiceBtn.addEventListener('click', () => {
+                    voiceAgentEnabled = !voiceAgentEnabled;
+                    if (voiceAgentEnabled) {
+                        voiceBtn.className = 'w-8 h-8 rounded-full glass-hud flex items-center justify-center text-[#2ae500] hover:bg-white/10 transition-all border border-[#2ae500]/30';
+                        voiceBtn.innerHTML = '<span class="material-symbols-outlined text-sm">volume_up</span>';
+                        addLogLine("AI VOICE COACH ENABLED");
+                        showToast("VOICE COACH ACTIVE");
+                        speakCoachingCue("Voice coaching active.");
+                    } else {
+                        voiceBtn.className = 'w-8 h-8 rounded-full bg-error-container/20 text-error flex items-center justify-center border border-error/30 hover:bg-error-container transition-all';
+                        voiceBtn.innerHTML = '<span class="material-symbols-outlined text-sm">volume_off</span>';
+                        window.speechSynthesis.cancel();
+                        addLogLine("AI VOICE COACH MUTED");
+                        showToast("VOICE COACH MUTED");
+                    }
+                });
+            }
+
+            // End Session & Log Workout
+            const endSessionBtn = document.getElementById('end-session-btn');
+            if (endSessionBtn) {
+                endSessionBtn.addEventListener('click', async () => {
+                    const durationSec = Math.round((Date.now() - sessionStartTime) / 1000);
+                    
+                    if (repsCount === 0 || durationSec < 2) {
+                        window.location.href = 'exercises.html';
+                        return;
+                    }
+
+                    endSessionBtn.disabled = true;
+                    addLogLine("UPLOADING ATHLETIC SESSION LOG...");
+                    
+                    try {
+                        const res = await fetch('/api/workouts/log', {
+                            method: 'POST',
+                            headers: getAuthHeaders(),
+                            body: JSON.stringify({
+                                exercise: exerciseName,
+                                reps: repsCount,
+                                durationSec: durationSec,
+                                averageAngle: 142
+                            })
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                            showToast(`SESSION LOGGED: +${data.xpGained} XP`);
+                            setTimeout(() => {
+                                window.location.href = 'exercises.html';
+                            }, 1500);
+                        } else {
+                            window.location.href = 'exercises.html';
+                        }
+                    } catch (e) {
+                        window.location.href = 'exercises.html';
                     }
                 });
             }

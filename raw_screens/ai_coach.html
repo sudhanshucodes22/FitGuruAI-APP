@@ -117,15 +117,15 @@
         .neon-glow {
             box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
         }
-        .waveform-bar {
-            animation: wave 1.2s ease-in-out infinite;
-        }
-        @keyframes wave {
-            0%, 100% { height: 8px; }
-            50% { height: 24px; }
+        .listening-glow {
+            border-color: rgba(57, 255, 20, 0.5) !important;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2) !important;
         }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
+        }
+        main.scroll-area {
+            padding-bottom: 280px !important;
         }
     </style>
 <style>
@@ -162,157 +162,14 @@
 </div>
 </div>
 <div>
-<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">"Ready to crush your goals today, Alex?"</h2>
-<p class="text-on-surface-variant max-w-lg mx-auto">I've analyzed your sleep data and previous workout intensity. We're pivoting your nutrition to optimize recovery.</p>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary" id="coach-title">"Ready to crush your goals today?"</h2>
+<p class="text-on-surface-variant max-w-lg mx-auto" id="coach-subtitle">Initializing coach protocol...</p>
 </div>
 </section>
-<!-- Diet Strategy Switcher -->
-<section class="grid grid-cols-1 md:grid-cols-2 gap-md">
-<div class="glass-card elite-border rounded-xl p-md flex flex-col gap-sm group cursor-pointer hover:bg-white/5 transition-all">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-primary text-3xl">restaurant</span>
-<span class="font-label-caps text-primary bg-primary/10 px-2 py-1 rounded">ACTIVE PLAN</span>
-</div>
-<h3 class="font-headline-md text-headline-md">Elite Lean Bulking</h3>
-<p class="text-on-surface-variant text-sm">Focus on 250kcal surplus with high protein bioavailability to maximize hypertrophic response.</p>
-<div class="mt-xs flex items-center gap-md">
-<div class="flex flex-col">
-<span class="text-primary font-mono-data">3,200</span>
-<span class="text-[10px] text-on-surface-variant font-label-caps">DAILY KCAL</span>
-</div>
-<div class="h-8 w-[1px] bg-white/10"></div>
-<div class="flex flex-col">
-<span class="text-primary font-mono-data">210g</span>
-<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
-</div>
-</div>
-</div>
-<div class="glass-card rounded-xl p-md flex flex-col gap-sm opacity-60 hover:opacity-100 transition-all cursor-pointer">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-secondary text-3xl">agender</span>
-</div>
-<h3 class="font-headline-md text-headline-md">Rapid Fat Loss</h3>
-<p class="text-on-surface-variant text-sm">Aggressive 500kcal deficit with carb cycling to maintain metabolic flexibility and strength.</p>
-<div class="mt-xs flex items-center gap-md">
-<div class="flex flex-col">
-<span class="text-on-surface font-mono-data">2,450</span>
-<span class="text-[10px] text-on-surface-variant font-label-caps">DAILY KCAL</span>
-</div>
-<div class="h-8 w-[1px] bg-white/10"></div>
-<div class="flex flex-col">
-<span class="text-on-surface font-mono-data">190g</span>
-<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
-</div>
-</div>
-</div>
-</section>
-<!-- Meal Schedule -->
-<section class="space-y-md">
-<div class="flex items-center justify-between">
-<h3 class="font-headline-md text-headline-md flex items-center gap-sm">
-<span class="material-symbols-outlined text-primary">calendar_today</span>
-                    Today's Protocol
-                </h3>
-<button class="text-primary font-label-caps text-xs flex items-center gap-xs">
-                    EDIT PLAN <span class="material-symbols-outlined text-sm">edit</span>
-</button>
-</div>
-<div class="space-y-sm">
-<!-- Meal 1 -->
-<div class="glass-card rounded-xl p-md flex items-center gap-md relative overflow-hidden group">
-<div class="absolute inset-y-0 left-0 w-1 bg-primary"></div>
-<div class="font-mono-data text-primary text-lg w-20 flex-shrink-0">07:00 AM</div>
-<div class="flex-grow">
-<h4 class="font-headline-md text-sm md:text-md">Power Oats &amp; Whey</h4>
-<p class="text-xs text-on-surface-variant font-body-md">80g Oats, 250ml Milk, 1 Scoop Whey</p>
-</div>
-<div class="text-right flex flex-col items-end">
-<span class="text-primary font-mono-data text-md">30g</span>
-<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
-</div>
-<span class="material-symbols-outlined text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<!-- Meal 2 -->
-<div class="glass-card rounded-xl p-md flex items-center gap-md relative overflow-hidden border-l-4 border-transparent">
-<div class="font-mono-data text-on-surface-variant text-lg w-20 flex-shrink-0">12:30 PM</div>
-<div class="flex-grow">
-<h4 class="font-headline-md text-sm md:text-md">Chicken &amp; Jasmine Rice</h4>
-<p class="text-xs text-on-surface-variant font-body-md">200g Grilled Chicken, 150g Rice, Steamed Greens</p>
-</div>
-<div class="text-right flex flex-col items-end">
-<span class="text-on-surface font-mono-data text-md">48g</span>
-<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
-</div>
-<span class="material-symbols-outlined text-on-surface-variant">radio_button_unchecked</span>
-</div>
-<!-- Meal 3 -->
-<div class="glass-card rounded-xl p-md flex items-center gap-md relative overflow-hidden border-l-4 border-transparent">
-<div class="font-mono-data text-on-surface-variant text-lg w-20 flex-shrink-0">04:00 PM</div>
-<div class="flex-grow">
-<h4 class="font-headline-md text-sm md:text-md">Pre-Workout Fuel</h4>
-<p class="text-xs text-on-surface-variant font-body-md">1 Banana, 30g Almonds, Black Coffee</p>
-</div>
-<div class="text-right flex flex-col items-end">
-<span class="text-on-surface font-mono-data text-md">6g</span>
-<span class="text-[10px] text-on-surface-variant font-label-caps">PROTEIN</span>
-</div>
-<span class="material-symbols-outlined text-on-surface-variant">radio_button_unchecked</span>
-</div>
-<!-- Meal 4 (Bento Card Style) -->
-<div class="grid grid-cols-2 gap-sm">
-<div class="glass-card rounded-xl p-md flex flex-col justify-between aspect-square">
-<span class="font-mono-data text-on-surface-variant">08:00 PM</span>
-<div>
-<h4 class="font-headline-md text-sm">Grilled Salmon</h4>
-<p class="text-[10px] text-on-surface-variant mt-xs font-body-md">Omega-3 focus for overnight anti-inflammatory support.</p>
-</div>
-<div class="pt-sm border-t border-white/5 flex justify-between items-center">
-<span class="text-primary font-mono-data">32g P</span>
-<span class="material-symbols-outlined text-on-surface-variant text-sm">info</span>
-</div>
-</div>
-<div class="glass-card rounded-xl p-md flex flex-col justify-between aspect-square">
-<span class="font-mono-data text-on-surface-variant">10:00 PM</span>
-<div>
-<h4 class="font-headline-md text-sm">Casein Shake</h4>
-<p class="text-[10px] text-on-surface-variant mt-xs font-body-md">Slow release protein to fuel muscle repair during REM.</p>
-</div>
-<div class="pt-sm border-t border-white/5 flex justify-between items-center">
-<span class="text-primary font-mono-data">25g P</span>
-<span class="material-symbols-outlined text-on-surface-variant text-sm">bedtime</span>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- AI Insights Bento -->
-<section class="grid grid-cols-6 gap-sm">
-<div class="col-span-6 md:col-span-4 glass-card rounded-xl p-md flex flex-col gap-sm">
-<h4 class="font-label-caps text-xs text-primary">RECOVERY INDEX</h4>
-<div class="flex items-end gap-md flex-grow">
-<div class="flex-grow h-32 flex items-end gap-xs">
-<div class="w-full bg-primary/20 h-1/2 rounded-t-sm"></div>
-<div class="w-full bg-primary/40 h-2/3 rounded-t-sm"></div>
-<div class="w-full bg-primary/60 h-3/4 rounded-t-sm"></div>
-<div class="w-full bg-primary h-[90%] rounded-t-sm neon-glow"></div>
-<div class="w-full bg-primary/40 h-1/2 rounded-t-sm"></div>
-<div class="w-full bg-primary/30 h-1/3 rounded-t-sm"></div>
-</div>
-<div class="text-right">
-<span class="text-headline-lg font-display-hero text-primary">88%</span>
-<p class="text-[10px] text-on-surface-variant font-label-caps">OPTIMAL ZONE</p>
-</div>
-</div>
-</div>
-<div class="col-span-6 md:col-span-2 glass-card rounded-xl p-md flex flex-col items-center justify-center text-center gap-sm">
-<div class="w-16 h-16 rounded-full border-2 border-primary/20 flex items-center justify-center relative">
-<div class="absolute inset-0 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
-<span class="material-symbols-outlined text-primary text-3xl">water_drop</span>
-</div>
-<div>
-<h4 class="font-headline-md text-sm">Hydration Status</h4>
-<p class="text-[10px] text-on-surface-variant">2.4L / 4.0L Goal</p>
-</div>
+<!-- Chat Thread Section -->
+<section class="w-full relative z-10 flex-grow" id="chat-section">
+<div id="chat-messages-container" class="flex flex-col gap-sm p-sm bg-black/40 rounded-2xl border border-white/5 w-full">
+    <!-- Messages loaded dynamically -->
 </div>
 </section>
 </main>
@@ -321,48 +178,27 @@
 <!-- Chat Interaction Background Blur -->
 <div class="bg-background/90 backdrop-blur-2xl border-t border-white/10 px-gutter pt-md pb-xs rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
 <!-- Voice Waveform Overlay -->
-<div class="flex items-center justify-center gap-1 h-12 mb-sm">
-<div class="waveform-bar w-1 bg-primary/20 rounded-full" style="animation-delay: 0.1s; height: 30px;"></div>
-<div class="waveform-bar w-1 bg-primary/40 rounded-full" style="animation-delay: 0.2s; height: 33px;"></div>
-<div class="waveform-bar w-1 bg-primary/60 rounded-full" style="animation-delay: 0.3s; height: 22px;"></div>
-<div class="waveform-bar w-1 bg-primary rounded-full neon-glow" style="animation-delay: 0.4s; height: 10px;"></div>
-<div class="waveform-bar w-1 bg-primary/60 rounded-full" style="animation-delay: 0.5s; height: 18px;"></div>
-<div class="waveform-bar w-1 bg-primary/40 rounded-full" style="animation-delay: 0.6s; height: 12px;"></div>
-<div class="waveform-bar w-1 bg-primary/20 rounded-full" style="animation-delay: 0.7s; height: 14px;"></div>
+<div class="flex items-center justify-center gap-1 h-12 mb-sm" id="voice-waves">
+<div class="waveform-bar w-1 bg-primary/20 rounded-full" style="animation-delay: 0.1s; height: 6px; opacity: 0.3;"></div>
+<div class="waveform-bar w-1 bg-primary/40 rounded-full" style="animation-delay: 0.2s; height: 6px; opacity: 0.3;"></div>
+<div class="waveform-bar w-1 bg-primary/60 rounded-full" style="animation-delay: 0.3s; height: 6px; opacity: 0.3;"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full neon-glow" style="animation-delay: 0.4s; height: 6px; opacity: 0.3;"></div>
+<div class="waveform-bar w-1 bg-primary/60 rounded-full" style="animation-delay: 0.5s; height: 6px; opacity: 0.3;"></div>
+<div class="waveform-bar w-1 bg-primary/40 rounded-full" style="animation-delay: 0.6s; height: 6px; opacity: 0.3;"></div>
+<div class="waveform-bar w-1 bg-primary/20 rounded-full" style="animation-delay: 0.7s; height: 6px; opacity: 0.3;"></div>
 </div>
 <!-- Input Bar -->
 <div class="flex items-center gap-sm mb-md">
-<div class="flex-grow glass-card rounded-full px-sm py-2 flex items-center gap-sm">
-<span class="material-symbols-outlined text-on-surface-variant text-md">mic</span>
-<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full placeholder:text-on-surface-variant/50" placeholder="Ask your coach anything..." type="text">
+<div id="chat-input-container" class="flex-grow glass-card rounded-full px-sm py-2 flex items-center gap-sm transition-all duration-300">
+<button id="voice-btn" class="flex items-center justify-center text-on-surface-variant hover:text-primary active:scale-95 transition-transform shrink-0" title="Voice Input">
+<span id="mic-icon" class="material-symbols-outlined text-md">mic</span>
+</button>
+<input id="chat-input" class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full placeholder:text-on-surface-variant/50" placeholder="Ask your coach anything..." type="text">
 </div>
-<button class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-lg shadow-primary/20 active:scale-90 transition-transform">
+<button id="send-btn" class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-lg shadow-primary/20 active:scale-90 transition-transform">
 <span class="material-symbols-outlined">send</span>
 </button>
 </div>
-<!-- Bottom Navigation Sync -->
-<nav class="flex justify-around items-center h-16 pb-2">
-<div class="flex flex-col items-center text-primary-fixed-dim bg-primary/10 rounded-xl p-2 px-4 scale-105">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span>
-<span class="font-label-caps text-[10px] mt-1">COACH</span>
-</div>
-<div class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined">center_focus_strong</span>
-<span class="font-label-caps text-[10px] mt-1">SCAN</span>
-</div>
-<div class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined">dashboard</span>
-<span class="font-label-caps text-[10px] mt-1">HOME</span>
-</div>
-<div class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined">fitness_center</span>
-<span class="font-label-caps text-[10px] mt-1">LOG</span>
-</div>
-<div class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined">map</span>
-<span class="font-label-caps text-[10px] mt-1">GYM</span>
-</div>
-</nav>
 </div>
 </div>
 <!-- Background Atmospheric Effect -->
@@ -371,18 +207,239 @@
 <div class="absolute top-[40%] -right-[10%] w-[30%] h-[50%] bg-primary/3 blur-[150px] rounded-full"></div>
 </div>
 <script>
-        // Simple micro-interaction for the voice bars to simulate activity
+        // Waveform animation
         const bars = document.querySelectorAll('.waveform-bar');
+        let isWaveformAnimating = false;
+        
         setInterval(() => {
             bars.forEach(bar => {
-                const randomHeight = Math.floor(Math.random() * 30) + 8;
-                bar.style.height = `${randomHeight}px`;
+                if (isWaveformAnimating) {
+                    const randomHeight = Math.floor(Math.random() * 26) + 6;
+                    bar.style.height = `${randomHeight}px`;
+                    bar.style.opacity = '1';
+                } else {
+                    bar.style.height = '6px';
+                    bar.style.opacity = '0.3';
+                }
             });
         }, 150);
 
-        // Active state determination logic for nav (Simulated)
-        // Current screen is Coach, so psychology icon is active.
+        const messagesContainer = document.getElementById('chat-messages-container');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Scroll helper to push content above bottom nav bar
+        function scrollToBottom() {
+            setTimeout(() => {
+                const scrollArea = document.querySelector('.scroll-area');
+                if (scrollArea) {
+                    scrollArea.scrollTop = scrollArea.scrollHeight;
+                }
+            }, 50);
+        }
+
+        function appendMessage(sender, text, timestamp = new Date()) {
+            const timeStr = new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const messageEl = document.createElement('div');
+            
+            if (sender === 'user') {
+                messageEl.className = 'flex flex-col items-end gap-1 self-end max-w-[85%]';
+                messageEl.innerHTML = `
+                    <div class="glass-card bg-[#39ff14]/10 border border-[#39ff14]/30 text-white rounded-2xl rounded-tr-none px-md py-sm text-xs font-body-md shadow-[0_0_15px_rgba(57,255,20,0.1)]">
+                        ${text}
+                    </div>
+                    <span class="text-[8px] text-on-surface-variant/40 font-mono-data mr-1">${timeStr}</span>
+                `;
+            } else {
+                messageEl.className = 'flex flex-col items-start gap-1 self-start max-w-[85%]';
+                messageEl.innerHTML = `
+                    <div class="flex items-center gap-xs mb-0.5">
+                        <span class="material-symbols-outlined text-[10px] text-primary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+                        <span class="text-[8px] text-primary font-mono-data tracking-wider uppercase">JARVIS_V4</span>
+                    </div>
+                    <div class="glass-card bg-white/5 border border-white/10 text-on-surface rounded-2xl rounded-tl-none px-md py-sm text-xs font-body-md whitespace-pre-line leading-relaxed">
+                        ${text}
+                    </div>
+                    <span class="text-[8px] text-on-surface-variant/40 font-mono-data ml-1">${timeStr}</span>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageEl);
+            scrollToBottom();
+        }
+
+        function appendTypingIndicator() {
+            isWaveformAnimating = true; // Animate waves while coach is thinking
+            const typingEl = document.createElement('div');
+            typingEl.id = 'typing-indicator';
+            typingEl.className = 'flex flex-col items-start gap-1 self-start max-w-[80%]';
+            typingEl.innerHTML = `
+                <div class="flex items-center gap-xs mb-0.5">
+                    <span class="material-symbols-outlined text-[10px] text-primary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+                    <span class="text-[8px] text-primary font-mono-data tracking-wider uppercase">JARVIS_V4</span>
+                </div>
+                <div class="glass-card bg-white/5 border border-white/10 text-on-surface rounded-2xl rounded-tl-none px-md py-sm text-xs font-body-md flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style="animation-delay: 0.1s"></span>
+                    <span class="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                    <span class="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style="animation-delay: 0.3s"></span>
+                </div>
+            `;
+            messagesContainer.appendChild(typingEl);
+            scrollToBottom();
+        }
+
+        function removeTypingIndicator() {
+            isWaveformAnimating = false; // Stop waves
+            const typingEl = document.getElementById('typing-indicator');
+            if (typingEl) typingEl.remove();
+        }
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            
+            chatInput.value = '';
+            appendMessage('user', text);
+            appendTypingIndicator();
+
+            try {
+                const res = await fetch('/api/coach/chat', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ message: text })
+                });
+                
+                removeTypingIndicator();
+                const data = await res.json();
+                
+                if (res.ok) {
+                    appendMessage('coach', data.text, data.timestamp);
+                } else {
+                    appendMessage('coach', `// JARVIS // CONNECTION_ERROR: Failed to establish secure uplink. Reason: ${data.error || 'Server error'}`);
+                }
+            } catch (err) {
+                removeTypingIndicator();
+                appendMessage('coach', '// JARVIS // OFFLINE: Transmission failed. Check telemetry stream connection.');
+            }
+        }
+
+        async function initCoach() {
+            try {
+                // Profile
+                const profileRes = await fetch('/api/auth/profile', { headers: getAuthHeaders() });
+                if (!profileRes.ok) throw new Error("Unauthorized");
+                const profile = await profileRes.json();
+                
+                document.getElementById('coach-title').textContent = `"Ready to crush your goals today, ${profile.username}?"`;
+                document.getElementById('coach-subtitle').textContent = `Neural connection stable. Streak lock: ${profile.streak} Days.`;
+
+                // History
+                const historyRes = await fetch('/api/coach/history', { headers: getAuthHeaders() });
+                if (historyRes.ok) {
+                    const chats = await historyRes.json();
+                    messagesContainer.innerHTML = '';
+                    if (chats.length === 0) {
+                        appendMessage('coach', `Welcome back, ${profile.username}! Ask me anything about your workout protocols, meal macros, or rest cycles.`);
+                    } else {
+                        chats.forEach(chat => {
+                            appendMessage(chat.sender, chat.text, chat.timestamp);
+                        });
+                    }
+                    scrollToBottom();
+                }
+            } catch (err) {
+                console.error("Coach initialization failed:", err);
+                localStorage.removeItem('token');
+                window.location.href = 'auth.html';
+            }
+        }
+
+        // Web Speech API Voice Recognizer
+        const voiceBtn = document.getElementById('voice-btn');
+        const micIcon = document.getElementById('mic-icon');
+        const chatInputContainer = document.getElementById('chat-input-container');
+        let speechRecognitionInstance = null;
+        let isListening = false;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            speechRecognitionInstance = new SpeechRecognition();
+            speechRecognitionInstance.continuous = false;
+            speechRecognitionInstance.interimResults = false;
+            speechRecognitionInstance.lang = 'en-IN'; // Optimized for Indian accent/Hinglish transcribing to English
+
+            speechRecognitionInstance.onstart = () => {
+                isListening = true;
+                isWaveformAnimating = true;
+                micIcon.textContent = 'settings_voice';
+                micIcon.classList.add('text-primary', 'animate-pulse');
+                if (chatInputContainer) {
+                    chatInputContainer.classList.add('listening-glow');
+                }
+                chatInput.placeholder = 'Listening... Speak now.';
+                showToast("COACH VOICE UPLINK ACTIVE");
+            };
+
+            speechRecognitionInstance.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript;
+                chatInput.value = speechResult;
+                showToast("SPEECH ACQUIRED");
+                // Submit message after 600ms
+                setTimeout(() => {
+                    sendMessage();
+                }, 600);
+            };
+
+            speechRecognitionInstance.onerror = (event) => {
+                console.error("Speech link error:", event.error);
+                let friendlyMsg = `VOICE ERROR: ${event.error.toUpperCase()}`;
+                if (event.error === 'not-allowed') {
+                    friendlyMsg = "MIC ACCESS BLOCKED. PLEASE ENABLE MICROPHONE IN BROWSER.";
+                } else if (event.error === 'no-speech') {
+                    friendlyMsg = "NO SPEECH DETECTED. TRANSMISSION TIMED OUT.";
+                } else if (event.error === 'audio-capture') {
+                    friendlyMsg = "HARDWARE FAILURE: NO MICROPHONE FOUND.";
+                }
+                showToast(friendlyMsg, "error");
+                stopListeningState();
+            };
+
+            speechRecognitionInstance.onend = () => {
+                stopListeningState();
+            };
+
+            function stopListeningState() {
+                isListening = false;
+                isWaveformAnimating = false;
+                micIcon.textContent = 'mic';
+                micIcon.classList.remove('text-primary', 'animate-pulse');
+                if (chatInputContainer) {
+                    chatInputContainer.classList.remove('listening-glow');
+                }
+                chatInput.placeholder = 'Ask your coach anything...';
+            }
+
+            voiceBtn.addEventListener('click', () => {
+                if (isListening) {
+                    speechRecognitionInstance.stop();
+                } else {
+                    speechRecognitionInstance.start();
+                }
+            });
+        } else {
+            voiceBtn.addEventListener('click', () => {
+                showToast("VOICE INPUT NOT SUPPORTED BY SYSTEM", "error");
+            });
+        }
+
+        // Event listeners
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCoach();
+        });
     </script>
-
-
 </body></html>

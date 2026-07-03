@@ -168,7 +168,7 @@
 </div>
 <div class="relative z-20 space-y-xs">
 <span class="font-label-caps text-label-caps text-primary tracking-[0.2em] uppercase">Daily Performance</span>
-<h2 class="font-display-hero text-headline-lg-mobile md:text-headline-lg text-white">Good Evening Sudhanshu 💪</h2>
+<h2 class="font-display-hero text-headline-lg-mobile md:text-headline-lg text-white" id="welcome-title">Good Evening Athlete 💪</h2>
 <p class="font-body-md text-on-surface-variant max-w-md">Your peak performance window is starting. AI suggests a high-intensity session tonight based on your recovery score.</p>
 </div>
 </section>
@@ -183,7 +183,7 @@
 <circle class="transition-all duration-1000 ease-out" cx="128" cy="128" fill="transparent" r="110" stroke="#39FF14" stroke-dasharray="691" stroke-dashoffset="138" stroke-width="12" style="stroke-dashoffset: 124;"></circle>
 </svg>
 <div class="absolute flex flex-col items-center">
-<span class="font-display-hero text-6xl text-white neon-text-glow">82</span>
+<span class="font-display-hero text-6xl text-white neon-text-glow" id="readiness-text">82</span>
 <span class="font-label-caps text-label-caps text-primary">READINESS</span>
 </div>
 <!-- Secondary Ring (Small) -->
@@ -244,11 +244,11 @@
 <span class="font-label-caps text-xs">CALORIES</span>
 </div>
 <div class="flex items-baseline gap-xs">
-<span class="font-display-hero text-white text-headline-md">1,842</span>
+<span class="font-display-hero text-white text-headline-md" id="calorie-val">1,842</span>
 <span class="text-xs text-on-surface-variant">/ 2,400</span>
 </div>
 <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-<div class="bg-primary h-full w-[76%] neon-glow"></div>
+<div id="calorie-progress" class="bg-primary h-full w-[76%] neon-glow"></div>
 </div>
 </div>
 <div class="glass-card p-sm rounded-xl space-y-xs" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
@@ -257,11 +257,11 @@
 <span class="font-label-caps text-xs">HYDRATION</span>
 </div>
 <div class="flex items-baseline gap-xs">
-<span class="font-display-hero text-white text-headline-md">2.4</span>
+<span class="font-display-hero text-white text-headline-md" id="water-val">2.4</span>
 <span class="text-xs text-on-surface-variant">/ 3.5 L</span>
 </div>
 <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-<div class="bg-blue-400 h-full w-[68%]"></div>
+<div id="water-progress" class="bg-blue-400 h-full w-[68%]"></div>
 </div>
 </div>
 <div class="glass-card p-sm rounded-xl space-y-xs" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
@@ -270,11 +270,11 @@
 <span class="font-label-caps text-xs">STEPS</span>
 </div>
 <div class="flex items-baseline gap-xs">
-<span class="font-display-hero text-white text-headline-md">8,142</span>
+<span class="font-display-hero text-white text-headline-md" id="steps-val">8,142</span>
 <span class="text-xs text-on-surface-variant">/ 10k</span>
 </div>
 <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-<div class="bg-primary-fixed-dim h-full w-[81%]"></div>
+<div id="steps-progress" class="bg-primary-fixed-dim h-full w-[81%]"></div>
 </div>
 </div>
 <div class="glass-card p-sm rounded-xl space-y-xs">
@@ -302,7 +302,7 @@
 <div class="relative z-10">
 <span class="bg-primary/20 text-primary-fixed px-3 py-1 rounded-full font-label-caps text-[10px] mb-4 inline-block">NEURAL ADAPTIVE COACHING</span>
 <h3 class="font-display-hero text-headline-lg text-white mb-2">Connect with AI Coach</h3>
-<p class="text-on-surface-variant max-w-sm">Optimizing your split based on yesterday's central nervous system fatigue.</p>
+<p id="briefing-text" class="text-on-surface-variant max-w-sm">Connecting neural split analytics...</p>
 </div>
 <button class="relative z-10 self-start bg-primary text-on-primary px-sm py-xs rounded-lg font-label-caps text-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                     START BRIEFING <span class="material-symbols-outlined text-sm">play_arrow</span>
@@ -349,7 +349,7 @@
 <!-- Daily Streak -->
 <div class="glass-card rounded-xl p-md flex flex-col justify-center items-center gap-md border border-white/5">
 <div class="text-center">
-<span class="font-display-hero text-5xl text-white">12</span>
+<span class="font-display-hero text-5xl text-white" id="streak-text">12</span>
 <p class="font-label-caps text-on-surface-variant text-xs mt-1">DAY STREAK</p>
 </div>
 <div class="flex gap-1">
@@ -407,16 +407,8 @@
 </nav>
 <!-- Interactive script for ring animation -->
 <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const circle = document.querySelector('circle[stroke-dashoffset]');
-            if (circle) {
-                // Trigger animation after a slight delay
-                setTimeout(() => {
-                    circle.style.strokeDashoffset = '124'; // Example value: 82% of 691
-                }, 500);
-            }
-            
-            // Subtle parallax/tilt for glass cards
+        // Parallax tilt effect for cards
+        function initCardTilt() {
             const cards = document.querySelectorAll('.glass-card, .glass-card-elite');
             cards.forEach(card => {
                 card.addEventListener('mousemove', (e) => {
@@ -437,6 +429,72 @@
                     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
                 });
             });
+        }
+
+        async function fetchDashboardData() {
+            try {
+                // 1. Fetch Profile info
+                const profileRes = await fetch('/api/auth/profile', {
+                    headers: getAuthHeaders()
+                });
+                if (!profileRes.ok) throw new Error("Unauthorized");
+                const profile = await profileRes.json();
+
+                // Update Username & Streak
+                document.getElementById('welcome-title').textContent = `Good Evening ${profile.username} 💪`;
+                document.getElementById('streak-text').textContent = profile.streak;
+
+                // 2. Fetch today's habits & readiness
+                const habitsRes = await fetch('/api/habits/today', {
+                    headers: getAuthHeaders()
+                });
+                const habits = await habitsRes.json();
+
+                // Update readiness score
+                const readinessVal = habits.readinessScore || 50;
+                document.getElementById('readiness-text').textContent = readinessVal;
+                
+                // Animate Ring (691 is circumference)
+                const circle = document.querySelector('circle[stroke-dashoffset]');
+                if (circle) {
+                    const offset = 691 - (691 * readinessVal / 100);
+                    circle.style.strokeDashoffset = offset;
+                }
+
+                // Update progress metrics
+                // Calories
+                document.getElementById('calorie-val').textContent = habits.calorieProgress || '0';
+                const calPercent = Math.min(100, ((habits.calorieProgress || 0) / 2400) * 100);
+                document.getElementById('calorie-progress').style.width = `${calPercent}%`;
+
+                // Water
+                const waterL = (habits.waterMl / 1000).toFixed(1);
+                document.getElementById('water-val').textContent = waterL;
+                const waterPercent = Math.min(100, (habits.waterMl / 3500) * 100);
+                document.getElementById('water-progress').style.width = `${waterPercent}%`;
+
+                // Steps
+                document.getElementById('steps-val').textContent = habits.steps.toLocaleString();
+                const stepsPercent = Math.min(100, (habits.steps / 10000) * 100);
+                document.getElementById('steps-progress').style.width = `${stepsPercent}%`;
+
+                // 3. Fetch Coach Briefing
+                const briefingRes = await fetch('/api/coach/briefing', {
+                    headers: getAuthHeaders()
+                });
+                const briefingData = await briefingRes.json();
+                document.getElementById('briefing-text').textContent = briefingData.briefing;
+
+            } catch (err) {
+                console.error("Dashboard load failed:", err);
+                localStorage.removeItem('token');
+                window.location.href = 'auth.html';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCardTilt();
+            fetchDashboardData();
         });
     </script>
 

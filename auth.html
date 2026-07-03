@@ -139,6 +139,7 @@
     </script>
 
     <link href="app.css?v=3" rel="stylesheet">
+    <script src="api-helper.js?v=2"></script>
 
 </head>
 <body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
@@ -183,41 +184,25 @@
 </header>
 <!-- Auth Selection Glass Card -->
 <div class="w-full max-w-md glass-container rounded-[2rem] p-lg flex flex-col gap-sm">
-<!-- Primary Action: Create Account -->
-<button onclick="window.location.href='dashboard.html'" class="group relative w-full h-16 bg-primary-container text-on-primary-container font-headline-md text-headline-md rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-center px-gutter" style="--mouse-x: 230.46922302246094px; --mouse-y: 28.221435546875px;">
-<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-<span class="relative z-10">CREATE ACCOUNT</span>
-</button>
-<!-- Secondary Action: Sign In -->
-<button onclick="window.location.href='dashboard.html'" class="w-full h-16 glass-container text-on-surface font-headline-md text-headline-md rounded-xl transition-all duration-300 hover:bg-white/5 hover:border-white/20 active:scale-95 flex items-center justify-center px-gutter">
-                SIGN IN
-            </button>
-<!-- Divider -->
-<div class="flex items-center gap-sm my-md">
-<div class="h-[1px] flex-1 bg-white/10"></div>
-<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Fast Track With</span>
-<div class="h-[1px] flex-1 bg-white/10"></div>
-</div>
-<!-- Social Logins -->
-<div class="grid grid-cols-2 gap-sm">
-<!-- Apple -->
-<button onclick="window.location.href='dashboard.html'" class="flex items-center justify-center gap-sm h-14 rounded-xl glass-container hover:bg-white/5 transition-all group">
-<svg class="w-5 h-5 fill-on-surface" viewBox="0 0 24 24">
-<path d="M17.05 20.28c-.96.95-2.06 2.15-3.41 2.15-1.31 0-1.74-.83-3.29-.83-1.54 0-2.03.81-3.28.83-1.34.02-2.58-1.38-3.55-2.33C1.53 18.1 0 15.19 0 12.35c0-4.54 2.84-6.94 5.61-6.94 1.46 0 2.84.97 3.73.97.9 0 2.53-1.12 4.29-1.12 1.83 0 3.2.66 4.14 1.87-3.32 1.94-2.78 6.25.5 7.64-.93 2.13-2.17 4.18-3.22 5.51zM13.03 2.31C13.84 1.34 14.39 0 14.39 0s-1.31.06-2.81 1.77c-1.28 1.47-1.11 2.76-1.11 2.76s1.37.14 2.56-1.22z"></path>
-</svg>
-<span class="font-body-md text-body-md">Apple</span>
-</button>
-<!-- Google -->
-<button onclick="window.location.href='dashboard.html'" class="flex items-center justify-center gap-sm h-14 rounded-xl glass-container hover:bg-white/5 transition-all group">
-<svg class="w-5 h-5" viewBox="0 0 24 24">
-<path d="M12 5.04c1.73 0 3.01.75 3.67 1.38l2.73-2.73C16.74 2.1 14.59 1 12 1 7.37 1 3.42 3.69 1.5 7.65l3.18 2.47C5.43 7.15 8.44 5.04 12 5.04z" fill="#EA4335"></path>
-<path d="M23.49 12.27c0-.83-.07-1.63-.2-2.39H12v4.51h6.44c-.28 1.48-1.11 2.73-2.36 3.58l3.66 2.84c2.14-1.97 3.39-4.88 3.39-8.54z" fill="#4285F4"></path>
-<path d="M4.68 14.88l-3.18 2.47C3.42 20.31 7.37 23 12 23c2.95 0 5.43-1.01 7.24-2.73l-3.66-2.84c-1.01.67-2.31 1.07-3.58 1.07-3.56 0-6.57-2.41-7.65-5.62z" fill="#FBBC05"></path>
-<path d="M1.5 7.65l3.18 2.47c1.08-3.21 4.09-5.62 7.65-5.62 1.38 0 2.65.41 3.69 1.1l2.73-2.73C13.62 1.39 11.41 1 9.32 1.43 5.92 2.14 3.06 4.54 1.5 7.65z" fill="#34A853"></path>
-</svg>
-<span class="font-body-md text-body-md">Google</span>
-</button>
-</div>
+<form id="auth-form" class="flex flex-col gap-sm">
+    <div class="flex flex-col gap-xs">
+        <label class="font-mono-data text-[10px] text-on-surface-variant uppercase tracking-wider">Username</label>
+        <input id="username" type="text" placeholder="ENTER USERNAME" required class="w-full h-12 px-md bg-white/5 border border-white/10 rounded-xl focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim text-on-surface placeholder-on-surface-variant/40 font-mono-data text-xs transition-all uppercase">
+    </div>
+    <div class="flex flex-col gap-xs">
+        <label class="font-mono-data text-[10px] text-on-surface-variant uppercase tracking-wider">Security Code</label>
+        <input id="password" type="password" placeholder="ENTER PASSWORD" required class="w-full h-12 px-md bg-white/5 border border-white/10 rounded-xl focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim text-on-surface placeholder-on-surface-variant/40 font-mono-data text-xs transition-all">
+    </div>
+    <!-- Actions -->
+    <div class="flex flex-col gap-xs mt-md">
+        <button id="register-btn" type="button" class="group relative w-full h-14 bg-primary-container text-on-primary-container font-headline-md text-sm rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-center">
+            <span class="relative z-10 font-bold uppercase tracking-wider">CREATE ACCOUNT</span>
+        </button>
+        <button id="login-btn" type="button" class="w-full h-14 glass-container text-on-surface font-headline-md text-sm rounded-xl transition-all duration-300 hover:bg-white/5 hover:border-white/20 active:scale-95 flex items-center justify-center">
+            SIGN IN
+        </button>
+    </div>
+</form>
 </div>
 <!-- Footer Meta Section -->
 <footer class="mt-lg text-center max-w-xs">
@@ -246,6 +231,68 @@
                 button.style.setProperty('--mouse-y', `${y}px`);
             });
         });
+
+        // Register handler
+        const registerBtn = document.getElementById('register-btn');
+        if (registerBtn) {
+            registerBtn.addEventListener('click', async () => {
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                if (!username || !password) {
+                    showToast("Username & password required", "error");
+                    return;
+                }
+                try {
+                    const res = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, password })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                        showToast(data.error || "Registration failed", "error");
+                    } else {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('username', data.user.username);
+                        showToast("Account Created", "success");
+                        setTimeout(() => window.location.href = 'dashboard.html', 1000);
+                    }
+                } catch (err) {
+                    showToast("Connection failed", "error");
+                }
+            });
+        }
+
+        // Login handler
+        const loginBtn = document.getElementById('login-btn');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', async () => {
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                if (!username || !password) {
+                    showToast("Username & password required", "error");
+                    return;
+                }
+                try {
+                    const res = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, password })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                        showToast(data.error || "Login failed", "error");
+                    } else {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('username', data.user.username);
+                        showToast("Welcome back!", "success");
+                        setTimeout(() => window.location.href = 'dashboard.html', 1000);
+                    }
+                } catch (err) {
+                    showToast("Connection failed", "error");
+                }
+            });
+        }
     </script>
 <!-- Custom Cursor for that Elite feeling -->
 <div class="fixed w-4 h-4 bg-primary-container rounded-full pointer-events-none z-[9999] opacity-0 transition-opacity duration-300 hidden md:block mix-blend-difference" id="custom-cursor" style="left: 372px; top: 401px; opacity: 0;"></div>

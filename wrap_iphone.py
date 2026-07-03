@@ -7,6 +7,7 @@ OUT_DIR = '/Users/sudhanshu/.gemini/antigravity/scratch/fitguru-app'
 # Premium Phone Simulator CSS to inject
 SIMULATOR_STYLE = """
     <link href="app.css?v=3" rel="stylesheet">
+    <script src="api-helper.js?v=2"></script>
 """
 
 # iOS-Style Status Bar

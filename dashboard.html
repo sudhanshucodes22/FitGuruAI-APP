@@ -146,9 +146,17 @@
     body {
       min-height: max(884px, 100dvh);
     }
+    #units-toggle-btn.lbs-active {
+        background-color: #2ae500 !important;
+    }
+    #units-toggle-btn.lbs-active #units-toggle-knob {
+        transform: translateX(24px);
+        background-color: #000000 !important;
+    }
   </style>
 
     <link href="app.css?v=3" rel="stylesheet">
+    <script src="api-helper.js?v=2"></script>
 
 </head>
 <body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
@@ -175,24 +183,31 @@
             
             
 <!-- Top Navigation -->
-<header class="w-full flex-shrink-0 z-20 bg-background/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-gutter py-md">
-<div class="flex items-center gap-sm">
-<button onclick="if(document.referrer && document.referrer.includes(window.location.host)) { window.history.back(); } else { window.location.href='index.html?v=4'; }" class="p-xs hover:bg-white/5 rounded-full transition-all duration-300 ease-out active:scale-95 text-on-surface-variant hover:text-primary mr-1 flex-shrink-0" title="Go Back">
-    <span class="material-symbols-outlined text-xl leading-none">arrow_back</span>
-</button>
-<div onclick="window.location.href='profile.html'" class="w-10 h-10 rounded-full overflow-hidden border border-primary/20 cursor-pointer active:scale-95 transition-transform">
-<img class="w-full h-full object-cover" data-alt="A cinematic, high-detail portrait of a professional athlete in a dark gym environment. The lighting is dramatic and moody, highlighting the contours of the face with sharp neon green accents reflecting from nearby equipment. The background is blurred to create depth, focusing on the determined and focused expression of the athlete. The overall aesthetic is premium, high-contrast, and technically sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4cB7OeVPdcQzcrxItKzyUg_XksDWpCLT4LzP9MME0fdmPz_AV_5OE6TNUYf5yPklG-YAIG-EdRpcGo7Bm0srVW8NoSlihHjGIkJ3IX8_c7m_1hy0d-65Fcumrq_5mwXa8agUaTkFNVrlmj48MN2fhsaYCZJ8Beyi4nbWlrY_25fctRd3NAOZReCQcbEamx4Aa9aaw_q93f6KUefNiCpN7DVUrscDEFp9VmGGz2KDOqUXcC5p1O3USAbfFoU_hwaUvJLXI3iN5xw">
-</div>
-<h1 class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim">FITGURU</h1>
-</div>
-<div class="flex items-center gap-md">
-<button class="transition-all duration-300 ease-out active:scale-95 hover:bg-white/5 p-xs rounded-full">
-<span class="material-symbols-outlined text-primary">search</span>
-</button>
-<button class="transition-all duration-300 ease-out active:scale-95 hover:bg-white/5 p-xs rounded-full">
-<span class="material-symbols-outlined text-primary">settings</span>
-</button>
-</div>
+<header class="w-full flex-shrink-0 z-20 bg-background/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-gutter py-md relative">
+    <div id="header-main-content" class="flex justify-between items-center w-full transition-all duration-300">
+        <div class="flex items-center gap-sm">
+            <button onclick="if(document.referrer && document.referrer.includes(window.location.host)) { window.history.back(); } else { window.location.href='index.html?v=4'; }" class="p-xs hover:bg-white/5 rounded-full transition-all duration-300 ease-out active:scale-95 text-on-surface-variant hover:text-primary mr-1 flex-shrink-0" title="Go Back">
+                <span class="material-symbols-outlined text-xl leading-none">arrow_back</span>
+            </button>
+            <div onclick="window.location.href='profile.html'" class="w-10 h-10 rounded-full overflow-hidden border border-primary/20 cursor-pointer active:scale-95 transition-transform">
+                <img id="header-avatar-img" class="w-full h-full object-cover" data-alt="A cinematic, high-detail portrait of a professional athlete in a dark gym environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4cB7OeVPdcQzcrxItKzyUg_XksDWpCLT4LzP9MME0fdmPz_AV_5OE6TNUYf5yPklG-YAIG-EdRpcGo7Bm0srVW8NoSlihHjGIkJ3IX8_c7m_1hy0d-65Fcumrq_5mwXa8agUaTkFNVrlmj48MN2fhsaYCZJ8Beyi4nbWlrY_25fctRd3NAOZReCQcbEamx4Aa9aaw_q93f6KUefNiCpN7DVUrscDEFp9VmGGz2KDOqUXcC5p1O3USAbfFoU_hwaUvJLXI3iN5xw">
+            </div>
+            <h1 class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim">FITGURU</h1>
+        </div>
+        <div class="flex items-center gap-md">
+            <span id="search-trigger-btn" class="material-symbols-outlined text-primary cursor-pointer hover:text-white transition-colors">search</span>
+            <span id="settings-trigger-btn" class="material-symbols-outlined text-primary cursor-pointer hover:text-white transition-colors">settings</span>
+        </div>
+    </div>
+    
+    <!-- Slide-out Search Bar -->
+    <div id="header-search-bar" class="absolute inset-x-gutter top-1/2 -translate-y-1/2 flex items-center bg-black/80 border border-white/10 rounded-full px-sm py-1.5 gap-xs z-10 hidden transition-all duration-300 opacity-0 scale-95 w-[90%] mx-auto">
+        <span class="material-symbols-outlined text-on-surface-variant text-md">search</span>
+        <input type="text" id="search-input" class="bg-transparent border-none focus:ring-0 text-xs text-on-surface w-full p-0 placeholder:text-on-surface-variant/50" placeholder="Search Dashboard...">
+        <button id="close-search-btn" class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
+            <span class="material-symbols-outlined text-on-surface-variant text-sm">close</span>
+        </button>
+    </div>
 </header>
 <main class="scroll-area flex-grow w-full px-gutter   space-y-md">
 <!-- Hero Section -->
@@ -203,7 +218,7 @@
 </div>
 <div class="relative z-20 space-y-xs">
 <span class="font-label-caps text-label-caps text-primary tracking-[0.2em] uppercase">Daily Performance</span>
-<h2 class="font-display-hero text-headline-lg-mobile md:text-headline-lg text-white">Good Evening Sudhanshu 💪</h2>
+<h2 class="font-display-hero text-headline-lg-mobile md:text-headline-lg text-white" id="welcome-title">Good Evening Athlete 💪</h2>
 <p class="font-body-md text-on-surface-variant max-w-md">Your peak performance window is starting. AI suggests a high-intensity session tonight based on your recovery score.</p>
 </div>
 </section>
@@ -218,7 +233,7 @@
 <circle class="transition-all duration-1000 ease-out" cx="128" cy="128" fill="transparent" r="110" stroke="#39FF14" stroke-dasharray="691" stroke-dashoffset="138" stroke-width="12" style="stroke-dashoffset: 124;"></circle>
 </svg>
 <div class="absolute flex flex-col items-center">
-<span class="font-display-hero text-6xl text-white neon-text-glow">82</span>
+<span class="font-display-hero text-6xl text-white neon-text-glow" id="readiness-text">82</span>
 <span class="font-label-caps text-label-caps text-primary">READINESS</span>
 </div>
 <!-- Secondary Ring (Small) -->
@@ -279,11 +294,11 @@
 <span class="font-label-caps text-xs">CALORIES</span>
 </div>
 <div class="flex items-baseline gap-xs">
-<span class="font-display-hero text-white text-headline-md">1,842</span>
-<span class="text-xs text-on-surface-variant">/ 2,400</span>
+<span class="font-display-hero text-white text-headline-md" id="calorie-val">1,842</span>
+<span class="text-xs text-on-surface-variant">/ <span id="calorie-target-label">2,400</span></span>
 </div>
 <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-<div class="bg-primary h-full w-[76%] neon-glow"></div>
+<div id="calorie-progress" class="bg-primary h-full w-[76%] neon-glow"></div>
 </div>
 </div>
 <div class="glass-card p-sm rounded-xl space-y-xs" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
@@ -292,11 +307,11 @@
 <span class="font-label-caps text-xs">HYDRATION</span>
 </div>
 <div class="flex items-baseline gap-xs">
-<span class="font-display-hero text-white text-headline-md">2.4</span>
-<span class="text-xs text-on-surface-variant">/ 3.5 L</span>
+<span class="font-display-hero text-white text-headline-md" id="water-val">2.4</span>
+<span class="text-xs text-on-surface-variant">/ <span id="water-target-label">3.5</span> L</span>
 </div>
 <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-<div class="bg-blue-400 h-full w-[68%]"></div>
+<div id="water-progress" class="bg-blue-400 h-full w-[68%]"></div>
 </div>
 </div>
 <div class="glass-card p-sm rounded-xl space-y-xs" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
@@ -305,11 +320,11 @@
 <span class="font-label-caps text-xs">STEPS</span>
 </div>
 <div class="flex items-baseline gap-xs">
-<span class="font-display-hero text-white text-headline-md">8,142</span>
-<span class="text-xs text-on-surface-variant">/ 10k</span>
+<span class="font-display-hero text-white text-headline-md" id="steps-val">8,142</span>
+<span class="text-xs text-on-surface-variant">/ <span id="steps-target-label">10k</span></span>
 </div>
 <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-<div class="bg-primary-fixed-dim h-full w-[81%]"></div>
+<div id="steps-progress" class="bg-primary-fixed-dim h-full w-[81%]"></div>
 </div>
 </div>
 <div class="glass-card p-sm rounded-xl space-y-xs">
@@ -337,7 +352,7 @@
 <div class="relative z-10">
 <span class="bg-primary/20 text-primary-fixed px-3 py-1 rounded-full font-label-caps text-[10px] mb-4 inline-block">NEURAL ADAPTIVE COACHING</span>
 <h3 class="font-display-hero text-headline-lg text-white mb-2">Connect with AI Coach</h3>
-<p class="text-on-surface-variant max-w-sm">Optimizing your split based on yesterday's central nervous system fatigue.</p>
+<p id="briefing-text" class="text-on-surface-variant max-w-sm">Connecting neural split analytics...</p>
 </div>
 <button onclick="window.location.href='coach.html'" class="relative z-10 self-start bg-primary text-on-primary px-sm py-xs rounded-lg font-label-caps text-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                     START BRIEFING <span class="material-symbols-outlined text-sm">play_arrow</span>
@@ -384,7 +399,7 @@
 <!-- Daily Streak -->
 <div class="glass-card rounded-xl p-md flex flex-col justify-center items-center gap-md border border-white/5">
 <div class="text-center">
-<span class="font-display-hero text-5xl text-white">12</span>
+<span class="font-display-hero text-5xl text-white" id="streak-text">12</span>
 <p class="font-label-caps text-on-surface-variant text-xs mt-1">DAY STREAK</p>
 </div>
 <div class="flex gap-1">
@@ -421,16 +436,8 @@
 
 <!-- Interactive script for ring animation -->
 <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const circle = document.querySelector('circle[stroke-dashoffset]');
-            if (circle) {
-                // Trigger animation after a slight delay
-                setTimeout(() => {
-                    circle.style.strokeDashoffset = '124'; // Example value: 82% of 691
-                }, 500);
-            }
-            
-            // Subtle parallax/tilt for glass cards
+        // Parallax tilt effect for cards
+        function initCardTilt() {
             const cards = document.querySelectorAll('.glass-card, .glass-card-elite');
             cards.forEach(card => {
                 card.addEventListener('mousemove', (e) => {
@@ -451,16 +458,357 @@
                     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
                 });
             });
+        }
+
+        async function fetchDashboardData() {
+            try {
+                // 1. Fetch Profile info
+                const profileRes = await fetch('/api/auth/profile', {
+                    headers: getAuthHeaders()
+                });
+                if (!profileRes.ok) throw new Error("Unauthorized");
+                const profile = await profileRes.json();
+
+                // Update Username & Streak
+                document.getElementById('welcome-title').textContent = `Good Evening ${profile.username} 💪`;
+                document.getElementById('streak-text').textContent = profile.streak;
+
+                // 2. Fetch today's habits & readiness
+                const habitsRes = await fetch('/api/habits/today', {
+                    headers: getAuthHeaders()
+                });
+                const habits = await habitsRes.json();
+
+                // Update readiness score
+                const readinessVal = habits.readinessScore || 50;
+                document.getElementById('readiness-text').textContent = readinessVal;
+                
+                // Animate Ring (691 is circumference)
+                const circle = document.querySelector('circle[stroke-dashoffset]');
+                if (circle) {
+                    const offset = 691 - (691 * readinessVal / 100);
+                    circle.style.strokeDashoffset = offset;
+                }
+
+                // Update progress metrics
+                const targetWater = Number(localStorage.getItem('targetWater')) || 2500;
+                const targetSteps = Number(localStorage.getItem('targetSteps')) || 10000;
+                const targetCalories = 2400;
+
+                // Update targets labels in HTML
+                const waterTargetLabel = document.getElementById('water-target-label');
+                if (waterTargetLabel) waterTargetLabel.textContent = (targetWater / 1000).toFixed(1);
+                
+                const stepsTargetLabel = document.getElementById('steps-target-label');
+                if (stepsTargetLabel) stepsTargetLabel.textContent = targetSteps >= 1000 ? (targetSteps / 1000).toFixed(0) + 'k' : targetSteps;
+                
+                const calorieTargetLabel = document.getElementById('calorie-target-label');
+                if (calorieTargetLabel) calorieTargetLabel.textContent = targetCalories.toLocaleString();
+
+                // Calories
+                document.getElementById('calorie-val').textContent = habits.calorieProgress || '0';
+                const calPercent = Math.min(100, ((habits.calorieProgress || 0) / targetCalories) * 100);
+                document.getElementById('calorie-progress').style.width = `${calPercent}%`;
+
+                // Water
+                const waterL = (habits.waterMl / 1000).toFixed(1);
+                document.getElementById('water-val').textContent = waterL;
+                const waterPercent = Math.min(100, (habits.waterMl / targetWater) * 100);
+                document.getElementById('water-progress').style.width = `${waterPercent}%`;
+
+                // Steps
+                document.getElementById('steps-val').textContent = habits.steps.toLocaleString();
+                const stepsPercent = Math.min(100, (habits.steps / targetSteps) * 100);
+                document.getElementById('steps-progress').style.width = `${stepsPercent}%`;
+
+                // 3. Fetch Coach Briefing
+                const briefingRes = await fetch('/api/coach/briefing', {
+                    headers: getAuthHeaders()
+                });
+                const briefingData = await briefingRes.json();
+                document.getElementById('briefing-text').textContent = briefingData.briefing;
+
+                // Update header avatar image
+                const avatarImg = document.getElementById('header-avatar-img');
+                if (avatarImg && profile.avatar) {
+                    avatarImg.src = profile.avatar;
+                }
+
+            } catch (err) {
+                console.error("Dashboard load failed:", err);
+                localStorage.removeItem('token');
+                window.location.href = 'auth.html';
+            }
+        }
+
+        // Search Slide-out functionality
+        const searchTrigger = document.getElementById('search-trigger-btn');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+        const headerMainContent = document.getElementById('header-main-content');
+        const headerSearchBar = document.getElementById('header-search-bar');
+        const searchInput = document.getElementById('search-input');
+
+        if (searchTrigger && closeSearchBtn && headerMainContent && headerSearchBar && searchInput) {
+            searchTrigger.addEventListener('click', () => {
+                headerMainContent.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                headerSearchBar.classList.remove('hidden');
+                setTimeout(() => {
+                    headerSearchBar.classList.add('opacity-100', 'scale-100');
+                    searchInput.focus();
+                }, 50);
+            });
+
+            closeSearchBtn.addEventListener('click', () => {
+                headerSearchBar.classList.remove('opacity-100', 'scale-100');
+                setTimeout(() => {
+                    headerSearchBar.classList.add('hidden');
+                    headerMainContent.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+                    searchInput.value = '';
+                    // Restore all cards
+                    document.querySelectorAll('main > section, main > div > div, main .glass-card, main .glass-card-elite').forEach(card => card.classList.remove('hidden'));
+                }, 200);
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                document.querySelectorAll('main > section, main > div > div, main .glass-card, main .glass-card-elite').forEach(card => {
+                    if (card.classList.contains('ring-container') || card.closest('.ring-container')) return;
+                    
+                    const text = card.textContent.toLowerCase();
+                    if (text.includes(query)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        }
+
+        // Settings Modal functionality
+        const settingsTrigger = document.getElementById('settings-trigger-btn');
+        const closeSettingsBtn = document.getElementById('close-settings-btn');
+        const settingsModal = document.getElementById('settings-modal');
+        const logoutBtn = document.getElementById('logout-btn');
+        const saveRepsBtn = document.getElementById('save-reps-btn');
+        const settingsTargetReps = document.getElementById('settings-target-reps');
+        const unitsToggleBtn = document.getElementById('units-toggle-btn');
+
+        let userProfile = null;
+        let isLbsActive = localStorage.getItem('weightUnit') === 'LBS';
+
+        const settingsTargetSteps = document.getElementById('settings-target-steps');
+        const settingsTargetWater = document.getElementById('settings-target-water');
+        const settingsTargetSleep = document.getElementById('settings-target-sleep');
+        const saveDashboardSettingsBtn = document.getElementById('save-dashboard-settings-btn');
+        const resetProgressBtn = document.getElementById('reset-progress-btn');
+
+        async function loadProfileSettings() {
+            try {
+                const res = await fetch('/api/auth/profile', { headers: getAuthHeaders() });
+                if (res.ok) {
+                    userProfile = await res.json();
+                    if (settingsTargetReps) {
+                        settingsTargetReps.value = userProfile.targetReps || 10;
+                    }
+                }
+                // Load metrics targets from localStorage
+                if (settingsTargetSteps) {
+                    settingsTargetSteps.value = localStorage.getItem('targetSteps') || 10000;
+                }
+                if (settingsTargetWater) {
+                    settingsTargetWater.value = localStorage.getItem('targetWater') || 2500;
+                }
+                if (settingsTargetSleep) {
+                    settingsTargetSleep.value = localStorage.getItem('targetSleep') || 8;
+                }
+            } catch (err) {
+                console.error("Failed to load settings profile:", err);
+            }
+        }
+
+        if (settingsTrigger && closeSettingsBtn && settingsModal) {
+            settingsTrigger.addEventListener('click', () => {
+                loadProfileSettings();
+                settingsModal.classList.remove('hidden');
+            });
+
+            closeSettingsBtn.addEventListener('click', () => {
+                settingsModal.classList.add('hidden');
+            });
+
+            settingsModal.addEventListener('click', (e) => {
+                if (e.target === settingsModal) {
+                    settingsModal.classList.add('hidden');
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !settingsModal.classList.contains('hidden')) {
+                    settingsModal.classList.add('hidden');
+                }
+            });
+        }
+
+        if (saveDashboardSettingsBtn) {
+            saveDashboardSettingsBtn.addEventListener('click', async () => {
+                const val = Number(settingsTargetReps.value);
+                const stepsVal = Number(settingsTargetSteps.value);
+                const waterVal = Number(settingsTargetWater.value);
+                const sleepVal = Number(settingsTargetSleep.value);
+
+                if (isNaN(val) || val <= 0 || isNaN(stepsVal) || stepsVal <= 0 || isNaN(waterVal) || waterVal <= 0 || isNaN(sleepVal) || sleepVal <= 0) {
+                    showToast("Please enter valid positive targets", "error");
+                    return;
+                }
+
+                // Save custom targets to localStorage
+                localStorage.setItem('targetSteps', stepsVal);
+                localStorage.setItem('targetWater', waterVal);
+                localStorage.setItem('targetSleep', sleepVal);
+
+                try {
+                    const res = await fetch('/api/auth/profile/update', {
+                        method: 'POST',
+                        headers: getAuthHeaders(),
+                        body: JSON.stringify({ targetReps: val })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        userProfile = data.user;
+                        showToast("DASHBOARD PROTOCOL UPDATED");
+                        settingsModal.classList.add('hidden');
+                        fetchDashboardData();
+                    } else {
+                        showToast(data.error || "Update failed", "error");
+                    }
+                } catch (err) {
+                    showToast("Connection failed", "error");
+                }
+            });
+        }
+
+        if (resetProgressBtn) {
+            resetProgressBtn.addEventListener('click', async () => {
+                if (!confirm("Are you sure you want to reset all today's progress? This resets steps, sleep, and water to zero.")) {
+                    return;
+                }
+                try {
+                    const res = await fetch('/api/habits/toggle', {
+                        method: 'POST',
+                        headers: getAuthHeaders(),
+                        body: JSON.stringify({
+                            waterMl: 0,
+                            sleepHrs: 0,
+                            steps: 0,
+                            dietCompleted: false,
+                            workoutCompleted: false
+                        })
+                    });
+                    if (res.ok) {
+                        showToast("TODAY'S HABITS PROGRESS RESET");
+                        settingsModal.classList.add('hidden');
+                        fetchDashboardData();
+                    } else {
+                        showToast("Failed to reset today's progress", "error");
+                    }
+                } catch (err) {
+                    showToast("Connection failed", "error");
+                }
+            });
+        }
+
+        if (unitsToggleBtn) {
+            if (isLbsActive) {
+                unitsToggleBtn.classList.add('lbs-active');
+            }
+            unitsToggleBtn.addEventListener('click', () => {
+                isLbsActive = !isLbsActive;
+                localStorage.setItem('weightUnit', isLbsActive ? 'LBS' : 'KG');
+                unitsToggleBtn.classList.toggle('lbs-active', isLbsActive);
+                showToast(`WEIGHT UNIT SET TO ${isLbsActive ? 'LBS' : 'KG'}`);
+            });
+        }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                showToast("SYSTEM SHUTDOWN: USER LOGGED OUT");
+                setTimeout(() => {
+                    window.location.href = 'auth.html';
+                }, 1000);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCardTilt();
+            fetchDashboardData();
+            loadProfileSettings();
         });
     </script>
 
-
-
-
-
-
-
+    <!-- Settings Modal Overlay -->
+    <div id="settings-modal" class="absolute inset-0 z-[100] hidden flex items-center justify-center bg-black/75 backdrop-blur-md p-gutter">
+        <div class="glass-card w-full max-w-sm rounded-2xl border border-white/10 p-md space-y-md relative overflow-hidden shadow-2xl max-h-[85%] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-white/5 pb-sm">
+                <h3 class="font-label-caps text-label-caps text-primary tracking-widest">DASHBOARD PROTOCOL</h3>
+                <button id="close-settings-btn" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
+                    <span class="material-symbols-outlined text-on-surface-variant text-md">close</span>
+                </button>
+            </div>
             
+            <!-- Target Daily Reps Input -->
+            <div class="space-y-xs">
+                <label class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider block">Target Daily Reps</label>
+                <input type="number" id="settings-target-reps" class="bg-black border border-white/10 focus:border-primary/50 focus:ring-0 rounded-lg text-sm text-on-surface w-full px-sm py-xs focus:outline-none" min="1">
+            </div>
+
+            <!-- Target Daily Steps Input -->
+            <div class="space-y-xs">
+                <label class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider block">Target Daily Steps</label>
+                <input type="number" id="settings-target-steps" class="bg-black border border-white/10 focus:border-primary/50 focus:ring-0 rounded-lg text-sm text-on-surface w-full px-sm py-xs focus:outline-none" min="100" step="500">
+            </div>
+
+            <!-- Target Daily Water Input -->
+            <div class="space-y-xs">
+                <label class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider block">Water Target (ml)</label>
+                <input type="number" id="settings-target-water" class="bg-black border border-white/10 focus:border-primary/50 focus:ring-0 rounded-lg text-sm text-on-surface w-full px-sm py-xs focus:outline-none" min="100" step="250">
+            </div>
+
+            <!-- Target Daily Sleep Input -->
+            <div class="space-y-xs">
+                <label class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider block">Sleep Target (Hours)</label>
+                <input type="number" id="settings-target-sleep" class="bg-black border border-white/10 focus:border-primary/50 focus:ring-0 rounded-lg text-sm text-on-surface w-full px-sm py-xs focus:outline-none" min="1" max="24" step="0.5">
+            </div>
+            
+            <!-- Weight Unit Selection -->
+            <div class="space-y-xs">
+                <label class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider block">Metric Units</label>
+                <div class="flex items-center justify-between bg-black/40 border border-white/10 rounded-lg p-sm">
+                    <span class="text-xs text-on-surface">Use Pounds (LBS)</span>
+                    <button id="units-toggle-btn" class="w-12 h-6 bg-white/10 rounded-full p-0.5 transition-colors relative flex items-center">
+                        <span class="w-5 h-5 bg-on-surface-variant rounded-full transition-transform shadow" id="units-toggle-knob"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-sm pt-sm border-t border-white/5">
+                <button id="reset-progress-btn" class="flex-1 py-xs border border-error/30 text-error font-label-caps text-[10px] rounded-lg active:scale-95 transition-all text-center hover:bg-error/10">
+                    RESET TODAY
+                </button>
+                <button id="save-dashboard-settings-btn" class="flex-1 py-xs bg-primary text-on-primary font-label-caps text-[10px] rounded-lg active:scale-95 transition-all text-center">
+                    SAVE SYSTEM
+                </button>
+            </div>
+            
+            <!-- Log Out -->
+            <div class="border-t border-white/5 pt-md">
+                <button id="logout-btn" class="w-full py-sm bg-error/10 hover:bg-error/20 border border-error/30 text-error font-label-caps text-label-caps rounded-xl active:scale-95 transition-all text-center">
+                    LOG OUT SYSTEM
+                </button>
+            </div>
+        </div>
+    </div>
             
             <!-- Bottom Navigation Bar -->
             <nav class="absolute bottom-0 left-0 w-full bg-background/95 border-t border-white/10 flex justify-around items-center px-1 pb-3 z-40 shadow-[0_-10px_20px_rgba(0,0,0,0.5)]" style="height: 84px;">

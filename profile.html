@@ -137,6 +137,22 @@
         .elite-border {
             border-top: 1px solid #39FF14;
         }
+        #units-toggle-btn.lbs-active {
+            background-color: rgba(57, 255, 20, 0.2);
+            border-color: rgba(57, 255, 20, 0.4);
+        }
+        #units-toggle-btn.lbs-active #units-toggle-knob {
+            transform: translateX(24px);
+            background-color: #39FF14;
+        }
+        #sync-toggle-btn.sync-active {
+            background-color: rgba(57, 255, 20, 0.2);
+            border-color: rgba(57, 255, 20, 0.4);
+        }
+        #sync-toggle-btn.sync-active #sync-toggle-knob {
+            transform: translateX(24px);
+            background-color: #39FF14;
+        }
         .scanline {
             background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50%);
             background-size: 100% 4px;
@@ -156,6 +172,7 @@
   </style>
 
     <link href="app.css?v=3" rel="stylesheet">
+    <script src="api-helper.js?v=2"></script>
 
 </head>
 <body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
@@ -183,19 +200,30 @@
             
 <!-- Top AppBar -->
 <header class="w-full flex-shrink-0 z-20 bg-background/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-gutter py-md">
-<div class="flex items-center gap-sm">
+    <div id="header-main-content" class="flex justify-between items-center w-full transition-all duration-300">
 <button onclick="if(document.referrer && document.referrer.includes(window.location.host)) { window.history.back(); } else { window.location.href='dashboard.html?v=4'; }" class="p-xs hover:bg-white/5 rounded-full transition-all duration-300 ease-out active:scale-95 text-on-surface-variant hover:text-primary mr-1 flex-shrink-0" title="Go Back">
     <span class="material-symbols-outlined text-xl leading-none">arrow_back</span>
 </button>
-<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-primary/20">
-<img class="w-full h-full object-cover" data-alt="A professional close-up portrait of a high-performance athlete with sharp features and determined expression. The lighting is cinematic, using neon green rim lighting against a deep black studio background. The style is ultra-high definition, resembling a high-end sports magazine cover with deep shadows and vibrant highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdjqIqXnxjCrYrNz7P8akBINlTPV2xHFBejV9w5gf526H5BxCiJFmxjo8bhFiCj9YCSPNik3zNX95DVaPMGm1RpEB-6KCKgQerwBfccGTA7fL4YbAzd4hApqgnNnr8VYA5izalJbOCVv6SY1vqpnBllDEf0BcrsEl4R54XAZYEFONc6mxStTAZEmGVkNtFXku7KDetkmytfnIHXUKFq4zxC31G0QTLSm14zzwEYtyp2eIYJvT2b8ocXahy9OnhysuO2OzfWdWL-g">
-</div>
-<span class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim">FITGURU</span>
-</div>
-<div class="flex items-center gap-md">
-<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="search">search</span>
-<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="settings">settings</span>
-</div>
+        <div class="flex items-center gap-sm">
+            <div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-primary/20">
+                <img id="header-avatar-img" class="w-full h-full object-cover" data-alt="A professional close-up portrait of a high-performance athlete with sharp features and determined expression. The lighting is cinematic, using neon green rim lighting against a deep black studio background. The style is ultra-high definition, resembling a high-end sports magazine cover with deep shadows and vibrant highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdjqIqXnxjCrYrNz7P8akBINlTPV2xHFBejV9w5gf526H5BxCiJFmxjo8bhFiCj9YCSPNik3zNX95DVaPMGm1RpEB-6KCKgQerwBfccGTA7fL4YbAzd4hApqgnNnr8VYA5izalJbOCVv6SY1vqpnBllDEf0BcrsEl4R54XAZYEFONc6mxStTAZEmGVkNtFXku7KDetkmytfnIHXUKFq4zxC31G0QTLSm14zzwEYtyp2eIYJvT2b8ocXahy9OnhysuO2OzfWdWL-g">
+            </div>
+            <span class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim">FITGURU</span>
+        </div>
+        <div class="flex items-center gap-md">
+            <span id="search-trigger-btn" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="search">search</span>
+            <span id="settings-trigger-btn" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="settings">settings</span>
+        </div>
+    </div>
+    
+    <!-- Slide-out Search Bar -->
+    <div id="header-search-bar" class="absolute inset-x-gutter top-1/2 -translate-y-1/2 flex items-center bg-black/80 border border-white/10 rounded-full px-sm py-1.5 gap-xs z-10 hidden transition-all duration-300 opacity-0 scale-95 w-[90%] mx-auto">
+        <span class="material-symbols-outlined text-on-surface-variant text-md">search</span>
+        <input type="text" id="search-input" class="bg-transparent border-none focus:ring-0 text-xs text-on-surface w-full p-0 placeholder:text-on-surface-variant/50" placeholder="Search Personal Records...">
+        <button id="close-search-btn" class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
+            <span class="material-symbols-outlined text-on-surface-variant text-sm">close</span>
+        </button>
+    </div>
 </header>
 <main class="scroll-area flex-grow w-full px-gutter   space-y-xl pb-xl">
 <!-- Hero Section: Profile Header -->
@@ -203,7 +231,7 @@
 <div class="relative w-full md:w-1/3 group">
 <div class="avatar-3d-card w-full aspect-[4/5] rounded-xl overflow-hidden glass-card elite-border relative p-base">
 <div class="avatar-inner h-full w-full relative">
-<img class="w-full h-full object-cover rounded-lg" data-alt="A full-body digital render of a futuristic 'Cyber Athlete' in a dark high-tech gym environment. The character is wearing bioluminescent compression gear with glowing green fiber optics. The aesthetic is sleek, aggressive, and premium, with volumetric lighting and subtle atmospheric particles floating in the air. The color palette is dominated by pure black and electric neon green." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyDC4vg_D6NLuiAfkYEWWMDgUu1wnbgd5adylEHYuRpRzWtDD6fILpIoJuGG_Uaaw-AGCrBPs-evXlbf1KzeK6qc3DWDaiDjxtimh1tMDkGNaBqFW2uIIm-BK-MbIh2cyDi4ORPe34vgymYZmGRRCUtcolID2xW82s5eI9hPKuXhtmGznKpZBh8E47MpZq44GVd6d5GqB_qnJPwI-dDOzI_f6tmSJO28TwiQSaZexzZvmI4AuwGcbFU0YYPdFTO-kmt3AlttUV5Q">
+<img id="main-avatar-img" class="w-full h-full object-cover rounded-lg" data-alt="A full-body digital render of a futuristic 'Cyber Athlete' in a dark high-tech gym environment. The character is wearing bioluminescent compression gear with glowing green fiber optics. The aesthetic is sleek, aggressive, and premium, with volumetric lighting and subtle atmospheric particles floating in the air. The color palette is dominated by pure black and electric neon green." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyDC4vg_D6NLuiAfkYEWWMDgUu1wnbgd5adylEHYuRpRzWtDD6fILpIoJuGG_Uaaw-AGCrBPs-evXlbf1KzeK6qc3DWDaiDjxtimh1tMDkGNaBqFW2uIIm-BK-MbIh2cyDi4ORPe34vgymYZmGRRCUtcolID2xW82s5eI9hPKuXhtmGznKpZBh8E47MpZq44GVd6d5GqB_qnJPwI-dDOzI_f6tmSJO28TwiQSaZexzZvmI4AuwGcbFU0YYPdFTO-kmt3AlttUV5Q">
 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
 <div class="absolute bottom-md left-md">
 <div class="bg-primary/10 backdrop-blur-md border border-primary/30 px-sm py-xs rounded-full inline-flex items-center gap-xs">
@@ -216,13 +244,13 @@
 <!-- XP Badge -->
 <div class="absolute -bottom-4 -right-4 w-20 h-20 bg-background border border-primary/40 rounded-full flex flex-col items-center justify-center neon-glow shadow-primary/20">
 <span class="font-label-caps text-label-caps text-on-surface-variant">LVL</span>
-<span class="font-display-hero text-headline-md text-primary-fixed-dim">42</span>
+<span id="profile-level-val" class="font-display-hero text-headline-md text-primary-fixed-dim">42</span>
 </div>
 </div>
 <div class="flex-1 space-y-md">
 <div>
-<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">Alex Sterling</h1>
-<p class="font-body-lg text-on-surface-variant flex items-center gap-xs">
+<h1 id="profile-username" class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">Alex Sterling</h1>
+<p id="profile-streak" class="font-body-lg text-on-surface-variant flex items-center gap-xs">
                         Pro Athlete <span class="w-1 h-1 bg-surface-container-highest rounded-full"></span> 7-Day Streak
                     </p>
 </div>
@@ -231,7 +259,7 @@
 <div class="glass-card p-md rounded-xl space-y-xs">
 <span class="font-label-caps text-label-caps text-on-surface-variant">WORKOUTS</span>
 <div class="flex items-baseline gap-xs">
-<span class="font-display-hero text-headline-md text-on-surface">1,248</span>
+<span id="profile-workouts-val" class="font-display-hero text-headline-md text-on-surface">1,248</span>
 <span class="material-symbols-outlined text-primary text-sm" data-icon="trending_up">trending_up</span>
 </div>
 </div>
@@ -245,7 +273,7 @@
 <div class="glass-card p-md rounded-xl space-y-xs col-span-2 md:col-span-1">
 <span class="font-label-caps text-label-caps text-on-surface-variant">PR TOTAL</span>
 <div class="flex items-baseline gap-xs">
-<span class="font-display-hero text-headline-md text-on-surface">412</span>
+<span id="pr-total-val" class="font-display-hero text-headline-md text-on-surface">412</span>
 <span class="font-mono-data text-mono-data text-on-surface-variant">KG</span>
 </div>
 </div>
@@ -365,140 +393,128 @@
 <p class="font-body-md text-on-surface-variant">Current limits to be broken.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-gutter">
-<div class="md:col-span-2 md:row-span-2 glass-card rounded-xl p-lg flex flex-col justify-between overflow-hidden relative">
+<div class="pr-card md:col-span-2 md:row-span-2 glass-card rounded-xl p-lg flex flex-col justify-between overflow-hidden relative">
 
 <div class="relative z-10">
 <span class="font-label-caps text-label-caps text-primary tracking-widest">MAJOR LIFT</span>
-<h3 class="font-display-hero text-[64px] text-on-surface mt-base">185<span class="text-headline-md text-on-surface-variant ml-xs">KG</span></h3>
+<h3 class="font-display-hero text-[64px] text-on-surface mt-base"><span id="pr-squat-val">185</span><span class="pr-unit text-headline-md text-on-surface-variant ml-xs">KG</span></h3>
 <p class="font-headline-md text-on-surface">Back Squat</p>
 </div>
 <div class="relative z-10 flex justify-between items-end border-t border-white/5 pt-md">
 <div class="space-y-base">
 <p class="font-label-caps text-[10px] text-on-surface-variant">LAST UPDATED</p>
-<p class="font-mono-data text-mono-data text-on-surface">12 AUG 2023</p>
+<p class="font-mono-data text-mono-data text-on-surface" id="pr-squat-date">12 AUG 2023</p>
 </div>
-<div onclick="updatePR(this)" class="bg-primary px-md py-sm rounded-lg text-on-primary font-label-caps text-label-caps active:scale-95 transition-transform cursor-pointer">
+<div onclick="updatePRPrompt('prSquat', 'Back Squat (KG)')" class="bg-primary px-md py-sm rounded-lg text-on-primary font-label-caps text-label-caps active:scale-95 transition-transform cursor-pointer">
                             UPDATE
                         </div>
 </div>
 </div>
-<div class="glass-card rounded-xl p-md flex flex-col justify-between rounded-lg">
+<div onclick="updatePRPrompt('prBench', 'Bench Press (KG)')" class="pr-card glass-card rounded-xl p-md flex flex-col justify-between rounded-lg cursor-pointer hover:bg-white/5 transition-all">
 <div class="flex justify-between items-start">
 <span class="font-label-caps text-label-caps text-on-surface-variant">BENCH PRESS</span>
 <span class="material-symbols-outlined text-primary" data-icon="fitness_center">fitness_center</span>
 </div>
 <div>
-<span class="font-display-hero text-headline-md text-on-surface">125</span>
-<span class="font-mono-data text-mono-data text-on-surface-variant ml-xs">KG</span>
+<span class="font-display-hero text-headline-md text-on-surface" id="pr-bench-val">125</span>
+<span class="pr-unit font-mono-data text-mono-data text-on-surface-variant ml-xs">KG</span>
 </div>
 </div>
-<div class="glass-card rounded-xl p-md flex flex-col justify-between rounded-lg">
+<div onclick="updatePRPrompt('prDeadlift', 'Deadlift (KG)')" class="pr-card glass-card rounded-xl p-md flex flex-col justify-between rounded-lg cursor-pointer hover:bg-white/5 transition-all">
 <div class="flex justify-between items-start">
 <span class="font-label-caps text-label-caps text-on-surface-variant">DEADLIFT</span>
 <span class="material-symbols-outlined text-primary" data-icon="bolt">bolt</span>
 </div>
 <div>
-<span class="font-display-hero text-headline-md text-on-surface">220</span>
-<span class="font-mono-data text-mono-data text-on-surface-variant ml-xs">KG</span>
+<span class="font-display-hero text-headline-md text-on-surface" id="pr-deadlift-val">220</span>
+<span class="pr-unit font-mono-data text-mono-data text-on-surface-variant ml-xs">KG</span>
 </div>
 </div>
-<div class="glass-card rounded-xl p-md flex flex-col justify-between border-l-2 border-primary/40 rounded-lg">
+<div onclick="updatePRPrompt('prOverhead', 'Overhead (KG)')" class="pr-card glass-card rounded-xl p-md flex flex-col justify-between border-l-2 border-primary/40 rounded-lg cursor-pointer hover:bg-white/5 transition-all">
 <div class="flex justify-between items-start">
 <span class="font-label-caps text-label-caps text-on-surface-variant">OVERHEAD</span>
 <span class="material-symbols-outlined text-primary" data-icon="vertical_align_top">vertical_align_top</span>
 </div>
 <div>
-<span class="font-display-hero text-headline-md text-on-surface">85</span>
-<span class="font-mono-data text-mono-data text-on-surface-variant ml-xs">KG</span>
+<span class="font-display-hero text-headline-md text-on-surface" id="pr-overhead-val">85</span>
+<span class="pr-unit font-mono-data text-mono-data text-on-surface-variant ml-xs">KG</span>
 </div>
 </div>
-<div class="glass-card rounded-xl p-md flex flex-col justify-between rounded-lg">
+<div onclick="updatePRPrompt('prMile', 'Mile Run')" class="pr-card glass-card rounded-xl p-md flex flex-col justify-between rounded-lg cursor-pointer hover:bg-white/5 transition-all">
 <div class="flex justify-between items-start">
 <span class="font-label-caps text-label-caps text-on-surface-variant">MILE RUN</span>
 <span class="material-symbols-outlined text-primary" data-icon="speed">speed</span>
 </div>
 <div>
-<span class="font-display-hero text-headline-md text-on-surface">5:42</span>
+<span class="font-display-hero text-headline-md text-on-surface" id="pr-mile-val">5:42</span>
 <span class="font-mono-data text-mono-data text-on-surface-variant ml-xs">MIN</span>
 </div>
 </div>
 </div>
 </section>
-
-     <script>
-         function updatePR(btn) {
-             const parent = btn.closest('.relative');
-             const display = parent.querySelector('h3');
-             const currentVal = parseInt(display.textContent);
-             const newVal = prompt("Enter new Personal Record (KG):", currentVal);
-             if (newVal && !isNaN(newVal)) {
-                 display.innerHTML = newVal + '<span class="text-headline-md text-on-surface-variant ml-xs">KG</span>';
-                 
-                 // Show premium alert
-                 const toast = document.createElement('div');
-                 toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-background border border-[#39ff14]/50 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md max-w-sm w-[90%] transition-all duration-300';
-                 toast.innerHTML = '<span class="material-symbols-outlined text-[#39ff14]">check_circle</span><span class="text-xs font-mono-data uppercase">PR DATABASE UPDATED</span>';
-                 document.body.appendChild(toast);
-                 setTimeout(() => toast.remove(), 2000);
-             }
-         }
-         
-         // Select Avatar Forge options and update avatar profile picture!
-         document.addEventListener('DOMContentLoaded', () => {
-             const avatarOptions = document.querySelectorAll('.grid-cols-2 .relative, .grid-cols-2 button');
-             const mainAvatarImg = document.querySelector('.avatar-inner img');
-             
-             avatarOptions.forEach(opt => {
-                 opt.addEventListener('click', () => {
-                     const img = opt.querySelector('img');
-                     if (img && mainAvatarImg) {
-                         // Update main profile picture
-                         mainAvatarImg.src = img.src;
-                         
-                         // Clear active classes from other options
-                         avatarOptions.forEach(o => {
-                             o.classList.remove('border-2', 'border-primary/50', 'shadow-lg', 'shadow-primary/20');
-                             const badge = o.querySelector('.absolute.top-xs');
-                             if(badge) badge.remove();
-                             const activeLabel = o.querySelector('.bg-primary\/80');
-                             if (activeLabel) {
-                                 activeLabel.className = 'absolute bottom-0 inset-x-0 p-xs text-center bg-black/60 backdrop-blur-sm';
-                                 activeLabel.querySelector('span').textContent = activeLabel.querySelector('span').textContent.replace('ACTIVE', '');
-                             }
-                         });
-                         
-                         // Set current as active
-                         opt.classList.add('border-2', 'border-primary/50', 'shadow-lg', 'shadow-primary/20');
-                         
-                         // Add check icon badge
-                         const badge = document.createElement('div');
-                         badge.className = 'absolute top-xs right-xs';
-                         badge.innerHTML = '<span class="material-symbols-outlined text-primary text-sm">check_circle</span>';
-                         opt.appendChild(badge);
-                     }
-                 });
-             });
-             
-             // Forge new button action
-             const forgeBtn = document.querySelector('.border-dashed');
-             if(forgeBtn) {
-                 forgeBtn.addEventListener('click', () => {
-                     forgeBtn.disabled = true;
-                     const originalText = forgeBtn.querySelector('span:last-child').textContent;
-                     forgeBtn.querySelector('span:last-child').textContent = 'SYNTHESIZING...';
-                     
-                     setTimeout(() => {
-                         forgeBtn.disabled = false;
-                         forgeBtn.querySelector('span:last-child').textContent = originalText;
-                         alert("New AI Athlete avatar synthesized and added to collection!");
-                     }, 2000);
-                 });
-             }
-         });
-     </script>
-     </main>
-     
+</main>
 <!-- Bottom Navigation -->
+
+
+<!-- Settings Modal Overlay -->
+<div id="settings-modal" class="absolute inset-0 z-[100] hidden flex items-center justify-center bg-black/75 backdrop-blur-md p-gutter">
+<div class="glass-card w-full max-w-sm rounded-2xl border border-white/10 p-md space-y-md relative overflow-hidden shadow-2xl max-h-[85%] overflow-y-auto">
+    <div class="flex justify-between items-center border-b border-white/5 pb-sm">
+        <h3 class="font-label-caps text-label-caps text-primary tracking-widest">PROFILE PROTOCOL</h3>
+        <button id="close-settings-btn" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
+            <span class="material-symbols-outlined text-on-surface-variant text-md">close</span>
+        </button>
+    </div>
+    
+    <!-- Display Name Input -->
+    <div class="space-y-xs">
+        <label class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider block">Display Name</label>
+        <input type="text" id="settings-display-name" class="bg-black border border-white/10 focus:border-primary/50 focus:ring-0 rounded-lg text-sm text-on-surface w-full px-sm py-xs focus:outline-none">
+    </div>
+    
+    <!-- Target Daily Reps Input -->
+    <div class="space-y-xs">
+        <label class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider block">Target Daily Reps</label>
+        <input type="number" id="settings-target-reps" class="bg-black border border-white/10 focus:border-primary/50 focus:ring-0 rounded-lg text-sm text-on-surface w-full px-sm py-xs focus:outline-none" min="1">
+    </div>
+    
+    <!-- Weight Unit Selection -->
+    <div class="space-y-xs">
+        <label class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider block">Metric Units</label>
+        <div class="flex items-center justify-between bg-black/40 border border-white/10 rounded-lg p-sm">
+            <span class="text-xs text-on-surface">Use Pounds (LBS)</span>
+            <button id="units-toggle-btn" class="w-12 h-6 bg-white/10 rounded-full p-0.5 border border-white/10 transition-colors relative flex items-center">
+                <span class="w-5 h-5 bg-on-surface-variant rounded-full transition-transform shadow" id="units-toggle-knob"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Apple Health / Google Fit Sync -->
+    <div class="space-y-xs">
+        <label class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider block">Device Telemetry</label>
+        <div class="flex items-center justify-between bg-black/40 border border-white/10 rounded-lg p-sm">
+            <span class="text-xs text-on-surface">Health Kit Synced</span>
+            <button id="sync-toggle-btn" class="w-12 h-6 bg-white/10 rounded-full p-0.5 border border-white/10 transition-colors relative flex items-center">
+                <span class="w-5 h-5 bg-on-surface-variant rounded-full transition-transform shadow" id="sync-toggle-knob"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="pt-sm border-t border-white/5">
+        <button id="save-profile-settings-btn" class="w-full py-sm bg-primary text-on-primary font-label-caps text-label-caps rounded-xl active:scale-95 transition-all text-center">
+            SAVE PROTOCOLS
+        </button>
+    </div>
+    
+    <!-- Log Out -->
+    <div class="border-t border-white/5 pt-md">
+        <button id="logout-btn" class="w-full py-sm bg-error/10 hover:bg-error/20 border border-error/30 text-error font-label-caps text-label-caps rounded-xl active:scale-95 transition-all text-center">
+            LOG OUT SYSTEM
+        </button>
+    </div>
+</div>
+</div>
 
 <!-- Ambient Background Elements -->
 <div class="absolute top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
@@ -530,6 +546,403 @@
                 avatarInner.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
             });
         }
+
+        let userProfile = null;
+
+        // Dynamic API loading
+        async function loadProfile() {
+            try {
+                // 1. Fetch Profile
+                const res = await fetch('/api/auth/profile', { headers: getAuthHeaders() });
+                if (!res.ok) throw new Error("Unauthorized");
+                userProfile = await res.json();
+
+                // 2. Fetch Workouts History to get exact details
+                const workoutsRes = await fetch('/api/workouts/history', { headers: getAuthHeaders() });
+                const workouts = workoutsRes.ok ? await workoutsRes.json() : [];
+
+                updateUI(workouts);
+            } catch (err) {
+                console.error("Profile load failed:", err);
+                localStorage.removeItem('token');
+                window.location.href = 'auth.html';
+            }
+        }
+
+        function updateUI(workouts) {
+            if (!userProfile) return;
+
+            // Header profile photo
+            const headerAvatarImg = document.getElementById('header-avatar-img');
+            if (headerAvatarImg && userProfile.avatar) headerAvatarImg.src = userProfile.avatar;
+
+            // Main avatar image
+            const mainAvatarImg = document.getElementById('main-avatar-img');
+            if (mainAvatarImg && userProfile.avatar) mainAvatarImg.src = userProfile.avatar;
+
+            // Level & Username & Streak
+            document.getElementById('profile-level-val').textContent = userProfile.level;
+            document.getElementById('profile-username').textContent = userProfile.username;
+            document.getElementById('profile-streak').innerHTML = `Athlete <span class="w-1 h-1 bg-surface-container-highest rounded-full"></span> ${userProfile.streak} Day Streak`;
+
+            // Calculate total workouts and reps
+            const repsCompleted = userProfile.repsCompleted || 0;
+            document.getElementById('profile-workouts-val').textContent = repsCompleted.toLocaleString();
+
+            // PR elements
+            const squat = Number(userProfile.prSquat || 185);
+            const bench = Number(userProfile.prBench || 125);
+            const deadlift = Number(userProfile.prDeadlift || 220);
+            const overhead = Number(userProfile.prOverhead || 85);
+            const mile = userProfile.prMile || "5:42";
+
+            document.getElementById('pr-squat-val').textContent = squat;
+            document.getElementById('pr-bench-val').textContent = bench;
+            document.getElementById('pr-deadlift-val').textContent = deadlift;
+            document.getElementById('pr-overhead-val').textContent = overhead;
+            document.getElementById('pr-mile-val').textContent = mile;
+
+            // Calculate PR total
+            const prTotal = squat + bench + deadlift + overhead;
+            document.getElementById('pr-total-val').textContent = prTotal;
+
+            // Highlight selected avatar option in UI if it matches
+            const avatarOpts = document.querySelectorAll('.grid-cols-2 .glass-card, .grid-cols-3 .glass-card, .md\\:grid-cols-5 .glass-card');
+            avatarOpts.forEach(opt => {
+                const img = opt.querySelector('img');
+                if (img) {
+                    const isCurrent = img.src === userProfile.avatar;
+                    opt.classList.remove('border-2', 'border-primary/50', 'shadow-lg', 'shadow-primary/20');
+                    const badge = opt.querySelector('.absolute.top-xs');
+                    if (badge) badge.remove();
+                    const activeLabel = opt.querySelector('.bg-primary\\/80');
+                    if (activeLabel) {
+                        activeLabel.className = 'absolute bottom-0 inset-x-0 p-xs text-center bg-black/60 backdrop-blur-sm';
+                        activeLabel.innerHTML = `<span class="font-label-caps text-[10px] text-white">${opt.querySelector('span').textContent.replace('ACTIVE', '').trim()}</span>`;
+                    }
+                    
+                    if (isCurrent) {
+                        opt.classList.add('border-2', 'border-primary/50', 'shadow-lg', 'shadow-primary/20');
+                        const checkBadge = document.createElement('div');
+                        checkBadge.className = 'absolute top-xs right-xs';
+                        checkBadge.innerHTML = '<span class="material-symbols-outlined text-primary text-sm">check_circle</span>';
+                        opt.appendChild(checkBadge);
+
+                        const label = opt.querySelector('.absolute.bottom-0');
+                        if (label) {
+                            label.className = 'absolute bottom-0 inset-x-0 p-xs text-center bg-primary/80 backdrop-blur-sm';
+                            label.querySelector('span').className = 'font-label-caps text-[10px] text-on-primary';
+                            label.querySelector('span').textContent = 'ACTIVE';
+                        }
+                    }
+                }
+            });
+            if (window.updateWeightUnitsUI) {
+                window.updateWeightUnitsUI();
+            }
+        }
+
+        async function updatePRPrompt(field, label) {
+            const currentVal = userProfile ? (userProfile[field] || "") : "";
+            const newVal = prompt(`Enter new Personal Record for ${label}:`, currentVal);
+            if (newVal === null) return; // cancelled
+            
+            const trimmed = newVal.trim();
+            if (!trimmed) return;
+
+            // Validate number for lifts
+            if (field !== 'prMile') {
+                if (isNaN(trimmed) || Number(trimmed) <= 0) {
+                    showToast("Please enter a valid positive number", "error");
+                    return;
+                }
+            }
+
+            try {
+                const res = await fetch('/api/auth/profile/update', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({
+                        [field]: field === 'prMile' ? trimmed : Number(trimmed)
+                    })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    userProfile = data.user;
+                    loadProfile(); // refresh UI
+                    showToast("PR DATABASE UPDATED");
+                } else {
+                    showToast(data.error || "PR update failed", "error");
+                }
+            } catch (err) {
+                showToast("Connection failed", "error");
+            }
+        }
+
+        // Hook up avatar selection click events
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+
+            const avatarOptions = document.querySelectorAll('.grid-cols-2 .glass-card, .grid-cols-3 .glass-card, .md\\:grid-cols-5 .glass-card');
+            avatarOptions.forEach(opt => {
+                // Skip the "FORGE NEW" button card
+                if (opt.tagName.toLowerCase() === 'button') return;
+                
+                opt.addEventListener('click', async () => {
+                    const img = opt.querySelector('img');
+                    if (img && userProfile) {
+                        try {
+                            const res = await fetch('/api/auth/profile/update', {
+                                method: 'POST',
+                                headers: getAuthHeaders(),
+                                body: JSON.stringify({ avatar: img.src })
+                            });
+                            const data = await res.json();
+                            if (res.ok) {
+                                userProfile = data.user;
+                                showToast("AVATAR SYNCED SUCCESSFULLY");
+                                updateUI([]);
+                            }
+                        } catch (err) {
+                            showToast("Avatar update failed", "error");
+                        }
+                    }
+                });
+            });
+
+            // Forge avatar simulation
+            const forgeBtn = document.querySelector('.border-dashed');
+            if (forgeBtn) {
+                forgeBtn.addEventListener('click', async () => {
+                    forgeBtn.disabled = true;
+                    const textSpan = forgeBtn.querySelector('span:last-child');
+                    const originalText = textSpan.textContent;
+                    textSpan.textContent = 'NEURAL SYNTHESIS...';
+
+                    const generatedAvatars = [
+                        "https://lh3.googleusercontent.com/aida-public/AB6AXuC7NheTY4Pu9lD4sT2jljOnPrFuRSiNGIufnN6BIxwn9aXTAQFkgHUwxlcWI2C2izErMCAV3NN0joHbGu3r9AakyX9wIWEIK2yBeG3wZT4WioVx36HawhwlH72spUO5jIKvleqg3GIPN2Vfljv3EyTrnGGiyUNSDRCTTYY0RrAIIGx4r54HHC4_LGbMsZhwx4_t-L2WnbzY8O1BterfN0SA5HSqfnAuD7q-pppzcqCq8uwnCYMtpVbWgCE4gxEi8OvtjQ8J5eZ1vw",
+                        "https://lh3.googleusercontent.com/aida-public/AB6AXuBje8Fo8eTJkMAYumqWw1gLD9y70cezcwpR5s6KAHn6uJt3EyDoF4jU1TNwqYYMtqZRNoLeP4A2oDL1XTddop_rH5-TY4uy39Ohpo0pR9IUY-qyJ9RIw6uhzezmaMifHk2VHFD54WhTKSByiJclgOOlg2M7m9CNvqTaJewtXwXJ_9u86Jd8XYDRYywzwp6MTD-aD4aHRYJH-RjD2VRyRWHImwleYt2YnO14ZI_gGrQmpXKWTzEikXE_bWpnnU95Hle4JlBAf7J6Fg",
+                        "https://lh3.googleusercontent.com/aida-public/AB6AXuDXDd__ZcgWUrUrpWNIn5n-d6INhvpetE4B-CNtjDvo4SIOtstpUTQhOD0fq2sjvE67AvxR6aknST2IV45GieH_96gSICGCcQUreUOtxB7H4J9M1YgebK1p-6XVA1TkgXq4Q8vq-GKDYXTzQf00VTf2c_djnbi7Ige-eEYsZYnVp9yFd0rruiQe5Ab4WT1VYfoW1sOOqvgxS9psNMXntmevd43dm1evGLRICVGC24qfCxrVvn23bCr1CwdX3kqPO-1mdJZ5gfDoJg"
+                    ];
+
+                    const randomAvatar = generatedAvatars[Math.floor(Math.random() * generatedAvatars.length)];
+
+                    setTimeout(async () => {
+                        try {
+                            const res = await fetch('/api/auth/profile/update', {
+                                method: 'POST',
+                                headers: getAuthHeaders(),
+                                body: JSON.stringify({ avatar: randomAvatar })
+                            });
+                            const data = await res.json();
+                            if (res.ok) {
+                                userProfile = data.user;
+                                showToast("NEW ATHLETE SYNTHESIZED!");
+                                updateUI([]);
+                            }
+                        } catch (err) {
+                            showToast("Synthesis upload failed", "error");
+                        } finally {
+                            forgeBtn.disabled = false;
+                            textSpan.textContent = originalText;
+                        }
+                    }, 2000);
+                });
+            }
+
+            // Search Slide-out functionality
+            const searchTrigger = document.getElementById('search-trigger-btn');
+            const closeSearchBtn = document.getElementById('close-search-btn');
+            const headerMainContent = document.getElementById('header-main-content');
+            const headerSearchBar = document.getElementById('header-search-bar');
+            const searchInput = document.getElementById('search-input');
+
+            if (searchTrigger && closeSearchBtn && headerMainContent && headerSearchBar && searchInput) {
+                searchTrigger.addEventListener('click', () => {
+                    headerMainContent.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                    headerSearchBar.classList.remove('hidden');
+                    setTimeout(() => {
+                        headerSearchBar.classList.add('opacity-100', 'scale-100');
+                        searchInput.focus();
+                    }, 50);
+                });
+
+                closeSearchBtn.addEventListener('click', () => {
+                    headerSearchBar.classList.remove('opacity-100', 'scale-100');
+                    setTimeout(() => {
+                        headerSearchBar.classList.add('hidden');
+                        headerMainContent.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+                        searchInput.value = '';
+                        // Reset filter
+                        document.querySelectorAll('.pr-card').forEach(card => card.classList.remove('hidden'));
+                    }, 200);
+                });
+
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    document.querySelectorAll('.pr-card').forEach(card => {
+                        const text = card.textContent.toLowerCase();
+                        if (text.includes(query)) {
+                            card.classList.remove('hidden');
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                });
+            }
+
+            // Settings Modal functionality
+            const settingsTrigger = document.getElementById('settings-trigger-btn');
+            const closeSettingsBtn = document.getElementById('close-settings-btn');
+            const settingsModal = document.getElementById('settings-modal');
+            const logoutBtn = document.getElementById('logout-btn');
+            const saveProfileSettingsBtn = document.getElementById('save-profile-settings-btn');
+            const settingsDisplayName = document.getElementById('settings-display-name');
+            const settingsTargetReps = document.getElementById('settings-target-reps');
+            const unitsToggleBtn = document.getElementById('units-toggle-btn');
+            const syncToggleBtn = document.getElementById('sync-toggle-btn');
+
+            let isLbsActive = localStorage.getItem('weightUnit') === 'LBS';
+            let isSyncActive = localStorage.getItem('healthKitSynced') === 'true';
+
+            window.updateWeightUnitsUI = function() {
+                if (userProfile) {
+                    const squat = Number(userProfile.prSquat || 185);
+                    const bench = Number(userProfile.prBench || 125);
+                    const deadlift = Number(userProfile.prDeadlift || 220);
+                    const overhead = Number(userProfile.prOverhead || 85);
+
+                    const unitLabel = isLbsActive ? 'LBS' : 'KG';
+                    const multiplier = isLbsActive ? 2.20462 : 1;
+
+                    const prSquatVal = document.getElementById('pr-squat-val');
+                    const prBenchVal = document.getElementById('pr-bench-val');
+                    const prDeadliftVal = document.getElementById('pr-deadlift-val');
+                    const prOverheadVal = document.getElementById('pr-overhead-val');
+                    
+                    if (prSquatVal) prSquatVal.textContent = Math.round(squat * multiplier);
+                    if (prBenchVal) prBenchVal.textContent = Math.round(bench * multiplier);
+                    if (prDeadliftVal) prDeadliftVal.textContent = Math.round(deadlift * multiplier);
+                    if (prOverheadVal) prOverheadVal.textContent = Math.round(overhead * multiplier);
+
+                    document.querySelectorAll('.pr-unit').forEach(el => el.textContent = unitLabel);
+
+                    const totalKg = squat + bench + deadlift + overhead;
+                    const prTotalVal = document.getElementById('pr-total-val');
+                    if (prTotalVal) prTotalVal.textContent = Math.round(totalKg * multiplier);
+                    
+                    const totalUnitLabel = document.querySelector('.font-mono-data.text-mono-data.text-on-surface-variant');
+                    if (totalUnitLabel) totalUnitLabel.textContent = unitLabel;
+                }
+            };
+
+            function loadSettingsValues() {
+                if (userProfile) {
+                    if (settingsDisplayName) settingsDisplayName.value = userProfile.username || '';
+                    if (settingsTargetReps) settingsTargetReps.value = userProfile.targetReps || 10;
+                }
+                
+                if (unitsToggleBtn) {
+                    unitsToggleBtn.classList.toggle('lbs-active', isLbsActive);
+                }
+                
+                if (syncToggleBtn) {
+                    syncToggleBtn.classList.toggle('sync-active', isSyncActive);
+                }
+            }
+
+            if (settingsTrigger && closeSettingsBtn && settingsModal) {
+                settingsTrigger.addEventListener('click', () => {
+                    loadSettingsValues();
+                    settingsModal.classList.remove('hidden');
+                });
+
+                closeSettingsBtn.addEventListener('click', () => {
+                    settingsModal.classList.add('hidden');
+                });
+
+                settingsModal.addEventListener('click', (e) => {
+                    if (e.target === settingsModal) {
+                        settingsModal.classList.add('hidden');
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && !settingsModal.classList.contains('hidden')) {
+                        settingsModal.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (syncToggleBtn) {
+                syncToggleBtn.addEventListener('click', () => {
+                    isSyncActive = !isSyncActive;
+                    localStorage.setItem('healthKitSynced', isSyncActive ? 'true' : 'false');
+                    syncToggleBtn.classList.toggle('sync-active', isSyncActive);
+                    showToast(`TELEMETRY SYNC ${isSyncActive ? 'ACTIVE' : 'DEACTIVATED'}`);
+                });
+            }
+
+            if (unitsToggleBtn) {
+                unitsToggleBtn.addEventListener('click', () => {
+                    isLbsActive = !isLbsActive;
+                    localStorage.setItem('weightUnit', isLbsActive ? 'LBS' : 'KG');
+                    unitsToggleBtn.classList.toggle('lbs-active', isLbsActive);
+                    showToast(`WEIGHT UNIT SET TO ${isLbsActive ? 'LBS' : 'KG'}`);
+                    window.updateWeightUnitsUI();
+                });
+            }
+
+            if (saveProfileSettingsBtn) {
+                saveProfileSettingsBtn.addEventListener('click', async () => {
+                    const name = settingsDisplayName.value.trim();
+                    const reps = Number(settingsTargetReps.value);
+
+                    if (!name) {
+                        showToast("Please enter a valid display name", "error");
+                        return;
+                    }
+                    if (isNaN(reps) || reps <= 0) {
+                        showToast("Please enter a valid target reps number", "error");
+                        return;
+                    }
+
+                    try {
+                        const res = await fetch('/api/auth/profile/update', {
+                            method: 'POST',
+                            headers: getAuthHeaders(),
+                            body: JSON.stringify({ username: name, targetReps: reps })
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                            userProfile = data.user;
+                            
+                            const userDisplayEl = document.getElementById('profile-username');
+                            if (userDisplayEl) {
+                                userDisplayEl.textContent = userProfile.username;
+                            }
+                            
+                            showToast("PROFILE PROTOCOLS UPDATED");
+                            settingsModal.classList.add('hidden');
+                        } else {
+                            showToast(data.error || "Update failed", "error");
+                        }
+                    } catch (err) {
+                        showToast("Connection failed", "error");
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('token');
+                    showToast("SYSTEM SHUTDOWN: USER LOGGED OUT");
+                    setTimeout(() => {
+                        window.location.href = 'auth.html';
+                    }, 1000);
+                });
+            }
+        });
     </script>
 
 

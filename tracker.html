@@ -153,6 +153,7 @@
   </style>
 
     <link href="app.css?v=3" rel="stylesheet">
+    <script src="api-helper.js?v=2"></script>
 
 </head>
 <body class="bg-black text-[#e2e2e2] font-body-md overflow-y-auto flex items-center justify-center min-h-screen py-6 sm:py-0 select-none">
@@ -185,12 +186,12 @@
     <span class="material-symbols-outlined text-xl leading-none">arrow_back</span>
 </button>
 <div class="w-10 h-10 rounded-full overflow-hidden border border-primary/20">
-<img class="w-full h-full object-cover" data-alt="A cinematic, high-contrast portrait of a professional athlete in a dark gym environment, illuminated by sharp neon green accent lights. The style is ultra-modern and technical, mimicking elite automotive UI photography with deep shadows and vibrant light highlights. The athlete has a focused, intense expression, capturing the essence of high-performance discipline and elite fitness innovation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDepeoxvh9szWyMhyU5e35zmXUhbgl2Gx76ddyrKDOAX80X1XhZxmtfM50VhRVp89cgUeGPVhULa2yKP6kcHBrzslVnpHb8SGgU3nt45_co-mJEFu-zyxrm8YQcCSCERzDoLRA4Px1phyIQnJIlVJVO2AMbLd3OkkfvWle0X51-ubjEzq7mP05rSJ3ygoQVmm1Mg-4uDdH6cKB_2xkO7GRQJXTVY_XCHx2HcSFcsc9Wt5iPy6WHZyaOLOr7Ukz7A1V-qEyxOdxhPg"/>
+<img id="user-avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDepeoxvh9szWyMhyU5e35zmXUhbgl2Gx76ddyrKDOAX80X1XhZxmtfM50VhRVp89cgUeGPVhULa2yKP6kcHBrzslVnpHb8SGgU3nt45_co-mJEFu-zyxrm8YQcCSCERzDoLRA4Px1phyIQnJIlVJVO2AMbLd3OkkfvWle0X51-ubjEzq7mP05rSJ3ygoQVmm1Mg-4uDdH6cKB_2xkO7GRQJXTVY_XCHx2HcSFcsc9Wt5iPy6WHZyaOLOr7Ukz7A1V-qEyxOdxhPg"/>
 </div>
 <h1 class="font-display-hero text-headline-md tracking-tighter text-primary-fixed-dim">FITGURU</h1>
 </div>
-<button class="p-xs hover:bg-white/5 rounded-full transition-all duration-300 ease-out active:scale-95 text-on-surface-variant hover:text-primary">
-<span class="material-symbols-outlined">settings</span>
+<button onclick="localStorage.removeItem('token'); window.location.href='auth.html';" class="p-xs hover:bg-white/5 rounded-full transition-all duration-300 ease-out active:scale-95 text-on-surface-variant hover:text-primary" title="Logout">
+<span class="material-symbols-outlined">logout</span>
 </button>
 </header>
 <main class="scroll-area flex-grow w-full px-4">
@@ -199,20 +200,20 @@
 <!-- Compact Consistency Score Card (Horizontal Row) -->
 <div class="glass-card rounded-xl p-md flex items-center justify-between gap-sm relative overflow-hidden group">
 <div class="flex flex-col justify-center flex-grow pr-sm">
-<h2 class="font-label-caps text-xs text-on-surface-variant mb-xs uppercase tracking-[0.2em]">Consistency Score</h2>
-<span class="font-display-hero text-2xl text-primary font-bold" id="score-percentage-text">85%</span>
-<span class="font-mono-data text-[10px] text-on-surface-variant mt-0.5 block">+12% vs last week</span>
-<p class="mt-sm font-body-md text-[11px] text-on-surface-variant">You're in the <span class="text-primary-fixed-dim font-bold">top 3%</span> of athletes today.</p>
+<h2 class="font-label-caps text-xs text-on-surface-variant mb-xs uppercase tracking-[0.2em]">Readiness Score</h2>
+<span class="font-display-hero text-4xl text-primary font-bold" id="score-percentage-text">50%</span>
+<span class="font-mono-data text-[10px] text-on-surface-variant mt-0.5 block">Dynamic live calculation</span>
+<p class="mt-sm font-body-md text-[11px] text-on-surface-variant">Perform daily disciplines to maximize score.</p>
 </div>
 <div class="relative w-20 h-20 flex items-center justify-center shrink-0">
 <!-- Progress Ring Background -->
 <svg class="w-full h-full" viewbox="0 0 100 100">
 <circle cx="50" cy="50" fill="transparent" r="45" stroke="#1A1A1A" stroke-width="8"></circle>
 <!-- Active Progress Track -->
-<circle class="progress-ring-circle neon-glow" cx="50" cy="50" fill="transparent" id="score-ring" r="45" stroke="#39FF14" stroke-dasharray="282.7" stroke-dashoffset="42.4" stroke-linecap="round" stroke-width="8"></circle>
+<circle class="progress-ring-circle neon-glow" cx="50" cy="50" fill="transparent" id="score-ring" r="45" stroke="#39FF14" stroke-dasharray="282.7" stroke-dashoffset="141.3" stroke-linecap="round" stroke-width="8"></circle>
 </svg>
 <div class="absolute inset-0 flex items-center justify-center text-center">
-<span class="font-semibold text-xs text-primary">85%</span>
+<span class="font-semibold text-xs text-primary" id="score-ring-text">50%</span>
 </div>
 </div>
 </div>
@@ -221,31 +222,18 @@
 <div class="glass-card rounded-xl p-md flex flex-col">
 <div class="flex justify-between items-center mb-lg">
 <div>
-<h2 class="font-headline-md text-headline-md text-primary">24 Day Streak</h2>
-<p class="font-body-md text-on-surface-variant">Don't break the chain, Alex.</p>
+<h2 class="font-headline-md text-headline-md text-primary" id="streak-title">0 Day Streak</h2>
+<p class="font-body-md text-on-surface-variant" id="streak-subtitle">Don't break the chain, Athlete.</p>
 </div>
 <div class="flex gap-xs">
 <span class="material-symbols-outlined text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
 </div>
 </div>
-<div class="grid grid-cols-7 gap-2 flex-grow dot-grid p-sm rounded-lg bg-black/40">
-<!-- Mock Calendar Dots -->
-<script>
-                        const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-                        weekdays.forEach(day => document.write(`<div class="text-center text-[10px] font-bold text-on-surface/50 uppercase tracking-normal mb-1">${day}</div>`));
-                        
-                        for(let i=0; i<28; i++) {
-                            const active = i < 24;
-                            const isToday = i === 24;
-                            const classes = active 
-                                ? 'bg-primary shadow-[0_0_10px_rgba(57,255,20,0.4)]' 
-                                : isToday ? 'border-2 border-primary animate-pulse' : 'bg-surface-container-highest opacity-30';
-                            document.write(`<div class="aspect-square rounded-full ${classes} transition-transform hover:scale-125 cursor-pointer"></div>`);
-                        }
-                    </script>
+<div class="grid grid-cols-7 gap-2 flex-grow dot-grid p-sm rounded-lg bg-black/40" id="calendar-dots">
+<!-- Dot elements injected by JavaScript -->
 </div>
 <div class="mt-md flex justify-between items-center font-mono-data text-xs text-on-surface-variant">
-<span>MARCH 2024</span>
+<span id="calendar-month">TODAY'S TIMELINE</span>
 <span class="flex items-center gap-xs"><span class="w-2 h-2 rounded-full bg-primary"></span> Completed</span>
 </div>
 </div>
@@ -255,68 +243,121 @@
 <section class="mb-xl">
 <div class="flex justify-between items-end mb-md">
 <h2 class="font-headline-md text-headline-md text-on-surface">Daily Disciplines</h2>
-<span class="font-mono-data text-xs text-on-surface-variant">3 of 5 Completed</span>
+<span class="font-mono-data text-xs text-on-surface-variant" id="disciplines-count">0 of 5 Completed</span>
 </div>
 <div class="flex flex-col gap-sm">
-<!-- Drink 4L Water -->
-<div class="glass-card p-sm rounded-xl flex items-center gap-sm relative cursor-pointer" onclick="toggleHabit(this)">
+<!-- Drink Water -->
+<div class="glass-card p-sm rounded-xl flex items-center gap-sm relative cursor-pointer" onclick="toggleWaterCard()">
 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 relative z-10">
 <span class="material-symbols-outlined text-primary text-xl">water_drop</span>
 </div>
 <div class="flex-grow min-w-0 relative z-10">
 <div class="flex justify-between items-baseline mb-1">
-<h3 class="font-semibold text-sm text-on-surface truncate">Drink 4L Water</h3>
-<span class="font-mono-data text-[10px] text-on-surface-variant font-body-md shrink-0">3L / 4L</span>
+<h3 class="font-semibold text-sm text-on-surface truncate">Hydration</h3>
+<div class="flex items-center gap-xs font-mono-data text-[10px] text-on-surface-variant shrink-0" onclick="event.stopPropagation();">
+<button onclick="changeWater(-250)" class="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-90 font-bold">-</button>
+<span id="water-text">0ml</span> / 3000ml
+<button onclick="changeWater(250)" class="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-90 font-bold">+</button>
+</div>
 </div>
 <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-<div class="h-full bg-primary-fixed-dim w-3/4 rounded-full"></div>
+<div id="water-progress-bar" class="h-full bg-primary-fixed-dim rounded-full" style="width: 0%"></div>
 </div>
 </div>
-<div class="habit-checkbox w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0 transition-all relative z-10">
+<div id="water-checkbox" class="habit-checkbox w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0 transition-all relative z-10">
 <span class="material-symbols-outlined text-black hidden font-bold text-xs">check</span>
 </div>
-<div class="sparkle-container absolute inset-0 pointer-events-none"></div>
+<div class="sparkle-container absolute inset-0 pointer-events-none" id="water-sparkles"></div>
 </div>
 
 <!-- 8h Sleep -->
-<div class="glass-card p-sm rounded-xl flex items-center gap-sm relative cursor-pointer" onclick="toggleHabit(this)">
+<div class="glass-card p-sm rounded-xl flex items-center gap-sm relative cursor-pointer" onclick="toggleSleepCard()">
 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 relative z-10">
 <span class="material-symbols-outlined text-primary text-xl">bedtime</span>
 </div>
 <div class="flex-grow min-w-0 relative z-10">
 <div class="flex justify-between items-baseline mb-1">
-<h3 class="font-semibold text-sm text-on-surface truncate">8h Sleep</h3>
-<span class="font-mono-data text-[10px] text-on-surface-variant font-body-md shrink-0">Achieved</span>
+<h3 class="font-semibold text-sm text-on-surface truncate">Rest Period</h3>
+<div class="flex items-center gap-xs font-mono-data text-[10px] text-on-surface-variant shrink-0" onclick="event.stopPropagation();">
+<button onclick="changeSleep(-0.5)" class="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-90 font-bold">-</button>
+<span id="sleep-text">0h</span> / 8h
+<button onclick="changeSleep(0.5)" class="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-90 font-bold">+</button>
+</div>
 </div>
 <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-<div class="h-full bg-primary-fixed-dim w-full rounded-full"></div>
+<div id="sleep-progress-bar" class="h-full bg-primary-fixed-dim rounded-full" style="width: 0%"></div>
 </div>
 </div>
-<div class="habit-checkbox w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0 transition-all relative z-10">
+<div id="sleep-checkbox" class="habit-checkbox w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0 transition-all relative z-10">
 <span class="material-symbols-outlined text-black hidden font-bold text-xs">check</span>
 </div>
-<div class="sparkle-container absolute inset-0 pointer-events-none"></div>
+<div class="sparkle-container absolute inset-0 pointer-events-none" id="sleep-sparkles"></div>
+</div>
+
+<!-- Steps -->
+<div class="glass-card p-sm rounded-xl flex items-center gap-sm relative cursor-pointer" onclick="toggleStepsCard()">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 relative z-10">
+<span class="material-symbols-outlined text-primary text-xl">footprint</span>
+</div>
+<div class="flex-grow min-w-0 relative z-10">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-semibold text-sm text-on-surface truncate">Steps Goal</h3>
+<div class="flex items-center gap-xs font-mono-data text-[10px] text-on-surface-variant shrink-0" onclick="event.stopPropagation();">
+<button onclick="changeSteps(-1000)" class="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-90 font-bold">-</button>
+<span id="steps-text">0</span> / 10000
+<button onclick="changeSteps(1000)" class="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-90 font-bold">+</button>
+</div>
+</div>
+<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div id="steps-progress-bar" class="h-full bg-primary-fixed-dim rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div id="steps-checkbox" class="habit-checkbox w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0 transition-all relative z-10">
+<span class="material-symbols-outlined text-black hidden font-bold text-xs">check</span>
+</div>
+<div class="sparkle-container absolute inset-0 pointer-events-none" id="steps-sparkles"></div>
+</div>
+
+<!-- Clean Diet -->
+<div class="glass-card p-sm rounded-xl flex items-center gap-sm relative cursor-pointer" id="diet-card" onclick="toggleDiet()">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 relative z-10">
+<span class="material-symbols-outlined text-primary text-xl">restaurant</span>
+</div>
+<div class="flex-grow min-w-0 relative z-10">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-semibold text-sm text-on-surface truncate">Clean Nutrition Plan</h3>
+<span class="font-mono-data text-[10px] text-on-surface-variant font-body-md shrink-0" id="diet-status">Pending</span>
+</div>
+<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div id="diet-progress-bar" class="h-full bg-primary-fixed-dim rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div id="diet-checkbox" class="habit-checkbox w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0 transition-all relative z-10">
+<span class="material-symbols-outlined text-black hidden font-bold text-xs">check</span>
+</div>
+<div class="sparkle-container absolute inset-0 pointer-events-none" id="diet-sparkles"></div>
 </div>
 
 <!-- Morning Workout -->
-<div class="glass-card p-sm rounded-xl flex items-center gap-sm relative cursor-pointer" onclick="toggleHabit(this)">
+<div class="glass-card p-sm rounded-xl flex items-center gap-sm relative cursor-pointer" id="workout-card" onclick="toggleWorkout()">
 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 relative z-10">
 <span class="material-symbols-outlined text-primary text-xl">fitness_center</span>
 </div>
 <div class="flex-grow min-w-0 relative z-10">
 <div class="flex justify-between items-baseline mb-1">
-<h3 class="font-semibold text-sm text-on-surface truncate">Morning Workout</h3>
-<span class="font-mono-data text-[10px] text-on-surface-variant font-body-md shrink-0">Achieved</span>
+<h3 class="font-semibold text-sm text-on-surface truncate">Elite Training Session</h3>
+<span class="font-mono-data text-[10px] text-on-surface-variant font-body-md shrink-0" id="workout-status">Pending</span>
 </div>
 <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-<div class="h-full bg-primary-fixed-dim w-full rounded-full"></div>
+<div id="workout-progress-bar" class="h-full bg-primary-fixed-dim rounded-full" style="width: 0%"></div>
 </div>
 </div>
-<div class="habit-checkbox w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0 transition-all relative z-10">
+<div id="workout-checkbox" class="habit-checkbox w-6 h-6 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0 transition-all relative z-10">
 <span class="material-symbols-outlined text-black hidden font-bold text-xs">check</span>
 </div>
-<div class="sparkle-container absolute inset-0 pointer-events-none"></div>
+<div class="sparkle-container absolute inset-0 pointer-events-none" id="workout-sparkles"></div>
 </div>
+
 </div>
 </section>
 
@@ -327,85 +368,188 @@
 <span class="material-symbols-outlined text-primary-fixed-dim text-4xl">auto_awesome</span>
 <div class="flex-grow min-w-0">
 <h3 class="font-headline-md text-on-surface mb-xs">AI Coach Analysis</h3>
-<p class="font-body-md text-xs text-on-surface-variant">Your energy peaks coincide with your morning hydration window. Doubling down on water before 10 AM could boost your metabolic rate by 4%.</p>
+<p class="font-body-md text-xs text-on-surface-variant" id="ai-insight-text">Performing real-time biometric and consistency synthesis...</p>
 </div>
 </div>
 <div class="flex gap-sm">
-<button class="bg-primary text-black font-label-caps text-xs px-md py-xs rounded-lg hover:scale-105 transition-transform">Optimise Schedule</button>
-<button class="border border-white/10 text-on-surface font-label-caps text-xs px-md py-xs rounded-lg hover:bg-white/5 transition-all">View Trends</button>
-</div>
-</div>
-<div class="glass-card rounded-xl p-md flex flex-col justify-between bg-gradient-to-br from-primary/10 to-transparent">
-<span class="font-label-caps text-xs text-primary uppercase">Next Milestone</span>
-<h4 class="font-display-hero text-headline-md text-on-surface mt-sm">30-Day Elite Badge</h4>
-<div class="mt-md flex items-center gap-xs">
-<div class="flex -space-x-2">
-<div class="w-8 h-8 rounded-full border-2 border-background bg-surface-container"></div>
-<div class="w-8 h-8 rounded-full border-2 border-background bg-primary/20 flex items-center justify-center text-[10px]">+14</div>
-</div>
-<span class="font-mono-data text-xs text-on-surface-variant">6 days left</span>
+<button onclick="window.location.href='coach.html'" class="bg-primary text-black font-label-caps text-xs px-md py-xs rounded-lg hover:scale-105 transition-transform">Consult Coach</button>
 </div>
 </div>
 </section>
 </main>
-<!-- Bottom Navigation Bar -->
 
 <script>
-        
-        let completedHabits = 3;
-        function updateScore(diff) {
-            completedHabits += diff;
-            if (completedHabits < 0) completedHabits = 0;
-            if (completedHabits > 5) completedHabits = 5;
+        let habitsState = {
+            waterMl: 0,
+            sleepHrs: 0,
+            steps: 0,
+            dietCompleted: false,
+            workoutCompleted: false,
+            readinessScore: 0
+        };
+
+        // Render functions
+        function renderUI() {
+            // Readiness Score
+            const readinessVal = habitsState.readinessScore || 0;
+            document.getElementById('score-percentage-text').textContent = `${readinessVal}%`;
+            document.getElementById('score-ring-text').textContent = `${readinessVal}%`;
             
-            // Update subtitle counts
-            const counts = document.querySelector('section.mb-xl .text-on-surface-variant');
-            if (counts) counts.textContent = `${completedHabits} of 5 Completed`;
-            
-            // Update circular readiness score
-            const scoreText = document.getElementById('score-percentage-text') || document.querySelector('.text-headline-lg.text-primary');
-            const scoreRing = document.getElementById('score-ring');
-            
-            let percentage = 60 + (completedHabits * 8); // Base 60%, +8% per habit
-            if (scoreText) scoreText.textContent = percentage + '%';
-            if (scoreRing) {
-                // Circumference is 282.7
-                const offset = 282.7 - (282.7 * percentage / 100);
-                scoreRing.style.strokeDashoffset = offset;
+            const circle = document.getElementById('score-ring');
+            if (circle) {
+                // 282.7 is circumference
+                const offset = 282.7 - (282.7 * readinessVal / 100);
+                circle.style.strokeDashoffset = offset;
+            }
+
+            // Water
+            document.getElementById('water-text').textContent = `${habitsState.waterMl}ml`;
+            const waterPercent = Math.min(100, (habitsState.waterMl / 3000) * 100);
+            document.getElementById('water-progress-bar').style.width = `${waterPercent}%`;
+            updateCheckbox('water-checkbox', habitsState.waterMl >= 3000);
+
+            // Sleep
+            document.getElementById('sleep-text').textContent = `${habitsState.sleepHrs}h`;
+            const sleepPercent = Math.min(100, (habitsState.sleepHrs / 8) * 100);
+            document.getElementById('sleep-progress-bar').style.width = `${sleepPercent}%`;
+            updateCheckbox('sleep-checkbox', habitsState.sleepHrs >= 8);
+
+            // Steps
+            document.getElementById('steps-text').textContent = habitsState.steps.toLocaleString();
+            const stepsPercent = Math.min(100, (habitsState.steps / 10000) * 100);
+            document.getElementById('steps-progress-bar').style.width = `${stepsPercent}%`;
+            updateCheckbox('steps-checkbox', habitsState.steps >= 10000);
+
+            // Diet
+            document.getElementById('diet-status').textContent = habitsState.dietCompleted ? 'Achieved' : 'Pending';
+            document.getElementById('diet-progress-bar').style.width = habitsState.dietCompleted ? '100%' : '0%';
+            updateCheckbox('diet-checkbox', habitsState.dietCompleted);
+
+            // Workout
+            document.getElementById('workout-status').textContent = habitsState.workoutCompleted ? 'Achieved' : 'Pending';
+            document.getElementById('workout-progress-bar').style.width = habitsState.workoutCompleted ? '100%' : '0%';
+            updateCheckbox('workout-checkbox', habitsState.workoutCompleted);
+
+            // Completed count
+            let completedCount = 0;
+            if (habitsState.waterMl >= 3000) completedCount++;
+            if (habitsState.sleepHrs >= 8) completedCount++;
+            if (habitsState.steps >= 10000) completedCount++;
+            if (habitsState.dietCompleted) completedCount++;
+            if (habitsState.workoutCompleted) completedCount++;
+            document.getElementById('disciplines-count').textContent = `${completedCount} of 5 Completed`;
+
+            // Dynamic AI Insights
+            const insightsText = document.getElementById('ai-insight-text');
+            if (readinessVal >= 80) {
+                insightsText.textContent = "BIOMETRICS OPTIMIZED: Readiness is elite. Today is highly favorable for hitting peak squat reps. Maintain hydration pacing.";
+            } else if (readinessVal >= 50) {
+                insightsText.textContent = "STABILITY PROTOCOL: Steady consistency levels. Keep sleep cycles lock-aligned to trigger anabolic synthesis.";
+            } else {
+                insightsText.textContent = "RECOVERY ALIGNMENT REQUIRED: Biometric scores are below base levels. Recommend priority hydration and targeting caseins to rebuild muscle fibers.";
             }
         }
 
-        function toggleHabit(card) {
-            const checkbox = card.querySelector('.habit-checkbox');
+        function updateCheckbox(id, isCompleted) {
+            const checkbox = document.getElementById(id);
+            if (!checkbox) return;
             const icon = checkbox.querySelector('span');
-            const sparkleContainer = card.querySelector('.sparkle-container');
+            const card = checkbox.closest('.glass-card');
             
-            const isCompleted = checkbox.classList.contains('bg-primary');
-            
-            if (!isCompleted) {
-                // Complete action
+            if (isCompleted) {
                 checkbox.classList.add('bg-primary', 'border-primary');
                 checkbox.classList.remove('border-white/10');
                 icon.classList.remove('hidden');
-                
-                // Celebration Sparkles
-                createSparkles(sparkleContainer);
-                
-                // Card feedback
-                card.classList.add('border-primary/50');
-                updateScore(1);
+                if (card) card.classList.add('border-primary/30');
             } else {
-                // Undo action
                 checkbox.classList.remove('bg-primary', 'border-primary');
                 checkbox.classList.add('border-white/10');
                 icon.classList.add('hidden');
-                card.classList.remove('border-primary/50');
-                updateScore(-1);
+                if (card) card.classList.remove('border-primary/30');
             }
         }
-     
 
+        // Toggles & increments
+        async function saveHabitsUpdate(fields) {
+            try {
+                const res = await fetch('/api/habits/toggle', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(fields)
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    habitsState = data.habits;
+                    renderUI();
+                    if (data.xpGained > 0) {
+                        showToast(`+${data.xpGained} XP GAINED`, 'success');
+                    }
+                } else {
+                    showToast(data.error || "Save failed", "error");
+                }
+            } catch (err) {
+                showToast("Connection failed", "error");
+            }
+        }
+
+        function changeWater(amount) {
+            const newVal = Math.max(0, habitsState.waterMl + amount);
+            if (newVal >= 3000 && habitsState.waterMl < 3000) {
+                createSparkles(document.getElementById('water-sparkles'));
+            }
+            saveHabitsUpdate({ waterMl: newVal });
+        }
+
+        function toggleWaterCard() {
+            // Toggles directly to goal if not reached, else sets to 0
+            const newVal = habitsState.waterMl >= 3000 ? 0 : 3000;
+            if (newVal >= 3000) createSparkles(document.getElementById('water-sparkles'));
+            saveHabitsUpdate({ waterMl: newVal });
+        }
+
+        function changeSleep(amount) {
+            const newVal = Math.max(0, habitsState.sleepHrs + amount);
+            if (newVal >= 8 && habitsState.sleepHrs < 8) {
+                createSparkles(document.getElementById('sleep-sparkles'));
+            }
+            saveHabitsUpdate({ sleepHrs: newVal });
+        }
+
+        function toggleSleepCard() {
+            const newVal = habitsState.sleepHrs >= 8 ? 0 : 8;
+            if (newVal >= 8) createSparkles(document.getElementById('sleep-sparkles'));
+            saveHabitsUpdate({ sleepHrs: newVal });
+        }
+
+        function changeSteps(amount) {
+            const newVal = Math.max(0, habitsState.steps + amount);
+            if (newVal >= 10000 && habitsState.steps < 10000) {
+                createSparkles(document.getElementById('steps-sparkles'));
+            }
+            saveHabitsUpdate({ steps: newVal });
+        }
+
+        function toggleStepsCard() {
+            const newVal = habitsState.steps >= 10000 ? 0 : 10000;
+            if (newVal >= 10000) createSparkles(document.getElementById('steps-sparkles'));
+            saveHabitsUpdate({ steps: newVal });
+        }
+
+        function toggleDiet() {
+            const nextVal = !habitsState.dietCompleted;
+            if (nextVal) createSparkles(document.getElementById('diet-sparkles'));
+            saveHabitsUpdate({ dietCompleted: nextVal });
+        }
+
+        function toggleWorkout() {
+            const nextVal = !habitsState.workoutCompleted;
+            if (nextVal) createSparkles(document.getElementById('workout-sparkles'));
+            saveHabitsUpdate({ workoutCompleted: nextVal });
+        }
+
+        // Sparkle generator
         function createSparkles(container) {
+            if (!container) return;
             for (let i = 0; i < 12; i++) {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'absolute w-1 h-1 bg-primary rounded-full sparkle-active';
@@ -420,7 +564,6 @@
                 sparkle.style.setProperty('--x', `${x}px`);
                 sparkle.style.setProperty('--y', `${y}px`);
                 
-                // Simple inline animation override for dynamic direction
                 sparkle.animate([
                     { transform: 'translate(-50%, -50%) scale(0)', opacity: 0 },
                     { transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1.5)`, opacity: 1, offset: 0.5 },
@@ -434,6 +577,65 @@
                 setTimeout(() => sparkle.remove(), 700);
             }
         }
+
+        // Initial setup
+        async function initPage() {
+            try {
+                // Profile
+                const profileRes = await fetch('/api/auth/profile', { headers: getAuthHeaders() });
+                if (!profileRes.ok) throw new Error("Unauthorized");
+                const profile = await profileRes.json();
+                
+                document.getElementById('streak-title').textContent = `${profile.streak} Day Streak`;
+                document.getElementById('streak-subtitle').textContent = `Don't break the chain, ${profile.username}.`;
+                
+                // Set calendar month dynamically
+                const options = { month: 'long', year: 'numeric' };
+                document.getElementById('calendar-month').textContent = new Date().toLocaleDateString('en-US', options).toUpperCase();
+
+                // Draw calendar dots dynamically
+                const dotsContainer = document.getElementById('calendar-dots');
+                dotsContainer.innerHTML = '';
+                const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+                weekdays.forEach(day => {
+                    const header = document.createElement('div');
+                    header.className = 'text-center text-[10px] font-bold text-on-surface/50 uppercase tracking-normal mb-1';
+                    header.textContent = day;
+                    dotsContainer.appendChild(header);
+                });
+
+                const todayDotIdx = Math.min(27, profile.streak);
+                for(let i=0; i<28; i++) {
+                    const active = i < todayDotIdx;
+                    const isToday = i === todayDotIdx;
+                    const dot = document.createElement('div');
+                    dot.className = `aspect-square rounded-full transition-transform hover:scale-125 cursor-pointer `;
+                    if (active) {
+                        dot.className += 'bg-primary shadow-[0_0_10px_rgba(57,255,20,0.4)]';
+                    } else if (isToday) {
+                        dot.className += 'border-2 border-primary animate-pulse';
+                    } else {
+                        dot.className += 'bg-surface-container-highest opacity-30';
+                    }
+                    dotsContainer.appendChild(dot);
+                }
+
+                // Habits
+                const habitsRes = await fetch('/api/habits/today', { headers: getAuthHeaders() });
+                if (habitsRes.ok) {
+                    habitsState = await habitsRes.json();
+                    renderUI();
+                }
+            } catch (err) {
+                console.error("Failed to load tracker page:", err);
+                localStorage.removeItem('token');
+                window.location.href = 'auth.html';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initPage();
+        });
     </script>
 
             

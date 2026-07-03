@@ -186,7 +186,7 @@
         <span class="material-symbols-outlined text-sm">videocam</span>
     </button>
     <!-- End Session Button -->
-    <button onclick="window.location.href='exercises.html'" class="w-8 h-8 rounded-full bg-error-container/20 text-error flex items-center justify-center border border-error/30 hover:bg-error-container transition-all" title="End Session">
+    <button id="end-session-btn" class="w-8 h-8 rounded-full bg-error-container/20 text-error flex items-center justify-center border border-error/30 hover:bg-error-container transition-all" title="End Session">
         <span class="material-symbols-outlined text-sm">close</span>
     </button>
 </div>
@@ -374,6 +374,12 @@
         }
 
         // 5. Initialize Page Controls & Tracking Variables
+        const urlParams = new URLSearchParams(window.location.search);
+        const exerciseName = urlParams.get('exercise') || 'Bench Press';
+        const sessionStartTime = Date.now();
+        let repsCount = 0;
+        let repState = 'up'; // "up" or "down" for real rep counting
+
         let useActualTracking = false;
         let poseDetector = null;
         let lastPoseTimestamp = 0;
@@ -635,6 +641,28 @@
                         showCoachingFeedback("MAX DEPTH REACHED. ARCH BACK & PRESS UP!", "Live Alert", true);
                     }
 
+                    // WebRTC-based Rep Counter State Machine
+                    if (avgAngle < 95 && repState === 'up') {
+                        repState = 'down';
+                        addLogLine("ELBOWS FLEXED: REP DOWN STAGE");
+                    } else if (avgAngle > 140 && repState === 'down') {
+                        repState = 'up';
+                        repsCount++;
+                        
+                        // Update HUD Counter & Progress Bar
+                        const repBadge = document.querySelector('#left-hud-panel .text-headline-lg');
+                        if (repBadge) {
+                            repBadge.innerHTML = String(repsCount).padStart(2, '0') + '<span class="font-mono-data text-body-md text-on-surface-variant">/12</span>';
+                        }
+                        const repProgress = document.querySelector('#left-hud-panel .bg-primary-fixed-dim');
+                        if (repProgress) {
+                            repProgress.style.width = `${Math.min(100, (repsCount / 12) * 100)}%`;
+                        }
+                        
+                        addLogLine(`REPS REGISTERED: REAL REP ${repsCount} DETECTED`);
+                        showToast(`REP ${repsCount} REGISTERED`);
+                    }
+
                     // Progress bar matches elbow extension
                     const progressVal = document.getElementById('coaching-progress-bar');
                     if (progressVal) {
@@ -658,12 +686,13 @@
                     const currentRep = Math.floor(timestamp / repDuration) % 12 + 1;
                     if (currentRep !== lastLoggedRep) {
                         lastLoggedRep = currentRep;
-                        const repBadge = document.querySelector('.w-48 .text-headline-lg');
+                        repsCount = currentRep;
+                        const repBadge = document.querySelector('#left-hud-panel .text-headline-lg');
                         if (repBadge) {
                             repBadge.innerHTML = String(currentRep).padStart(2, '0') + '<span class="font-mono-data text-body-md text-on-surface-variant">/12</span>';
                         }
                         
-                        const repProgress = document.querySelector('.w-48 .bg-primary-fixed-dim');
+                        const repProgress = document.querySelector('#left-hud-panel .bg-primary-fixed-dim');
                         if (repProgress) {
                             repProgress.style.width = `${(currentRep / 12) * 100}%`;
                         }
@@ -824,6 +853,46 @@
                         toast.innerHTML = '<span class="material-symbols-outlined text-primary-fixed-dim">save_alt</span><span class="text-xs font-mono-data uppercase">CLIP SAVED SUCCESSFULLY</span>';
                         document.body.appendChild(toast);
                         setTimeout(() => toast.remove(), 2000);
+                    }
+                });
+            }
+
+            // End Session & Log Workout
+            const endSessionBtn = document.getElementById('end-session-btn');
+            if (endSessionBtn) {
+                endSessionBtn.addEventListener('click', async () => {
+                    const durationSec = Math.round((Date.now() - sessionStartTime) / 1000);
+                    
+                    if (repsCount === 0 || durationSec < 2) {
+                        window.location.href = 'exercises.html';
+                        return;
+                    }
+
+                    endSessionBtn.disabled = true;
+                    addLogLine("UPLOADING ATHLETIC SESSION LOG...");
+                    
+                    try {
+                        const res = await fetch('/api/workouts/log', {
+                            method: 'POST',
+                            headers: getAuthHeaders(),
+                            body: JSON.stringify({
+                                exercise: exerciseName,
+                                reps: repsCount,
+                                durationSec: durationSec,
+                                averageAngle: 142
+                            })
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                            showToast(`SESSION LOGGED: +${data.xpGained} XP`);
+                            setTimeout(() => {
+                                window.location.href = 'exercises.html';
+                            }, 1500);
+                        } else {
+                            window.location.href = 'exercises.html';
+                        }
+                    } catch (e) {
+                        window.location.href = 'exercises.html';
                     }
                 });
             }
